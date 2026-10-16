@@ -1,0 +1,59 @@
+{
+  "title": "논문 슬라이드 예시 — LLaMA 1",
+  "subtitle": "구조·조건별 결과 · 3장 예시 / 전체 논문 발표 아님",
+  "slides": [
+    {
+      "title": "정규화의 위치와<br>함수를 따로 봅니다",
+      "body": "<p>LLaMA는 각 sublayer의 입력을 정규화하고 RMSNorm을 사용합니다. 원 Transformer의 post-norm과 비교하면 순서가 바뀝니다.</p><p>아래 식은 잔차 경로를 설명하는 축약입니다. pre-norm의 위치 선택과 RMSNorm이라는 함수 선택은 서로 다른 축입니다.</p>",
+      "visual": "<div class=\"norm-pair\"><div class=\"diagram-panel\"><div class=\"diagram-title\"><span>원 Transformer</span><strong>Post-norm</strong></div><div class=\"diagram-scroll\" tabindex=\"0\" role=\"region\" aria-label=\"Post-norm 잔차 연결도 · 가로로 스크롤 가능\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 630 210\" role=\"img\" aria-label=\"원 Transformer: sublayer와 잔차를 더한 후 LayerNorm\"><defs><marker id=\"post\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"4\" orient=\"auto\"><path d=\"M0,0 L8,4 L0,8 Z\" fill=\"#5D6570\"/></marker></defs><path d=\"M50 80H98\" fill=\"none\" stroke=\"#5D6570\" stroke-width=\"2\"  marker-end=\"url(#post)\"/><rect x=\"100\" y=\"52\" width=\"140\" height=\"56\" rx=\"10\" fill=\"#FFFFFF\" stroke=\"#959BA5\" stroke-width=\"1.6\"/><text x=\"170.0\" y=\"87.0\" text-anchor=\"middle\" class=\"sv-label\">Sublayer</text><path d=\"M240 80H301\" fill=\"none\" stroke=\"#5D6570\" stroke-width=\"2\"  marker-end=\"url(#post)\"/><circle cx=\"320\" cy=\"80\" r=\"18\" fill=\"#FFFFFF\" stroke=\"#5D6570\" stroke-width=\"1.6\"/><text x=\"320\" y=\"87\" text-anchor=\"middle\" class=\"sv-label\">+</text><path d=\"M338 80H388\" fill=\"none\" stroke=\"#5D6570\" stroke-width=\"2\"  marker-end=\"url(#post)\"/><rect x=\"390\" y=\"52\" width=\"140\" height=\"56\" rx=\"10\" fill=\"#FFFFFF\" stroke=\"#959BA5\" stroke-width=\"1.6\"/><text x=\"460.0\" y=\"87.0\" text-anchor=\"middle\" class=\"sv-label\">LayerNorm</text><path d=\"M530 80H585\" fill=\"none\" stroke=\"#5D6570\" stroke-width=\"2\"  marker-end=\"url(#post)\"/><path d=\"M62 80V158H320V101\" fill=\"none\" stroke=\"#5D6570\" stroke-width=\"2\"  marker-end=\"url(#post)\"/><text x=\"28\" y=\"87\" class=\"sv-label\">x</text><text x=\"595\" y=\"87\" class=\"sv-label\">y</text><text x=\"180\" y=\"184\" text-anchor=\"middle\" class=\"sv-note\">잔차 경로</text></svg></div><div class=\"formula\">LayerNorm(x + Sublayer(x))</div></div><div class=\"diagram-panel emphasized\"><div class=\"diagram-title\"><span>LLaMA</span><strong>Pre-norm + RMSNorm</strong></div><div class=\"diagram-scroll\" tabindex=\"0\" role=\"region\" aria-label=\"Pre-norm 잔차 연결도 · 가로로 스크롤 가능\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 630 210\" role=\"img\" aria-label=\"LLaMA: RMSNorm 이후 sublayer, 입력 잔차를 더함\"><defs><marker id=\"pre\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"4\" orient=\"auto\"><path d=\"M0,0 L8,4 L0,8 Z\" fill=\"#5D6570\"/></marker></defs><path d=\"M50 80H98\" fill=\"none\" stroke=\"#5D6570\" stroke-width=\"2\"  marker-end=\"url(#pre)\"/><rect x=\"100\" y=\"52\" width=\"140\" height=\"56\" rx=\"10\" fill=\"#EEF2FA\" stroke=\"#2E55A5\" stroke-width=\"1.6\"/><text x=\"170.0\" y=\"87.0\" text-anchor=\"middle\" class=\"sv-label\">RMSNorm</text><path d=\"M240 80H278\" fill=\"none\" stroke=\"#5D6570\" stroke-width=\"2\"  marker-end=\"url(#pre)\"/><rect x=\"280\" y=\"52\" width=\"140\" height=\"56\" rx=\"10\" fill=\"#EEF2FA\" stroke=\"#2E55A5\" stroke-width=\"1.6\"/><text x=\"350.0\" y=\"87.0\" text-anchor=\"middle\" class=\"sv-label\">Sublayer</text><path d=\"M420 80H491\" fill=\"none\" stroke=\"#5D6570\" stroke-width=\"2\"  marker-end=\"url(#pre)\"/><circle cx=\"510\" cy=\"80\" r=\"18\" fill=\"#FFFFFF\" stroke=\"#5D6570\" stroke-width=\"1.6\"/><text x=\"510\" y=\"87\" text-anchor=\"middle\" class=\"sv-label\">+</text><path d=\"M528 80H585\" fill=\"none\" stroke=\"#5D6570\" stroke-width=\"2\"  marker-end=\"url(#pre)\"/><path d=\"M62 80V158H510V101\" fill=\"none\" stroke=\"#5D6570\" stroke-width=\"2\"  marker-end=\"url(#pre)\"/><text x=\"28\" y=\"87\" class=\"sv-label\">x</text><text x=\"595\" y=\"87\" class=\"sv-label\">y</text><text x=\"284\" y=\"184\" text-anchor=\"middle\" class=\"sv-note\">잔차 경로</text></svg></div><div class=\"formula\">x + Sublayer(RMSNorm(x))</div></div></div><div class=\"annotation blue\"><strong>위치와 함수는 별개의 선택입니다.</strong><span>RMSNorm은 root mean square로 정규화하며 mean-centering을 생략합니다.</span></div>",
+      "note": "",
+      "section": "2",
+      "section_label": "데이터·설계·학습",
+      "layout": "process",
+      "sources": [
+        {
+          "label": "LLaMA v1 · §2.2 · Transformer §3.1 · RMSNorm §3",
+          "url": "https://arxiv.org/pdf/2302.13971v1#page=3"
+        },
+        {
+          "label": "Transformer",
+          "url": "https://arxiv.org/abs/1706.03762v7"
+        },
+        {
+          "label": "RMSNorm",
+          "url": "https://arxiv.org/abs/1910.07467v1"
+        }
+      ]
+    },
+    {
+      "title": "수학 성능은<br>다수결 조건에 따라 달라집니다",
+      "body": "<p>GSM8k에서 LLaMA-65B와 Minerva-62B의 우열은 maj1@k 미적용과 다수결에서 달라집니다. 다수결은 여러 샘플의 답을 모아 판단합니다.</p><p>Minerva는 수학 자료로 추가 학습한 모델이고 LLaMA는 수학 전용 fine-tuning을 하지 않았습니다. 학습 조건과 추론 샘플 수를 모두 표시해야 합니다.</p>",
+      "visual": "<div class=\"condition-panels\"><div class=\"compare-panel\"><h3>maj1@k 미적용</h3><p class=\"panel-sub\">기본 보고값 · GSM8k</p><div class=\"hbar-chart \" role=\"img\" aria-label=\"GSM8k maj1@k 미적용: Minerva 52.4%, LLaMA 50.9%\"><div class=\"hbar-row\" data-value=\"52.4\"><div class=\"hbar-head\"><span>Minerva 62B</span><strong>52.4<small>%</small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill gray\" style=\"width:52.4%\"></div></div></div><div class=\"hbar-row\" data-value=\"50.9\"><div class=\"hbar-head\"><span>LLaMA 65B</span><strong>50.9<small>%</small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill blue\" style=\"width:50.9%\"></div></div></div><div class=\"chart-axis\"><span>0</span><span>25</span><span>50</span><span>75</span><span>100%</span></div></div></div><div class=\"compare-panel\"><h3>다수결 · k = 100</h3><p class=\"panel-sub\">문제마다 100개 응답을 모아 판단</p><div class=\"hbar-chart \" role=\"img\" aria-label=\"GSM8k k100 다수결: Minerva 68.5%, LLaMA 69.7%\"><div class=\"hbar-row\" data-value=\"68.5\"><div class=\"hbar-head\"><span>Minerva 62B</span><strong>68.5<small>%</small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill gray\" style=\"width:68.5%\"></div></div></div><div class=\"hbar-row\" data-value=\"69.7\"><div class=\"hbar-head\"><span>LLaMA 65B</span><strong>69.7<small>%</small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill blue\" style=\"width:69.7%\"></div></div></div><div class=\"chart-axis\"><span>0</span><span>25</span><span>50</span><span>75</span><span>100%</span></div></div></div></div><p class=\"cap\">두 패널 모두 accuracy (%) · 0–100% 같은 축<br>shot 수·기본 decoding 설정은 v1 §3.4/Table 7에 미기술</p>",
+      "note": "",
+      "section": "3",
+      "section_label": "실험과 관찰",
+      "layout": "process",
+      "sources": [
+        {
+          "label": "LLaMA v1 · §3.4 · Table 7",
+          "url": "https://arxiv.org/pdf/2302.13971v1#page=6"
+        }
+      ]
+    },
+    {
+      "title": "MMLU에서는<br>더 높은 비교 모델이 있습니다",
+      "body": "<p>MMLU는 57개 지식 과제를 평가합니다. 기반 LLaMA-65B의 5-shot 평균은 63.4로 Chinchilla-70B와 PaLM-540B보다 낮습니다.</p><p>저자는 책과 학술 자료의 양이 상대적으로 적다는 점을 가능한 설명으로 제시합니다. 데이터 양의 차이가 원인이라는 것은 검증된 결론이 아닙니다.</p>",
+      "visual": "<div class=\"chart-heading\"><span class=\"tag blue\">기반 모델</span><strong>MMLU · 5-shot accuracy</strong></div><div class=\"hbar-chart \" role=\"img\" aria-label=\"Table 9 MMLU 5-shot LLaMA 63.4 Chinchilla 67.5 PaLM 69.3\"><div class=\"hbar-row\" data-value=\"63.4\"><div class=\"hbar-head\"><span>LLaMA 65B</span><strong>63.4<small>%</small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill blue\" style=\"width:63.4%\"></div></div></div><div class=\"hbar-row\" data-value=\"67.5\"><div class=\"hbar-head\"><span>Chinchilla 70B</span><strong>67.5<small>%</small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill gray\" style=\"width:67.5%\"></div></div></div><div class=\"hbar-row\" data-value=\"69.3\"><div class=\"hbar-head\"><span>PaLM 540B</span><strong>69.3<small>%</small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill gray\" style=\"width:69.3%\"></div></div></div><div class=\"chart-axis\"><span>0</span><span>25</span><span>50</span><span>75</span><span>100%</span></div></div><div class=\"annotation orange\"><strong>저자 가설</strong><span>책·학술 자료의 양이 차이를 설명할 가능성<br>원인을 확인한 통제 실험은 아닙니다.</span></div><p class=\"cap\">Table 9 평균 열 · 전체 57개 과제 · 모델 크기·학습 조건이 다릅니다.</p>",
+      "note": "가설의 주체는 저자입니다. instruction fine-tuning 전후 비교와 분리해 읽습니다.",
+      "section": "3",
+      "section_label": "실험과 관찰",
+      "layout": "quantitative",
+      "sources": [
+        {
+          "label": "LLaMA v1 · §3.6 · Table 9",
+          "url": "https://arxiv.org/pdf/2302.13971v1#page=7"
+        }
+      ]
+    }
+  ]
+}

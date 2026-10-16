@@ -1,0 +1,4 @@
+interface:
+  display_name: "논문 HTML 발표자료"
+  short_description: "논문과 파트 분석을 근거가 보존된 도식·차트 중심 발표자료로 구성"
+  default_prompt: "$create-paper-presentation으로 이 논문 분석의 기존 구성을 유지한 HTML 발표자료를 만들고, 실제 화면을 다시 검토해 개선해 주세요."
