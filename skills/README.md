@@ -2,12 +2,12 @@
 
 | 순서 | 스킬 | 결과 |
 | --- | --- | --- |
-| Skills 1 · [#170](https://github.com/Pseudo-Lab/llm-technical-report-study/issues/170) | [extract-paper-parts](extract-paper-parts/SKILL.md) | 원문 근거를 다섯 PART로 묶은 Markdown·HTML 읽기 지도 |
+| Skills 1 · [#170](https://github.com/Pseudo-Lab/llm-technical-report-study/issues/170) | [extract-paper-parts](extract-paper-parts/SKILL.md) | 다섯 파트 개요·협업 제안·파트별 질문·개념별 페이지로 된 Markdown·HTML 읽기 지도 |
 | Skills 2 · [#169](https://github.com/Pseudo-Lab/llm-technical-report-study/issues/169) | [create-paper-presentation](create-paper-presentation/SKILL.md) | 검토된 분석에서 구성한 HTML 발표자료와 화면 검토 피드백 |
 
 추출 → 사람의 범위·근거 검토 → 발표자료 제작 순으로 사용한다. 검토 전 초안을 요청받으면 검토 상태를 명시한다. 두 스킬은 원래 파트와 목차, 원문 근거, 실험 조건과 불확실성을 유지하며 담당 범위나 공식 학습목표를 임의로 확정하지 않는다.
 
-읽기 지도는 다섯 PART를 선택하고 해당 PART 안에서 한 페이지씩 넘긴다. 첫 화면부터 하단 이동 버튼을 표시하며, K/E 근거 링크는 해당 PART와 페이지를 함께 연다. [읽기 화면 양식](extract-paper-parts/assets/reading-map-shell.html)을 브라우저에서 직접 열면 동작하는 미리보기를 볼 수 있다.
+읽기 지도의 첫 페이지는 다섯 파트가 다루는 내용과 분량, 둘째 페이지는 함께 준비할 파트 조합이다. 이어서 파트마다 질문(RQ) 한 페이지와 개념당 한 페이지가 나오고, Background에는 이번 논문에서 새로 채울 빈 영역 표가 있다. 개념 링크는 해당 파트 탭과 페이지를 함께 연다. [읽기 화면 양식](extract-paper-parts/assets/reading-map-shell.html)을 브라우저에서 직접 열면 동작하는 미리보기를 볼 수 있다.
 
 ## 실행
 

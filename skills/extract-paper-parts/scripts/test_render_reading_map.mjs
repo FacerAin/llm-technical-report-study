@@ -13,148 +13,96 @@ const renderer = path.join(here, 'render_reading_map.mjs');
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'reading-map-test-'));
 after(() => fs.rmSync(temporary, {recursive: true, force: true}));
 
-function renderFile(input, name) {
-  const output = path.join(temporary, 'rendered', name + '.html');
-  execFileSync(process.execPath, [renderer, input, output], {
-    env: process.env,
-    encoding: 'utf8',
-  });
+function render(markdown, name) {
+  const input = path.join(temporary, name + '.md');
+  const output = path.join(temporary, 'out', name + '.html');
+  fs.writeFileSync(input, markdown);
+  execFileSync(process.execPath, [renderer, input, output], {env: process.env, encoding: 'utf8', stdio: 'pipe'});
   const html = fs.readFileSync(output, 'utf8');
-  const pages = [...html.matchAll(/<section class="paper-page"([^>]*)>([\s\S]*?)<\/section>/g)]
-    .map(([, attributes, body]) => ({
-      part: /data-part="([^"]+)"/.exec(attributes)?.[1],
-      title: /data-page-title="([^"]+)"/.exec(attributes)?.[1],
-      section: /data-section="([^"]+)"/.exec(attributes)?.[1],
-      body,
-    }));
-  assert.ok(pages.length, 'The renderer must produce reading pages.');
+  const pages = [...html.matchAll(/<section class="paper-page"([^>]*)>([\s\S]*?)<\/section>/g)].map(([, attrs, body]) => ({
+    part: /data-part="([^"]+)"/.exec(attrs)[1],
+    kind: /data-kind="([^"]+)"/.exec(attrs)[1],
+    title: /data-page-title="([^"]+)"/.exec(attrs)[1],
+    body,
+  }));
   return {html, pages};
 }
 
-function renderMarkdown(markdown, name) {
-  const input = path.join(temporary, name + '.md');
-  fs.writeFileSync(input, markdown);
-  return renderFile(input, name);
-}
+const sample = `# 예시 — 다섯 파트 읽기 지도
 
-function anchoredPage(pages, id) {
-  const matching = pages.filter(page => page.body.includes(`id="${id}"`));
-  assert.equal(matching.length, 1, `Anchor ${id} must occur on exactly one page.`);
-  return matching[0];
-}
+<!-- part: overview -->
+## 한눈에 보기
 
-test('the supplied template keeps each PART scope and workload in that PART', () => {
-  const {pages} = renderFile(path.join(here, '../assets/reading-map-template.md'), 'template');
-  const scopes = pages.filter(page => page.title === '범위·분량과 상대 부담');
-  assert.equal(scopes.length, 5);
-  const expected = {
-    'Architecture &amp; Pre-training': 'architecture',
-    'Data &amp; Synthesis': 'data',
-    'Post-training': 'post',
-    'Alignment &amp; RL': 'alignment',
-    Background: 'background',
-  };
-  for (const [section, part] of Object.entries(expected)) {
-    assert.equal(scopes.find(page => page.section === section)?.part, part,
-      `${section} must retain its scope and workload page.`);
-  }
-});
+### 다섯 파트가 다루는 내용
 
-test('an explicit common section keeps aggregate rows that name individual PARTs', () => {
-  const {pages} = renderMarkdown(`# 공통 집계 사례
-
-<!-- part: common -->
-## 전체 집계와 범위 조정
-
-| 문제 | 유지할 목표 | 결정 |
+| 파트 | 내용 | 분량 |
 | --- | --- | --- |
-| Architecture & Pre-training | 구조 목표 유지 | 사람 검토 대기 |
-| Alignment & RL | 보상 목표 유지 | 사람 검토 대기 |
+| Architecture & Pre-training | 블록 | ■■■□□ 중간 |
 
-- 사람 검토: 미검토
-`, 'common');
-  assert.ok(pages.every(page => page.part === 'common'),
-    'Part names inside a common aggregate must not move its rows to another PART.');
-  const body = pages.map(page => page.body).join('\n');
-  assert.ok(body.includes('구조 목표 유지'));
-  assert.ok(body.includes('보상 목표 유지'));
-  assert.ok(body.includes('사람 검토: 미검토'));
-});
+### 분량과 함께 할 파트
 
-test('legacy documents still recognize owners with and without colons', () => {
-  const {pages} = renderMarkdown(`# 기존 문서 사례
-
-## 핵심 주제와 원문 근거
-
-<a id="k01"></a>
-
-### K01 — 구조
-- 목표: G1; 주관: Architecture & Pre-training; 공동 참조: Background
-- 원문 근거: 구조가 계승되었다.
-
-<a id="k02"></a>
-
-### K02 — 데이터
-- 목표 G2; 주관 Data & Synthesis; 공동 참조 Post-training
-- 원문 근거: 데이터 조성은 미공개이다.
-
-## 외부 배경 원전
-
-<a id="e01"></a>
-
-### E01 — 선수 개념
-- 주관: Background; 공동 참조: Architecture & Pre-training
-- 원전 확인 상태: 확인 필요
-`, 'legacy');
-  assert.equal(anchoredPage(pages, 'k01').part, 'architecture');
-  assert.equal(anchoredPage(pages, 'k02').part, 'data');
-  assert.equal(anchoredPage(pages, 'e01').part, 'background');
-});
-
-test('pagination preserves source statements, unique anchors, and evidence links', () => {
-  const statements = Array.from({length: 9}, (_, i) =>
-    `보존 문장 ${i + 1}: ${'조건과 대상 단계를 유지한다. '.repeat(12).trim()}`);
-  const {html, pages} = renderMarkdown(`# 내용 보존 사례
+- Post와 Alignment를 함께 준비한다.
 
 <!-- part: architecture -->
-## 구조 담당
+## Architecture & Pre-training
 
-<a id="k01"></a>
+### 이 파트의 질문
 
-### K01 — 조건부 근거
-- 주관: Architecture & Pre-training; 공동 참조: Background
-${statements.map(statement => '- ' + statement).join('\n')}
+- **RQ1. 블록은 무엇이 다른가?**
+  - 개념: [RMSNorm](#c-rmsnorm)
 
-원문은 [정확한 판본](https://example.com/paper?v=2#sec-3), 배경은 [E01](#e01), 관련 파일은 [근거](자료/근거.md)를 확인한다.
+<a id="c-rmsnorm"></a>
+
+### RMSNorm
+
+- **무엇인가:** 평균을 빼지 않는 정규화.
+- **설명할 수 있어야 하는 것:**
+  - [ ] LayerNorm과 차이
 
 <!-- part: background -->
-## 배경 담당
+## Background
 
-<a id="e01"></a>
+### 이번에 새로 채울 빈 영역
 
-### E01 — 외부 원전
-- 주관: Background; 공동 참조: Architecture & Pre-training
-- 원전 미확인: 확인 필요이며 미수행으로 단정하지 않는다.
+| 개념 | 처음 나온 논문 |
+| --- | --- |
+| [RMSNorm](#c-rmsnorm) | Zhang & Sennrich 2019 |
+`;
 
-<!-- part: architecture -->
-## 구조 추가 읽기
+test('each H3 becomes one page in its marked part, in source order', () => {
+  const {pages} = render(sample, 'basic');
+  assert.deepEqual(pages.map(p => [p.part, p.title]), [
+    ['overview', '다섯 파트가 다루는 내용'],
+    ['overview', '분량과 함께 할 파트'],
+    ['architecture', '이 파트의 질문'],
+    ['architecture', 'RMSNorm'],
+    ['background', '이번에 새로 채울 빈 영역'],
+  ]);
+});
 
-### 공백과 읽기 계획
-- 사람 검토: 미검토
-- 앞의 [K01](#k01) 조건을 유지한다.
-`, 'preservation');
-  const architecture = pages.filter(page => page.part === 'architecture');
-  assert.ok(architecture.length > 2, 'Long evidence must be split across multiple pages.');
-  for (const statement of statements) {
-    assert.equal(architecture.filter(page => page.body.includes(statement)).length, 1,
-      'Every original statement must survive on exactly one page.');
-  }
-  assert.equal(anchoredPage(pages, 'k01').part, 'architecture');
-  assert.equal(anchoredPage(pages, 'e01').part, 'background');
-  assert.ok(html.includes('href="https://example.com/paper?v=2#sec-3"'));
-  assert.ok(html.includes('href="#k01"'));
-  assert.ok(html.includes('href="#e01"'));
-  assert.ok(html.includes(`href="../${encodeURIComponent('자료')}/${encodeURIComponent('근거.md')}"`));
-  assert.ok(pages.find(page => page.section === '구조 추가 읽기')?.body.includes('사람 검토: 미검토'));
-  assert.ok(anchoredPage(pages, 'e01').body.includes('원전 미확인: 확인 필요이며 미수행으로 단정하지 않는다.'));
+test('concept anchors move onto the concept page and links resolve', () => {
+  const {pages, html} = render(sample, 'anchors');
+  const concept = pages.find(p => p.title === 'RMSNorm');
+  assert.equal(concept.kind, 'concept');
+  assert.match(concept.body, /<a id="c-rmsnorm"><\/a>/);
+  assert.equal(pages.find(p => p.title === '이 파트의 질문').kind, 'questions');
+  assert.doesNotMatch(pages.find(p => p.title === '이 파트의 질문').body, /id="c-rmsnorm"/);
+  assert.match(html, /type="checkbox"/);
+  assert.match(html, /<div class="table-scroll"><table>/);
+  assert.doesNotMatch(html, /preview-overview/, 'shell preview pages are replaced');
+});
+
+test('a link to a missing concept fails the render', () => {
+  assert.throws(() => render(sample.replace('(#c-rmsnorm) | Zhang', '(#c-missing) | Zhang'), 'missing'), /missing anchors: c-missing/);
+});
+
+test('an unknown part marker fails the render', () => {
+  assert.throws(() => render(sample.replace('part: background', 'part: misc'), 'marker'), /Unknown part marker/);
+});
+
+test('the bundled template renders', () => {
+  const template = fs.readFileSync(path.join(here, '../assets/reading-map-template.md'), 'utf8')
+    .replace(/\(#c-\{slug\}\)/g, '(#c-slug)').replace(/<a id="c-\{slug\}"><\/a>/g, '<a id="c-slug"></a>');
+  const {pages} = render(template, 'template');
+  assert.deepEqual([...new Set(pages.map(p => p.part))], ['overview', 'architecture', 'data', 'post', 'alignment', 'background', 'common']);
 });
