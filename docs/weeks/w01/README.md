@@ -10,6 +10,16 @@
 - 모임 날짜: 추후 안내
 - 주간 편집자: 추후 안내
 
+## 발표자료
+
+- [W01 발표자료 HTML](index.html): 128장. 준비 과정 → LLaMA 1 다섯 파트 읽기 지도와 담당 → LLM 생애주기 → LLaMA 1(배경 · 데이터 · 구조·학습 · 평가 · 후학습·정렬) → 다음 주 Llama 2 다섯 파트와 업무 분배 제안. W01 스터디 피드백은 아직 반영하지 않았습니다.
+- [발표 대본](script.html) · [Markdown 원본](script.md): 장마다 같이 다듬는 대본입니다. 발표자료에서 `N` 키(넓은 화면은 오른쪽 아래 버튼)로 현재 장의 대본을 볼 수 있습니다.
+- [LLM 생애주기 지도](lifecycle-map.html): 발표자료 12장의 네 묶음 · 11단계를 단계마다 정하는 것과 스터디 주차로 펼친 페이지입니다. 상단 버튼으로 LLaMA 1이 다룬 칸을 표시할 수 있습니다.
+- [벤치마크 실제 예시](benchmark-examples.md): LLaMA 1이 쓴 벤치마크 20개의 실제 문항 · 출처 · 라이선스.
+- [LLaMA 1 읽기 지도](llama1-reading-map.html) · [Markdown](llama1-reading-map.md): Skills 1([#170](https://github.com/Pseudo-Lab/llm-technical-report-study/issues/170))로 만든 63쪽 읽기 지도입니다. 다섯 파트 개요와 협업 제안, 파트별 질문, 개념별 설명 페이지, Background 빈 영역 표로 되어 있습니다. 사람 검토 전 상태입니다.
+
+HTML 파일을 내려받아 브라우저에서 열면 됩니다. `←` / `→`로 슬라이드를 넘기고 `Home` / `End`로 처음과 끝으로 이동합니다.
+
 ## 학습목표
 
 - [ ] **LLaMA 1의 tokenization·Transformer block·position 처리 조합이 원 Transformer의 어느 위치를 바꾸며, 각 부품이 무엇을 담당하는지 설명할 수 있다.**

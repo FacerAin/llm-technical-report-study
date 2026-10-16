@@ -1,4 +1,4 @@
 interface:
   display_name: "논문 파트별 내용·분량 추출"
-  short_description: "다섯 PART별로 근거를 모아 한 페이지씩 넘기는 Markdown·HTML 읽기 지도"
-  default_prompt: "$extract-paper-parts로 지정한 보고서 버전과 학습목표를 읽고, Architecture & Pre-training / Data & Synthesis / Post-training / Alignment & RL / Background의 다섯 PART별 읽기 지도를 만들어줘. 각 PART 안에 질문·핵심 인계, 범위·부담, 주관 K ID 상세, 공백·읽기를 모으고 공통 자료는 별도로 둬. 파일 출력은 PART 마커가 있는 Markdown 원본과 같은 내용의 밝은 디자인 HTML로 작성해줘. HTML은 다섯 PART 선택 화면에서 시작하고, 선택한 PART 안에서 한 페이지씩 넘기도록 해줘. 이전/다음·방향키·Home/End·목차·페이지 수는 현재 PART에 한정하고, K/E 링크는 주관 PART와 대상 페이지를 함께 열어줘."
+  short_description: "다섯 파트의 내용·분량·협업 제안과 개념별 설명 페이지로 된 읽기 지도"
+  default_prompt: "$extract-paper-parts로 지정한 보고서 버전과 학습목표를 읽고 다섯 파트 읽기 지도를 만들어줘. 첫 페이지에 파트별 다루는 내용·필수 원문·개념 수·분량, 둘째 페이지에 함께 준비할 파트 조합을 두고, 파트마다 RQ 질문 한 페이지와 개념당 한 페이지(무엇인가·원문·설명할 수 있어야 하는 것)를 써줘. Background에는 이전 주차에 다루지 않았고 중간 논문에서 처음 나와 이번 논문이 쓴 개념 표를 넣어줘. Markdown과 같은 내용의 HTML로 출력해줘."

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>LLM 생애주기 지도</title>
+<style>
+:root{--bg:#E9ECF0;--card:#F7F8FA;--ink:#1A1D23;--ink2:#2F343C;--muted:#5D6570;--line:#CDD2D9;--blue:#2E55A5;--green:#2B7858;--orange:#A65A2E;--purple:#6A54A8;--f:Pretendard,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:var(--f);word-break:keep-all;-webkit-font-smoothing:antialiased}
+.top{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding:14px 24px;background:var(--bg);border-bottom:1px solid var(--line)}
+.top h1{margin:0;font-size:20px;letter-spacing:-.02em}
+.top p{margin:0;font-size:13px;color:var(--muted)}
+.tools{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.tools button{height:34px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:#fff;font:inherit;font-size:13px;cursor:pointer}
+.tools button[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+main{padding:18px 24px 28px}
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:start}
+.ph{border-radius:16px;border:1.5px solid;padding:12px;display:flex;flex-direction:column}
+.ph.blue{border-color:#5B79B8;background:#EEF2FA}.ph.green{border-color:#3E8E6A;background:#ECF5F0}
+.ph.orange{border-color:#C07A4A;background:#F9F0E8}.ph.purple{border-color:#7E68B8;background:#F1EEF8}
+.ph header{display:flex;flex-direction:column;margin:0 4px 10px}.ph header b{font-size:19px}.ph header span{font-size:12px;color:var(--muted)}
+.st{background:#fff;border:1px solid #DDE1E7;border-radius:12px;padding:0}
+.st summary{display:flex;align-items:center;gap:9px;padding:10px 12px;font-weight:700;font-size:16px;cursor:pointer;list-style:none}
+.st summary::-webkit-details-marker{display:none}
+.st summary::after{content:"▾";margin-left:auto;color:var(--muted);font-size:13px}
+.st:not([open]) summary::after{content:"▸"}
+.no{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#F0F2F5;font-size:12px;color:var(--muted)}
+.st ul{margin:0;padding:0 12px 6px 14px;list-style:none}
+.st li{padding:6px 0;border-top:1px solid #EEF0F3;font-size:14px;color:var(--ink2)}
+.st li b{font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.chips i{font-style:normal;font-size:12px;padding:2px 8px;border-radius:999px;background:#F0F2F5;border:1px solid #E1E4E9;color:var(--ink2)}
+.wk{display:flex;flex-wrap:wrap;gap:4px;padding:6px 12px 10px}
+.wk em{font-style:normal;font-size:11.5px;font-weight:700;padding:2px 7px;border-radius:6px;background:#EEF2FA;color:var(--blue)}
+.dn{display:block;text-align:center;font-style:normal;color:#959BA5;font-size:12px;line-height:18px}
+.band,.back{margin-top:14px;padding:10px 16px;border-radius:12px;font-size:14px}
+.band{background:#ECF5F0;border:1.5px solid var(--green);color:var(--green);font-weight:600}
+.back{background:#F9F0E8;border:1.5px dashed var(--orange)}.back b{color:var(--orange)}
+.l1{display:none;font-size:12px;font-weight:700;margin-left:6px}
+body.l1 .l1{display:inline}
+body.l1 .st[data-l1=full]{border-color:var(--blue);box-shadow:inset 3px 0 0 var(--blue)}body.l1 .st[data-l1=full] .l1::before{content:"● LLaMA 1";color:var(--blue)}
+body.l1 .st[data-l1=part]{border-color:var(--orange);border-style:dashed}body.l1 .st[data-l1=part] .l1::before{content:"◐ 일부";color:var(--orange)}
+body.l1 .st[data-l1=none]{opacity:.45}body.l1 .st[data-l1=none] .l1::before{content:"○ 없음";color:var(--muted)}
+.src{margin-top:14px;font-size:12px;color:var(--muted);line-height:1.7}.src a{color:var(--muted)}
+@media(max-width:1100px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.flow{grid-template-columns:minmax(0,1fr)}.top{padding:12px 14px}main{padding:12px 14px 24px}}
+@media print{.top .tools{display:none}.st{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="top"><h1>LLM 생애주기 지도</h1><p>네 묶음 · 11단계 · 단계마다 정하는 것과 스터디 주차</p>
+<div class="tools"><button type="button" id="open">모두 펼치기</button><button type="button" id="close">모두 접기</button><button type="button" id="l1" aria-pressed="false">LLaMA 1이 다룬 칸</button></div></header>
+<main>
+<div class="flow"><section class="ph blue"><header><b>데이터</b><span>Data &amp; Synthesis</span></header><details class="st" data-no="1" data-l1="full" open><summary><span class="no">1</span>수집<span class="l1"></span></summary><ul><li><b>웹 · 코드 · 수학 · 논문</b></li><li><b>CommonCrawl 덤프</b></li><li><b>라이선스 · opt-out</b></li><li><b>언어 범위</b></li></ul><div class="wk"><em>W01</em><em>W16</em></div></details><i class="dn">↓</i><details class="st" data-no="2" data-l1="full" open><summary><span class="no">2</span>토크나이저<span class="l1"></span></summary><ul><li><b>알고리즘</b><span class=chips><i>BPE · Unigram</i><i>SentencePiece · tiktoken</i></span></li><li><b>vocab 크기</b><span class=chips><i>32K → 128K+</i><i>언어별 압축률</i></span></li><li><b>숫자 · 바이트</b><span class=chips><i>숫자 한 자리씩</i><i>byte fallback</i></span></li><li><b>특수 토큰 · 사전학습 전에 고정</b><span class=chips><i>BOS · EOS · pad</i><i>역할 · 턴 토큰</i><i>도구 호출 토큰</i><i>think 토큰</i><i>예약 토큰</i></span></li><li><b>채팅 템플릿</b><span class=chips><i>ChatML &lt;|im_start|&gt;</i><i>Llama 3 header · &lt;|eot_id|&gt;</i></span></li></ul><div class="wk"><em>W01</em><em>W16</em></div></details><i class="dn">↓</i><details class="st" data-no="3" data-l1="full" open><summary><span class="no">3</span>정제 · 믹스<span class="l1"></span></summary><ul><li><b>텍스트 추출</b><span class=chips><i>HTML → 텍스트</i><i>trafilatura 등</i></span></li><li><b>언어 식별</b><span class=chips><i>fastText LID</i></span></li><li><b>휴리스틱 필터</b><span class=chips><i>길이 · 단어 길이</i><i>기호 · 불릿 비율</i><i>반복 줄 · n-gram</i><i>C4 · Gopher 규칙</i></span></li><li><b>모델 품질 필터</b><span class=chips><i>fastText 분류기</i><i>LLM 라벨 분류기</i><i>상위 10% 유지</i></span></li><li><b>안전 필터</b><span class=chips><i>독성 · NSFW</i><i>PII 마스킹</i></span></li><li><b>중복 제거</b><span class=chips><i>URL 단위</i><i>문서 MinHash</i><i>줄 단위</i></span></li><li><b>벤치 오염 제거</b><span class=chips><i>n-gram 매칭</i></span></li><li><b>믹스</b><span class=chips><i>소스 비율</i><i>업샘플</i><i>합성 · rephrase</i></span></li></ul><div class="wk"><em>W01</em><em>W04</em><em>W08</em><em>W16</em></div></details></section><section class="ph green"><header><b>사전학습</b><span>Architecture &amp; Pre-training</span></header><details class="st" data-no="4" data-l1="full" open><summary><span class="no">4</span>아키텍처<span class="l1"></span></summary><ul><li><b>attention</b><span class=chips><i>MHA → GQA</i><i>MLA</i><i>sparse · linear</i></span></li><li><b>FFN vs MoE</b></li><li><b>위치</b><span class=chips><i>RoPE</i><i>NoPE</i></span></li><li><b>RMSNorm · SwiGLU</b></li><li><b>MTP 헤드</b></li></ul><div class="wk"><em>W01</em><em>W02</em><em>W03</em><em>W05</em><em>W06</em><em>W08–W11</em><em>W15</em><em>W16</em></div></details><i class="dn">↓</i><details class="st" data-no="5" data-l1="full" open><summary><span class="no">5</span>사전학습 run<span class="l1"></span></summary><ul><li><b>예산</b><span class=chips><i>모델 크기</i><i>토큰 수</i><i>스케일링 법칙</i></span></li><li><b>optimizer</b><span class=chips><i>AdamW</i><i>Muon</i></span></li><li><b>LR 스케줄 · batch</b></li><li><b>정밀도</b><span class=chips><i>BF16</i><i>FP8</i></span></li><li><b>병렬화 · MFU</b></li><li><b>loss spike 대응</b></li></ul><div class="wk"><em>W01</em><em>W03</em><em>W06</em><em>W11</em><em>W15</em></div></details><i class="dn">↓</i><details class="st" data-no="6" data-l1="none" open><summary><span class="no">6</span>미드트레인<span class="l1"></span></summary><ul><li><b>annealing</b><span class=chips><i>고품질 수학 · 코드</i><i>LR → 0</i></span></li><li><b>롱컨텍스트</b><span class=chips><i>RoPE base 확장</i><i>긴 문서 비율</i></span></li><li><b>추론 데이터 주입</b></li><li><b>curriculum</b></li></ul><div class="wk"><em>W03</em><em>W08</em><em>W16</em></div></details></section><section class="ph orange"><header><b>후학습</b><span>Post-training · Alignment &amp; RL</span></header><details class="st" data-no="7" data-l1="part" open><summary><span class="no">7</span>SFT<span class="l1"></span></summary><ul><li><b>채팅 템플릿 적용</b></li><li><b>응답 토큰만 loss</b></li><li><b>데이터 출처</b><span class=chips><i>사람 작성</i><i>teacher 증류</i><i>추론 trace</i><i>도구 사용 궤적</i></span></li><li><b>양보다 품질</b></li></ul><div class="wk"><em>W01</em><em>W02</em><em>W03</em><em>W04</em><em>W07</em><em>W12</em><em>W14</em></div></details><i class="dn">↓</i><details class="st" data-no="8" data-l1="none" open><summary><span class="no">8</span>선호 최적화<span class="l1"></span></summary><ul><li><b>선호 데이터</b><span class=chips><i>chosen · rejected</i><i>사람 · LLM judge</i><i>on-policy 샘플</i></span></li><li><b>보상 모델</b><span class=chips><i>ranking loss</i><i>유용성 · 안전 RM</i></span></li><li><b>rejection sampling</b></li><li><b>PPO + KL</b></li><li><b>DPO (암묵적 보상)</b></li></ul><div class="wk"><em>W02</em><em>W04</em></div></details><i class="dn">↓</i><details class="st" data-no="9" data-l1="none" open><summary><span class="no">9</span>RL · 에이전트<span class="l1"></span></summary><ul><li><b>검증 가능 보상</b><span class=chips><i>수학 정답</i><i>코드 테스트</i></span></li><li><b>알고리즘</b><span class=chips><i>GRPO (value 없음)</i><i>생각 길이 · 예산</i></span></li><li><b>도구 환경</b><span class=chips><i>다중 턴</i><i>비동기 rollout</i><i>환경 합성</i></span></li><li><b>on-policy 증류</b></li></ul><div class="wk"><em>W04</em><em>W07</em><em>W08</em><em>W09</em><em>W10</em><em>W12</em><em>W13</em><em>W14</em><em>W15</em></div></details></section><section class="ph purple"><header><b>평가 · 배포</b><span>Background + Others</span></header><details class="st" data-no="10" data-l1="part" open><summary><span class="no">10</span>평가<span class="l1"></span></summary><ul><li><b>base 평가</b><span class=chips><i>few-shot</i><i>likelihood 채점</i></span></li><li><b>생성 · 추론</b><span class=chips><i>pass@k</i><i>verifier 채점</i></span></li><li><b>에이전트 벤치</b></li><li><b>안전</b><span class=chips><i>red teaming</i></span></li><li><b>오염 검사</b></li><li><b>LLM judge · 사람</b></li></ul><div class="wk"><em>W01</em><em>W02</em></div></details><i class="dn">↓</i><details class="st" data-no="11" data-l1="part" open><summary><span class="no">11</span>서빙<span class="l1"></span></summary><ul><li><b>KV cache</b><span class=chips><i>GQA · MLA 압축</i><i>top-k KV</i></span></li><li><b>양자화</b><span class=chips><i>int8 · int4</i><i>FP8</i></span></li><li><b>speculative decoding</b><span class=chips><i>MTP draft</i></span></li><li><b>vLLM · SGLang</b></li><li><b>지연 · 비용</b></li></ul><div class="wk"><em>W02</em><em>W05</em><em>W08</em><em>W09</em></div></details></section></div>
+<div class="band">평가 레이어 · 모든 단계의 결정 근거 — 소형 ablation → base eval → 생성형 · 에이전트 벤치 → 서빙 지표</div>
+<div class="back"><b>↺ 거꾸로 정해지는 결정</b> 11 서빙의 추론 비용 → 4 · 5 모델 크기와 학습 토큰 · 7의 채팅 템플릿 → 2 특수 토큰</div>
+<p class="src">W 태그는 이 스터디 README의 16주 커리큘럼 기준 · 단계 구성 참고: Karpathy “State of GPT”(2023), Olmo 3 model flow · 항목 확인: Llama 3 §3.1–3.2, Qwen 채팅 템플릿, FineWeb, DCLM, Gopher 규칙 · <a href="index.html#s12">발표자료로 돌아가기</a></p>
+</main>
+<script>
+const all=[...document.querySelectorAll('.st')];
+document.getElementById('open').onclick=()=>all.forEach(d=>d.open=true);
+document.getElementById('close').onclick=()=>all.forEach(d=>d.open=false);
+const b=document.getElementById('l1');b.onclick=()=>{const on=document.body.classList.toggle('l1');b.setAttribute('aria-pressed',on)};
+</script>
+</body>
+</html>
