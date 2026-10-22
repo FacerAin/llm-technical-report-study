@@ -237,25 +237,10 @@
       ]
     },
     {
-      "title": "정책 갱신은 rejection sampling과<br>PPO 두 가지를 썼습니다",
-      "body": "<p>§3.2.3은 RM으로 모델을 실제로 고치는 단계입니다. 두 방법을 씁니다.</p><p><b>Rejection sampling(RS)</b>은 K개를 뽑아 RM 최고점 답으로 SFT를 다시 하는 것이고, <b>PPO</b>는 RM 점수를 보상으로 RL을 하는 것입니다.</p>",
-      "visual": "<div class=\"table-wrap\"><table class=\"tbl\"><thead><tr><th scope=\"col\"></th><th scope=\"col\">Rejection sampling</th><th scope=\"col\">PPO</th></tr></thead><tbody><tr><td>한 prompt에서</td><td>K개 생성 → 최고 하나 선택</td><td>1개 생성</td></tr><tr><td>학습 방식</td><td>고른 답으로 SFT (다음 토큰 loss)</td><td>보상 − KL을 최대화 (RL)</td></tr><tr><td>데이터 시점</td><td>먼저 전부 모은 뒤 학습</td><td>매 step 갱신된 정책에서 생성</td></tr><tr><td>원문 표현</td><td>폭(breadth) 탐색</td><td>깊이(depth) 탐색</td></tr></tbody></table></div>",
-      "note": "3.2.3절은 RM을 써서 모델을 실제로 개선하는 단계입니다. 방법은 두 가지입니다. rejection sampling은 답을 여러 개 뽑아 RM이 가장 좋다고 한 답으로 다시 SFT를 합니다. PPO는 RM 점수를 보상으로 강화학습을 합니다. 논문은 RS를 넓게, PPO를 깊게 탐색한다고 표현합니다.",
-      "section": "5",
-      "section_label": "§3.2.3 RS · PPO",
-      "layout": "split",
-      "sources": [
-        {
-          "label": "Llama 2 · §3.2.3",
-          "url": "https://arxiv.org/pdf/2307.09288v2#page=13"
-        }
-      ]
-    },
-    {
-      "title": "RLHF는 V1부터 V5까지 반복했고<br>PPO는 마지막에 얹었습니다",
-      "body": "<p>새 선호 batch가 쌓이면 RM을 다시 학습하고, 그 RM으로 새 버전을 만들었습니다.</p><p>원문은 \"V4까지는 RS만, 그 뒤 RS 결과 위에 PPO\"라고 적습니다. Fig. 11에는 V5에만 PPO 표시가 있어, PPO는 V5부터로 읽는 쪽이 그림과 맞습니다(해석).</p>",
-      "visual": "<p class=\"panel-sub\" style=\"margin:0 0 6px\"><b>① 전체 흐름</b> · 버전이 어떻게 이어졌나</p><div class=\"flow\"><div class=\"bx gray\"><div class=\"t\">SFT</div><div class=\"d\">v1 · v2</div></div><div class=\"arrow\">→</div><div class=\"bx blue\"><div class=\"t\">RLHF V1–V4</div><div class=\"d\">RS만</div></div><div class=\"arrow\">→</div><div class=\"bx green thick\"><div class=\"t\">RLHF V5</div><div class=\"d\">RS → PPO</div></div></div><p class=\"panel-sub\" style=\"margin:18px 0 6px\"><b>② 버전 하나 안에서</b> · V1~V5마다 이 순서를 반복</p><div class=\"flow\"><div class=\"bx gray\"><div class=\"t\">최신 모델로 선호 수집</div><div class=\"d\">매주 batch</div></div><div class=\"arrow\">→</div><div class=\"bx gray\"><div class=\"t\">RM 재학습</div><div class=\"d\">쌓인 선호 전부</div></div><div class=\"arrow\">→</div><div class=\"bx blue\"><div class=\"t\">정책 갱신</div><div class=\"d\">RS (V5는 + PPO) → 다음 버전</div></div></div>",
-      "note": "반복 구조입니다. 선호 데이터는 매주 모았지만 정책은 V1부터 V5까지 다섯 번 갱신했습니다. V4까지는 rejection sampling만 썼고, 그 뒤 RS 결과 위에 PPO를 한 번 더 했습니다. 원문 문장만으로는 V4에 PPO가 들어갔는지 애매한데, 그림 11에는 V5에만 PPO 표시가 있습니다.",
+      "title": "정책은 RS로 다섯 번 갱신했고<br>PPO는 마지막에 얹었습니다",
+      "body": "<p><b>RS</b>는 K개를 뽑아 RM 최고점 답으로 다시 SFT, <b>PPO</b>는 RM 점수를 보상으로 RL입니다. 논문은 RS를 폭(breadth), PPO를 깊이(depth) 탐색이라 부릅니다.</p><p>새 선호 batch가 쌓이면 RM을 다시 학습하고 새 버전을 만들었습니다. 원문은 \"V4까지 RS만, 그 뒤 PPO\"라 적고, Fig. 11에는 V5에만 PPO 표시가 있습니다(해석).</p>",
+      "visual": "<p class=\"panel-sub\" style=\"margin:0 0 6px\"><b>① 전체 흐름</b> · 버전이 어떻게 이어졌나</p><div class=\"flow\"><div class=\"bx gray\"><div class=\"t\">SFT</div><div class=\"d\">v1 · v2</div></div><div class=\"arrow\">→</div><div class=\"bx blue\"><div class=\"t\">RLHF V1–V4</div><div class=\"d\">RS만</div></div><div class=\"arrow\">→</div><div class=\"bx green thick\"><div class=\"t\">RLHF V5</div><div class=\"d\">RS → PPO</div></div></div><p class=\"panel-sub\" style=\"margin:14px 0 6px\"><b>② 버전 하나 안에서</b> · V1~V5마다 반복</p><div class=\"flow\"><div class=\"bx gray\"><div class=\"t\">선호 수집</div><div class=\"d\">매주 batch</div></div><div class=\"arrow\">→</div><div class=\"bx gray\"><div class=\"t\">RM 재학습</div></div><div class=\"arrow\">→</div><div class=\"bx blue\"><div class=\"t\">정책 갱신</div><div class=\"d\">→ 다음 버전</div></div></div>",
+      "note": "3.2.3절은 RM으로 모델을 실제로 고치는 단계입니다. rejection sampling은 답을 여러 개 뽑아 RM이 가장 좋다고 한 답으로 다시 SFT를 하고, PPO는 RM 점수를 보상으로 강화학습을 합니다. 진행은 반복 구조입니다. 선호를 매주 모으고, 쌓이면 RM을 다시 학습하고, 그 RM으로 새 버전을 만듭니다. 이렇게 V1부터 V5까지 다섯 번 갱신했습니다. V4까지는 rejection sampling만 썼고 PPO는 마지막에 얹었습니다. 원문 문장만으로는 V4에 PPO가 들어갔는지 애매한데, 그림 11에는 V5에만 PPO 표시가 있습니다.",
       "section": "5",
       "section_label": "§3.2.3 RS · PPO",
       "layout": "process",
