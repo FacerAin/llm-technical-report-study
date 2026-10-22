@@ -237,7 +237,7 @@
       ]
     },
     {
-      "title": "정책은 RS로 다섯 번 갱신했고<br>PPO는 마지막에 얹었습니다",
+      "title": "V1–V4는 RS만 했고,<br>V5에서 RS 위에 PPO를 얹었습니다",
       "body": "<p><b>RS</b>는 K개를 뽑아 RM 최고점 답으로 다시 SFT, <b>PPO</b>는 RM 점수를 보상으로 RL입니다. 논문은 RS를 폭(breadth), PPO를 깊이(depth) 탐색이라 부릅니다.</p><p>새 선호 batch가 쌓이면 RM을 다시 학습하고 새 버전을 만들었습니다. 원문은 \"V4까지 RS만, 그 뒤 PPO\"라 적고, Fig. 11에는 V5에만 PPO 표시가 있습니다(해석).</p>",
       "visual": "<p class=\"panel-sub\" style=\"margin:0 0 6px\"><b>① 전체 흐름</b> · 버전이 어떻게 이어졌나</p><div class=\"flow\"><div class=\"bx gray\"><div class=\"t\">SFT</div><div class=\"d\">v1 · v2</div></div><div class=\"arrow\">→</div><div class=\"bx blue\"><div class=\"t\">RLHF V1–V4</div><div class=\"d\">RS만</div></div><div class=\"arrow\">→</div><div class=\"bx green thick\"><div class=\"t\">RLHF V5</div><div class=\"d\">RS → PPO</div></div></div><p class=\"panel-sub\" style=\"margin:14px 0 6px\"><b>② 버전 하나 안에서</b> · V1~V5마다 반복</p><div class=\"flow\"><div class=\"bx gray\"><div class=\"t\">선호 수집</div><div class=\"d\">매주 batch</div></div><div class=\"arrow\">→</div><div class=\"bx gray\"><div class=\"t\">RM 재학습</div></div><div class=\"arrow\">→</div><div class=\"bx blue\"><div class=\"t\">정책 갱신</div><div class=\"d\">→ 다음 버전</div></div></div>",
       "note": "3.2.3절은 RM으로 모델을 실제로 고치는 단계입니다. rejection sampling은 답을 여러 개 뽑아 RM이 가장 좋다고 한 답으로 다시 SFT를 하고, PPO는 RM 점수를 보상으로 강화학습을 합니다. 진행은 반복 구조입니다. 선호를 매주 모으고, 쌓이면 RM을 다시 학습하고, 그 RM으로 새 버전을 만듭니다. 이렇게 V1부터 V5까지 다섯 번 갱신했습니다. V4까지는 rejection sampling만 썼고 PPO는 마지막에 얹었습니다. 원문 문장만으로는 V4에 PPO가 들어갔는지 애매한데, 그림 11에는 V5에만 PPO 표시가 있습니다.",
