@@ -87,9 +87,9 @@
     },
     {
       "title": "선호는 두 답 중 하나를 고르고<br>얼마나 나은지 표시해 모았습니다",
-      "body": "<p>예를 들어 annotator가 직접 질문을 쓰면, 서로 다른 모델 변형이 temperature를 바꿔 답 두 개를 냅니다. 두 답이 최대한 다르게 나오도록 한 설계입니다.</p><p>annotator는 기준(도움 또는 안전)에 따라 하나를 고르고, 얼마나 나은지 <b>4단계</b> 중 하나로 표시합니다. 이것이 비교 1건입니다.</p>",
-      "visual": "<div class=\"bx gray\"><div class=\"t\">Prompt</div><div class=\"d\">파이썬에서 리스트를 뒤집는 방법을 알려 줘</div></div><div class=\"g c2\"><div class=\"bx blue thick\"><div class=\"t\">응답 A ✓ 선택</div><div class=\"d\"><code>lst[::-1]</code>은 뒤집힌 새 리스트를, <code>lst.reverse()</code>는 원본을 바로 뒤집습니다. 원본을 지켜야 하면 앞쪽을 쓰세요.</div></div><div class=\"bx gray\"><div class=\"t\">응답 B</div><div class=\"d\"><code>reversed()</code> 함수를 쓰면 됩니다.</div></div></div><div class=\"flow\"><div class=\"bx gray ctr\"><div class=\"t\">significantly better</div></div><div class=\"bx blue thick ctr\"><div class=\"t\">better</div><div class=\"d\">✓ 이번 선택</div></div><div class=\"bx gray ctr\"><div class=\"t\">slightly better</div></div><div class=\"bx gray ctr\"><div class=\"t\">negligibly better / unsure</div></div></div>",
-      "note": "예시로 보겠습니다. annotator가 리스트를 뒤집는 방법을 물었고, 서로 다른 모델에서 답이 두 개 나왔습니다. A는 두 방법과 차이까지 설명했고, B는 함수 이름만 알려 줬습니다. annotator는 A를 고르고, 확실히 압도적이진 않지만 분명히 낫다고 보고 better를 표시합니다. 이게 선호 데이터 한 건입니다.",
+      "body": "<p>annotator가 질문을 쓰면, 서로 다른 모델 변형이 temperature를 바꿔 답 두 개를 냅니다.</p><p>annotator는 기준(도움 또는 안전)에 따라 하나를 고르고, 얼마나 나은지 <b>4단계</b> 중 하나로 표시합니다. 이것이 비교 1건입니다.</p>",
+      "visual": "<div class=\"bx gray\"><div class=\"t\">Prompt (Table 5)</div><div class=\"d\">주기율표의 처음 10개 원소를 외우기 쉽게, 원소마다 한 줄씩 시로 써 줘</div></div><div class=\"g c2\"><div class=\"bx blue thick\"><div class=\"t\">응답 A ✓ 선택</div><div class=\"d\">수소는 맨 앞, 가장 가볍게 / 헬륨은 풍선 띄우며 둘째로 … (한 줄씩 10개)</div></div><div class=\"bx gray\"><div class=\"t\">응답 B</div><div class=\"d\">수소, 헬륨, 리튬, … 네온 (이름만 나열)</div></div></div><div class=\"flow\"><div class=\"bx gray ctr\"><div class=\"t\">significantly better</div></div><div class=\"bx blue thick ctr\"><div class=\"t\">better</div><div class=\"d\">✓ 이번 선택</div></div><div class=\"bx gray ctr\"><div class=\"t\">slightly better</div></div><div class=\"bx gray ctr\"><div class=\"t\">negligibly better / unsure</div></div></div>",
+      "note": "논문 표 5에 나온 질문으로 예를 들어 보겠습니다. 주기율표 원소 10개를 한 줄씩 시로 써 달라는 요청에 서로 다른 모델이 답 두 개를 냈습니다. A는 요청대로 한 줄씩 시를 썼고, B는 이름만 나열했습니다. annotator는 A를 고르고 better를 표시합니다. 질문은 논문 것이고 두 답은 설명을 위해 만든 것입니다. 이게 선호 데이터 한 건입니다.",
       "section": "3",
       "section_label": "§3.2.1 선호 데이터",
       "layout": "process",
@@ -121,27 +121,12 @@
     },
     {
       "title": "도움과 안전은 기준이 충돌해서<br>지침을 나눠 따로 모았습니다",
-      "body": "<p>도움됨은 요청을 얼마나 잘 들어주고 정보를 주는가, 안전은 응답이 안전 지침에 비추어 위험한가입니다.</p><p>\"폭탄 만드는 법을 자세히\"는 도움은 되지만 안전하지 않습니다. 한 기준으로 섞으면 판단이 흔들리므로, 지침을 나눠 각각 맞는 지시를 줍니다. 안전 annotator는 적대적 prompt에 집중합니다.</p>",
+      "body": "<p>도움됨은 요청을 얼마나 잘 들어주고 정보를 주는가, 안전은 응답이 안전 지침에 비추어 위험한가입니다.</p><p>\"폭탄 만드는 법을 자세히\"는 도움은 되지만 안전하지 않습니다. 그래서 지침을 나눠 따로 모았습니다. 안전 annotator는 적대적 prompt에 집중합니다.</p><p>안전 단계에서는 응답마다 <b>안전 / 위험 label</b>도 따로 받았습니다(둘 다 안전 47% · 둘 다 위험 35% · 고른 쪽만 안전 18% · 고른 쪽만 위험은 제외).</p>",
       "visual": "<div class=\"g c2\"><div class=\"bx blue\"><div class=\"t\">도움됨 (helpfulness)</div><div class=\"d\">요청을 잘 들어주고 정보를 주는가</div></div><div class=\"bx green\"><div class=\"t\">안전 (safety)</div><div class=\"d\">안전 지침에 비추어 위험한가</div></div></div><div class=\"annotation \"><strong>예: 폭탄 제조법 상세 안내</strong><span>도움됨 ↑ · 안전 ↓ → 하나의 점수로는 표현하기 어려움</span></div>",
       "note": "선호는 두 기준으로 따로 모았습니다. 도움이 되는지와 안전한지입니다. 폭탄 제조법을 자세히 알려 주는 답은 도움은 되지만 안전하지 않습니다. 이렇게 두 기준이 부딪히니까 처음부터 지침을 나눴고, 이 분리가 나중에 RM 두 개로 이어집니다.",
       "section": "3",
       "section_label": "§3.2.1 선호 데이터",
       "layout": "split",
-      "sources": [
-        {
-          "label": "Llama 2 · §3.2.1",
-          "url": "https://arxiv.org/pdf/2307.09288v2#page=10"
-        }
-      ]
-    },
-    {
-      "title": "안전 label 네 조합 중<br>하나는 학습에서 뺐습니다",
-      "body": "<p>안전 단계에서는 선호와 별도로 응답마다 <b>안전 / 위험</b> 판정을 하나 더 받습니다. 선호는 상대 비교, 안전 label은 절대 판정입니다.</p><p>\"고른 쪽이 위험, 다른 쪽이 안전\"인 경우는 안전한 쪽이 사람에게도 선호될 것이라 보고 제외했습니다.</p>",
-      "visual": "<div class=\"hbar-chart\" role=\"img\" aria-label=\"안전 label 조합 비율\"><div class=\"hbar-row\" data-value=\"18\"><div class=\"hbar-head\"><span>고른 쪽 안전 · 다른 쪽 위험</span><strong>18%<small></small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill green\" style=\"width:18.0%\"></div></div></div><div class=\"hbar-row\" data-value=\"47\"><div class=\"hbar-head\"><span>둘 다 안전</span><strong>47%<small></small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill blue\" style=\"width:47.0%\"></div></div></div><div class=\"hbar-row\" data-value=\"35\"><div class=\"hbar-head\"><span>둘 다 위험</span><strong>35%<small></small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill gray\" style=\"width:35.0%\"></div></div></div><div class=\"hbar-row\" data-value=\"0\"><div class=\"hbar-head\"><span>고른 쪽 위험 · 다른 쪽 안전</span><strong>제외<small></small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill gray\" style=\"width:0.0%\"></div></div></div></div><div class=\"chart-axis\"><span>0</span><span>25</span><span>50</span><span>75</span><span>100%</span></div>",
-      "note": "안전 데이터에는 선호 말고도 응답마다 안전한지 위험한지 판정을 하나 더 받았습니다. 조합을 보면 둘 다 안전이 47퍼센트로 가장 많고, 둘 다 위험도 35퍼센트입니다. 둘 다 위험할 때 고른 쪽은 덜 나쁜 쪽일 뿐이라, 이 label이 있어야 RM이 덜 위험한 것을 안전한 것으로 착각하지 않습니다. 고른 쪽이 위험한 경우는 뺐는데, 그 비율은 나와 있지 않습니다.",
-      "section": "3",
-      "section_label": "§3.2.1 선호 데이터",
-      "layout": "quantitative",
       "sources": [
         {
           "label": "Llama 2 · §3.2.1",
@@ -165,10 +150,10 @@
       ]
     },
     {
-      "title": "매주 최신 모델로 다시 모아<br>RM이 새 출력을 보게 했습니다",
-      "body": "<p>모델이 좋아지면 출력 분포가 바뀝니다. 옛 출력만 본 RM은 새 출력을 잘 못 가립니다.</p><p>그래서 선호를 <b>매주 batch로</b>, 그 시점의 <b>최신 Llama 2-Chat</b> 응답으로 다시 모았습니다. batch는 14개이고 뒤로 갈수록 커졌습니다.</p>",
-      "visual": "<div class=\"hbar-chart\" role=\"img\" aria-label=\"주간 batch별 비교 수\"><div class=\"hbar-row\" data-value=\"5561\"><div class=\"hbar-head\"><span>batch 1</span><strong>5,561<small></small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill gray\" style=\"width:2.2%\"></div></div></div><div class=\"hbar-row\" data-value=\"36206\"><div class=\"hbar-head\"><span>batch 4</span><strong>36,206<small></small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill gray\" style=\"width:14.5%\"></div></div></div><div class=\"hbar-row\" data-value=\"84388\"><div class=\"hbar-head\"><span>batch 7</span><strong>84,388<small></small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill gray\" style=\"width:33.8%\"></div></div></div><div class=\"hbar-row\" data-value=\"136729\"><div class=\"hbar-head\"><span>batch 10</span><strong>136,729<small></small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill gray\" style=\"width:54.7%\"></div></div></div><div class=\"hbar-row\" data-value=\"249356\"><div class=\"hbar-head\"><span>batch 14</span><strong>249,356<small></small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill blue\" style=\"width:99.7%\"></div></div></div></div>",
-      "note": "선호 데이터는 한 번에 모으지 않고 매주 모았습니다. 이유는 분포 이동입니다. 모델이 바뀌면 출력도 바뀌는데, 예전 출력만 본 RM은 새 출력을 잘 평가하지 못합니다. 그래서 매번 최신 모델로 응답을 뽑아 다시 모았습니다. batch는 처음 5천 건에서 마지막 25만 건까지 커졌습니다.",
+      "title": "매주 최신 모델로 다시 모았고,<br>갈수록 두 응답이 비슷해졌습니다",
+      "body": "<p>모델이 좋아지면 출력이 바뀌고, 옛 출력만 본 RM은 새 출력을 잘 못 가립니다. 그래서 선호를 <b>매주</b>, 그 시점 <b>최신 모델</b>의 응답으로 다시 모았습니다(14 batch).</p><p>batch가 갈수록 커지고(45배), prompt가 어려워지고, <b>두 응답이 비슷해져</b> \"negligibly better / unsure\"가 늘었습니다. 이 마지막 변화가 RM을 점점 어렵게 만듭니다.</p>",
+      "visual": "<div class=\"hbar-chart\" role=\"img\" aria-label=\"주간 batch별 비교 수\"><div class=\"hbar-row\" data-value=\"5561\"><div class=\"hbar-head\"><span>batch 1</span><strong>5,561<small></small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill gray\" style=\"width:2.2%\"></div></div></div><div class=\"hbar-row\" data-value=\"84388\"><div class=\"hbar-head\"><span>batch 7</span><strong>84,388<small></small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill gray\" style=\"width:33.8%\"></div></div></div><div class=\"hbar-row\" data-value=\"249356\"><div class=\"hbar-head\"><span>batch 14</span><strong>249,356<small></small></strong></div><div class=\"hbar-track\"><div class=\"hbar-fill blue\" style=\"width:99.7%\"></div></div></div></div><div class=\"g c3\"><div class=\"bx gray\"><div class=\"t\">규모 ↑</div><div class=\"d\">5,561 → 249,356</div></div><div class=\"bx orange\"><div class=\"t\">난이도 ↑</div><div class=\"d\">쉬운 → 복잡한 prompt</div></div><div class=\"bx blue thick\"><div class=\"t\">비슷한 응답 ↑</div><div class=\"d\">negligibly / unsure 증가</div></div></div>",
+      "note": "선호 데이터는 한 번에 모으지 않고 매주 최신 모델 답으로 다시 모았습니다. 모델이 바뀌면 출력도 바뀌는데, 예전 출력만 본 RM은 새 출력을 잘 평가하지 못하기 때문입니다. batch가 갈수록 세 가지가 변했습니다. 커졌고, 질문이 어려워졌고, 두 답이 점점 비슷해졌습니다. 마지막 변화 때문에 RM이 가려야 할 문제가 점점 어려워집니다.",
       "section": "3",
       "section_label": "§3.2.1 선호 데이터",
       "layout": "quantitative",
@@ -178,23 +163,8 @@
           "url": "https://arxiv.org/pdf/2307.09288v2#page=10"
         },
         {
-          "label": "Llama 2 · Table 26",
+          "label": "Llama 2 · Table 26 · Fig. 25–26",
           "url": "https://arxiv.org/pdf/2307.09288v2#page=52"
-        }
-      ]
-    },
-    {
-      "title": "batch가 갈수록 커지고, 어려워지고,<br>두 응답이 비슷해졌습니다",
-      "body": "<p>부록 A.3는 batch에 따른 세 가지 추세를 적습니다.</p><p>세 번째 추세가 중요합니다. 두 응답이 비슷하면 사람도 RM도 고르기 어렵습니다. 앞의 이진 비교 트레이드오프가 여기서 드러납니다.</p>",
-      "visual": "<div class=\"g c3\"><div class=\"bx gray\"><div class=\"t\">규모 ↑</div><div class=\"d\">annotator가 늘고 익숙해짐</div><div class=\"m\">5,561 → 249,356 (45배)</div></div><div class=\"bx orange\"><div class=\"t\">난이도 ↑</div><div class=\"d\">쉬운 prompt → 복잡한 prompt (curriculum)</div><div class=\"m\">같은 RM 점수가 batch마다 하락 (Fig. 26)</div></div><div class=\"bx blue thick\"><div class=\"t\">비슷한 응답 ↑</div><div class=\"d\">\"negligibly better / unsure\" 증가</div><div class=\"m\">\"significantly better\" 감소 (Fig. 25)</div></div></div>",
-      "note": "부록을 보면 batch가 갈수록 세 가지가 변했습니다. 커졌고, 질문이 어려워졌고, 두 응답이 점점 비슷해졌습니다. 마지막이 중요한데, 모델이 좋아질수록 두 답의 차이가 작아져서 고르기가 어려워집니다.",
-      "section": "3",
-      "section_label": "§3.2.1 선호 데이터",
-      "layout": "split",
-      "sources": [
-        {
-          "label": "Llama 2 · App. A.3.1–A.3.2 · Fig. 25–26",
-          "url": "https://arxiv.org/pdf/2307.09288v2#page=51"
         }
       ]
     },
