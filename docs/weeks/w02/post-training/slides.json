@@ -309,40 +309,6 @@
       ]
     },
     {
-      "title": "원문이 밝히지 않은 것도<br>같이 기록해 둡니다",
-      "body": "<p>데이터 레시피를 재현하려면 필요한데 원문에 없는 항목입니다. 발표에서는 \"미기술\"로 남겨 둡니다.</p>",
-      "visual": "<div class=\"table-wrap\"><table class=\"tbl\"><thead><tr><th scope=\"col\">항목</th><th scope=\"col\">상태</th></tr></thead><tbody><tr><td>27,540건의 과제 · 도메인 구성</td><td>미기술</td></tr><tr><td>SFT에서 공개 데이터와의 최종 혼합 비율</td><td>미기술</td></tr><tr><td>packing 시 문서 경계 마스킹 · annotator 수 · 비용</td><td>미기술</td></tr><tr><td>안전 label에서 제외한 경우의 비율</td><td>미기술</td></tr><tr><td>최종 RM의 margin 종류 · 보조 loss 식</td><td>미기술</td></tr><tr><td>RS에 실제로 쓴 K · PPO value function</td><td>미기술</td></tr><tr><td>PPO를 V4부터 썼는지 V5부터인지</td><td>문장이 모호 (Fig. 11은 V5)</td></tr></tbody></table></div>",
-      "note": "마지막으로 원문에 없는 것들입니다. SFT 데이터 구성, 혼합 비율, annotator 수와 비용, 최종 RM이 어떤 margin을 썼는지, RS에서 실제로 몇 개를 뽑았는지 같은 항목은 나와 있지 않습니다. PPO를 V4부터 썼는지도 문장만으로는 애매합니다. 재현하려면 필요한 정보인데 공개되지 않았습니다.",
-      "section": "6",
-      "section_label": "정리 · 토론",
-      "layout": "reference",
-      "sources": [
-        {
-          "label": "Llama 2 · §3.1–§3.2",
-          "url": "https://arxiv.org/pdf/2307.09288v2#page=9"
-        }
-      ]
-    },
-    {
-      "title": "함께 토론해 볼<br>질문 여섯 가지",
-      "body": "<p>정답이 정해진 질문이 아니라, 이후 모델이 실제로 다르게 선택한 지점들입니다.</p>",
-      "visual": "<div class=\"g c3\"><div class=\"bx blue\"><div class=\"t\">Q1. 27,540건에서 멈춘 판단</div><div class=\"d\">180건 비교만으로 충분했나? 이후 Llama 3는 합성 데이터로 SFT를 키웠다</div></div><div class=\"bx blue\"><div class=\"t\">Q2. 이진 비교 vs K개 순위</div><div class=\"d\">같은 예산이면 무엇이 나은가? 응답이 비슷해지면?</div></div><div class=\"bx green\"><div class=\"t\">Q3. 비슷한 쌍은 득인가 실인가</div><div class=\"d\">Llama 2는 작은 margin으로 남겼고, Llama 3는 학습에서 뺐다</div></div><div class=\"bx green\"><div class=\"t\">Q4. 제외한 안전 사례</div><div class=\"d\">\"위험한데 선호된\" 사례는 도움–안전 긴장의 정보가 아닐까?</div></div><div class=\"bx orange\"><div class=\"t\">Q5. RM 둘 vs 하나</div><div class=\"d\">안전 우선 스위치(0.15)는 적절한가? recall 0.55면 절반을 놓친다</div></div><div class=\"bx orange\"><div class=\"t\">Q6. RS 먼저, PPO 나중</div><div class=\"d\">PPO만 하지 않고 RS를 먼저 반복한 이유는? 지금은 DPO로 대체</div></div></div>",
-      "note": "토론 질문 네 개를 준비했습니다. 첫째, 180건 비교만으로 SFT를 멈춘 판단이 충분했는지. 둘째, 같은 예산이면 이진 비교와 순위 중 무엇이 나은지. 셋째, 비슷한 응답 쌍을 학습에 쓰는 게 도움이 되는지. 넷째, 안전 label에서 뺀 경우가 오히려 중요한 정보가 아니었는지. 다섯째, 안전 점수 0.15로 RM을 바꾸는 규칙이 적절한지. 여섯째, PPO 전에 RS를 먼저 반복한 이유입니다.",
-      "section": "6",
-      "section_label": "정리 · 토론",
-      "layout": "overview",
-      "sources": [
-        {
-          "label": "Llama 2 · §3.1–§3.2",
-          "url": "https://arxiv.org/pdf/2307.09288v2#page=9"
-        },
-        {
-          "label": "Llama 3 Herd §4",
-          "url": "https://arxiv.org/abs/2407.21783"
-        }
-      ]
-    },
-    {
       "title": "Llama 3는 같은 수집 틀에<br>편집 단계와 DPO를 더했습니다",
       "body": "<p>논문 밖 내용입니다. 1년 뒤 Llama 3는 선호 수집의 4단계 강도를 그대로 쓰면서, 사람이 고른 답을 직접 고치는 <b>편집 단계</b>를 더했습니다.</p><p>정책 갱신은 PPO 대신 DPO를 썼고, 비슷한 쌍은 학습에서 뺐습니다. \"최신 모델로 다시 모은다\"는 원칙은 그대로입니다.</p>",
       "visual": "<div class=\"table-wrap\"><table class=\"tbl\"><thead><tr><th scope=\"col\"></th><th scope=\"col\">Llama 2 (2023)</th><th scope=\"col\">Llama 3 (2024)</th></tr></thead><tbody><tr><td>SFT 데이터</td><td>사람이 쓴 27,540건</td><td>사람 + RS로 고른 모델 응답 + 합성</td></tr><tr><td>선호 형식</td><td>이진 비교 + 강도 4단계</td><td>같은 4단계 + 편집 (edited > chosen > rejected)</td></tr><tr><td>정책 갱신</td><td>RS → PPO</td><td>RS + SFT + DPO</td></tr><tr><td>비슷한 쌍</td><td>margin으로 남김</td><td>학습에서 제외</td></tr></tbody></table></div>",
