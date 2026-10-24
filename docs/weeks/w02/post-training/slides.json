@@ -167,6 +167,21 @@
           "url": "https://arxiv.org/pdf/2307.09288v2#page=52"
         }
       ]
+    },
+    {
+      "title": "Llama 3는 같은 선호 수집 틀에<br>편집 단계를 더하고 비슷한 쌍을 뺐습니다",
+      "body": "<p>논문 밖 내용입니다. 사람이 prompt를 쓰고 두 응답 중 하나를 고른 뒤 강도를 4단계로 표시하는 틀, 그리고 <b>최신 모델로 다시 모은다</b>는 원칙은 그대로입니다.</p><p>달라진 핵심은 두 가지입니다. 고른 답을 사람이 직접 고치는 <b>편집 단계</b>로 edited &gt; chosen &gt; rejected 순위를 만들고, 비슷한 쌍은 학습에서 <b>뺐습니다</b>.</p>",
+      "visual": "<div class=\"table-wrap\"><table class=\"tbl\"><thead><tr><th scope=\"col\"></th><th scope=\"col\">Llama 2 (2023)</th><th scope=\"col\">Llama 3 (2024)</th></tr></thead><tbody><tr><td>수집 주기</td><td>매주 batch (14개)</td><td>라운드마다 (6라운드)</td></tr><tr><td>응답 두 개</td><td>서로 다른 모델 변형 · temperature</td><td>그 라운드에 배포한 여러 모델 중 두 개</td></tr><tr><td>강도 4단계</td><td>… slightly / negligibly · unsure</td><td>… slightly / marginally better</td></tr><tr><td class=\"em\">편집 단계</td><td class=\"em\">없음</td><td class=\"em\">고른 답을 사람이 고침 → edited &gt; chosen &gt; rejected</td></tr><tr><td class=\"em\">비슷한 쌍</td><td class=\"em\">margin 0으로 학습에 남김</td><td class=\"em\">significantly · better만 쓰고 제외</td></tr><tr><td>RM margin</td><td>사용</td><td>제거</td></tr></tbody></table></div>",
+      "note": "마지막은 논문 밖 내용으로, 1년 뒤 Llama 3가 선호 데이터를 어떻게 모았는지입니다. 사람이 질문을 쓰고 두 답 중 하나를 고르고 강도를 표시하는 틀, 그리고 최신 모델로 계속 다시 모은다는 원칙은 같습니다. 달라진 건 두 가지입니다. 첫째, 고른 답을 사람이 직접 더 낫게 고치는 편집 단계를 넣어서, 고친 답, 고른 답, 버린 답 세 단계 순위를 만들었습니다. 둘 다 별로일 때 덜 나쁜 걸 고를 수밖에 없는 이진 비교의 한계를 보완한 겁니다. 둘째, 비슷한 쌍은 학습에서 뺐습니다. Llama 2에서 비슷한 쌍은 reward model도 거의 찍는 수준이었다는 결과와 맞닿아 있습니다.",
+      "section": "7",
+      "section_label": "논문 밖 · Llama 3",
+      "layout": "split",
+      "sources": [
+        {
+          "label": "Llama 3 Herd §4.2.1",
+          "url": "https://arxiv.org/abs/2407.21783"
+        }
+      ]
     }
   ]
 }
