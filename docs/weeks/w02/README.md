@@ -31,7 +31,7 @@
 
 ## 발표자료
 
-- Post-training · §3–§3.2 (SFT · 선호 데이터 · RM · RS/PPO): [슬라이드](post-training/index.html) · 원본 [slides.json](post-training/slides.json) — 덱에서 `N` 키로 대본을 봅니다.
+- Post-training · §3–§3.2.1 (SFT · 선호 데이터): [슬라이드](post-training/index.html) · 원본 [slides.json](post-training/slides.json) — 덱에서 `N` 키로 대본을 봅니다.
 
 ## 팀별 분석
 
