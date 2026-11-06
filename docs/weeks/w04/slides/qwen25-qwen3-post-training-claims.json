@@ -475,6 +475,19 @@
    ]
   },
   {
+   "id": "thinkfollow-s4",
+   "statement": "Stage 4 뒤 ThinkFollow는 98.9",
+   "kind": "table",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 Table 22 (p.21)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
+    }
+   ],
+   "display": "98.9"
+  },
+  {
    "id": "thinkfollow-s3",
    "statement": "Stage 3 뒤 ThinkFollow는 88.7",
    "kind": "table",
