@@ -233,30 +233,6 @@
    "layout": "wide"
   },
   {
-   "key": "q3-modes",
-   "part": "main",
-   "kind": "intro",
-   "seconds": 40,
-   "term": "Thinking vs Non-thinking",
-   "section": "3",
-   "section_label": "Qwen3 §4 서두",
-   "title": "Thinking vs Non-thinking: 같은 질문에 길게 따져 보고 답하거나, 바로 답한다",
-   "body": "<p>Qwen3는 두 모드를 한 모델에 담고, 질문 끝의 flag로 고릅니다.</p>",
-   "visual": "<div class=\"g c2\" data-main data-au=\"1\"><div class=\"flow vertical\"><div class=\"t\" style=\"font-weight:700\">Thinking mode</div><div class=\"bx gray\" style=\"padding:10px 16px\"><div class=\"m\"><b>User</b> 9.11과 9.9 중 더 큰 수는? <code>/think</code></div></div><div class=\"bx orange\" style=\"padding:10px 16px\"><div class=\"m\"><b>Assistant</b> &lt;think&gt; 소수점 아래를 맞추면 9.11 vs 9.90 … 0.11 &lt; 0.90 … 검산하면 9.9 − 9.11 = 0.79 &gt; 0 &lt;/think&gt;<br>9.9가 더 큽니다.</div></div></div><div class=\"flow vertical\"><div class=\"t\" style=\"font-weight:700\">Non-thinking mode</div><div class=\"bx gray\" style=\"padding:10px 16px\"><div class=\"m\"><b>User</b> 9.11과 9.9 중 더 큰 수는? <code>/no_think</code></div></div><div class=\"bx blue\" style=\"padding:10px 16px\"><div class=\"m\"><b>Assistant</b> &lt;think&gt;&lt;/think&gt;<br>9.9가 더 큽니다.</div></div></div></div><p class=\"cond\">발표자가 만든 예 · thinking은 느리지만 어려운 문제에 강하고, non-thinking은 짧고 빠름</p>",
-   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“A key innovation in Qwen3 is the integration of thinking mode (for complex, multi-step reasoning) and non-thinking mode (for rapid, context-driven responses) into a unified framework. This eliminates the need to switch between different models—–such as chat-optimized models (e.g., GPT-4o) and dedicated reasoning models (e.g., QwQ-32B)”<cite>Qwen3 Abstract (p.1)</cite></blockquote><p>이전에는 대화용(Qwen2.5-Instruct)과 추론용(QwQ-32B)을 따로 썼습니다. 형식은 [[@tmpl]]의 Table 9를 따릅니다.</p>",
-   "sources": [
-    {
-     "label": "Qwen3 Abstract (p.1)",
-     "url": "https://arxiv.org/pdf/2505.09388v1#page=1"
-    }
-   ],
-   "claims": [
-    "q3-two-modes"
-   ],
-   "ids": "Post-training · thinking과 non-thinking",
-   "layout": "wide"
-  },
-  {
    "key": "q3-pipeline",
    "part": "main",
    "kind": "mechanism",
@@ -342,6 +318,30 @@
     "rl-t22"
    ],
    "ids": "흐름 · Reasoning RL",
+   "layout": "wide"
+  },
+  {
+   "key": "q3-modes",
+   "part": "main",
+   "kind": "intro",
+   "seconds": 40,
+   "term": "Thinking Mode Fusion",
+   "section": "5",
+   "section_label": "§4.3–4.4 Mode Fusion · RL",
+   "title": "Thinking Mode Fusion: 길게 생각하는 모드와 바로 답하는 모드를 한 모델에 합친다",
+   "body": "<p>Stage 3입니다. 지금까지는 thinking만 학습했습니다. 여기서 두 모드를 한 모델에 담고, 질문 끝의 flag로 고르게 합니다.</p>",
+   "visual": "<div class=\"g c2\" data-main data-au=\"1\"><div class=\"flow vertical\"><div class=\"t\" style=\"font-weight:700\">Thinking mode</div><div class=\"bx gray\" style=\"padding:10px 16px\"><div class=\"m\"><b>User</b> 9.11과 9.9 중 더 큰 수는? <code>/think</code></div></div><div class=\"bx orange\" style=\"padding:10px 16px\"><div class=\"m\"><b>Assistant</b> &lt;think&gt; 소수점 아래를 맞추면 9.11 vs 9.90 … 0.11 &lt; 0.90 … 검산하면 9.9 − 9.11 = 0.79 &gt; 0 &lt;/think&gt;<br>9.9가 더 큽니다.</div></div></div><div class=\"flow vertical\"><div class=\"t\" style=\"font-weight:700\">Non-thinking mode</div><div class=\"bx gray\" style=\"padding:10px 16px\"><div class=\"m\"><b>User</b> 9.11과 9.9 중 더 큰 수는? <code>/no_think</code></div></div><div class=\"bx blue\" style=\"padding:10px 16px\"><div class=\"m\"><b>Assistant</b> &lt;think&gt;&lt;/think&gt;<br>9.9가 더 큽니다.</div></div></div></div><p class=\"cond\">thinking은 느리지만 어려운 문제에 강하고, non-thinking은 짧고 빠름</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“A key innovation in Qwen3 is the integration of thinking mode (for complex, multi-step reasoning) and non-thinking mode (for rapid, context-driven responses) into a unified framework. This eliminates the need to switch between different models—–such as chat-optimized models (e.g., GPT-4o) and dedicated reasoning models (e.g., QwQ-32B)”<cite>Qwen3 Abstract (p.1)</cite></blockquote><p>이전에는 대화용(Qwen2.5-Instruct)과 추론용(QwQ-32B)을 따로 썼습니다. 형식은 [[@tmpl]]의 Table 9를 따릅니다.</p>",
+   "sources": [
+    {
+     "label": "Qwen3 Abstract (p.1)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=1"
+    }
+   ],
+   "claims": [
+    "q3-two-modes"
+   ],
+   "ids": "Post-training · thinking과 non-thinking",
    "layout": "wide"
   },
   {
