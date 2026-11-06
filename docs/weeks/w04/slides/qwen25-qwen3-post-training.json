@@ -4,6 +4,7 @@
  "shell_version": 2,
  "budget_minutes": 20,
  "known_terms": [
+  "ToolUse",
   "Qwen2.5",
   "Qwen3",
   "SFT",
@@ -67,7 +68,7 @@
    "section_label": "들어가며",
    "layout": "wide",
    "title": "후학습: Qwen2.5는 SFT를 넓혔고, Qwen3는 thinking 능력부터 만든다",
-   "body": "<p>오늘 범위는 두 보고서의 Post-training 서두와 Qwen3의 Cold Start · Mode Fusion · 평가 · Discussion입니다.</p>",
+   "body": "<p>오늘 범위는 Qwen2.5의 SFT와 Qwen3 후학습 4단계(Cold Start · Reasoning RL · Mode Fusion · General RL), 그리고 평가 · Discussion입니다.</p>",
    "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl rowcards\"><thead><tr><th></th><th>Qwen2.5 (2024-12)</th><th>Qwen3 (2025-05)</th></tr></thead><tbody><tr><td data-label=\"항목\">순서</td><td data-label=\"Qwen2.5\">SFT → Offline RL → Online RL</td><td data-label=\"Qwen3\">Cold Start → Reasoning RL → Mode Fusion → General RL</td></tr><tr><td data-label=\"항목\">사용자 제어</td><td data-label=\"Qwen2.5\">system prompt</td><td data-label=\"Qwen3\"><code>/think</code> · <code>/no_think</code> · 생각 예산</td></tr><tr><td data-label=\"항목\">작은 모델</td><td data-label=\"Qwen2.5\">같은 과정</td><td data-label=\"Qwen3\">큰 모델에서 증류</td></tr></tbody></table></div>",
    "sources": [
     {
@@ -89,7 +90,7 @@
    "key": "q25-intro",
    "part": "main",
    "kind": "mechanism",
-   "seconds": 60,
+   "seconds": 55,
    "term": "Qwen2.5 후학습",
    "section": "2",
    "section_label": "Qwen2.5 §4",
@@ -116,7 +117,7 @@
    "key": "q25-sft-areas",
    "part": "main",
    "kind": "mechanism",
-   "seconds": 60,
+   "seconds": 55,
    "term": "SFT 9개 영역",
    "section": "2",
    "section_label": "Qwen2.5 §4",
@@ -265,7 +266,7 @@
    "key": "cs-filter",
    "part": "main",
    "kind": "mechanism",
-   "seconds": 80,
+   "seconds": 70,
    "term": "Cold Start 데이터",
    "section": "4",
    "section_label": "§4.1–4.2 Cold Start · RL",
@@ -518,12 +519,44 @@
    "layout": "wide"
   },
   {
+   "key": "t22",
+   "part": "main",
+   "kind": "result",
+   "seconds": 50,
+   "term": "Table 22",
+   "section": "6",
+   "section_label": "§4.7 Discussion",
+   "title": "Table 22: Stage 3–4는 일반 능력을 올리고, 어려운 추론은 조금 내준다",
+   "body": "<p>Qwen3-32B를 Stage 2 · 3 · 4 뒤에 각각 쟀습니다. 저자들은 범용성을 위해 이 trade-off를 받아들였다고 씁니다.</p>",
+   "visual": "<div style=\"display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:20px;align-items:center\"><figure class=\"crop\" data-main style=\"margin:0\"><img style=\"max-height:415px;width:auto;max-width:100%\" src=\"figures/qwen3-table22.png\" alt=\"Qwen3 Table 22\" data-glyph-px=\"19\"><figcaption>원문 · Qwen3 Table 22 (p.21) · 전체</figcaption></figure><div><div class=\"verdict\"><span class=\"vd-claim\">저자: “Stage 3에서 CounterFactQA +10.9, LengthCtrl +8.0”</span><span class=\"vd-res vd-ok\">표: 61.3 − 50.4 = +10.9 · 70.6 − 62.6 = +8.0</span></div><div class=\"verdict\"><span class=\"vd-claim\">저자: “어려운 과제의 thinking 성능은 오히려 떨어진다”</span><span class=\"vd-res vd-ok\">표: AIME'24 −1.9 (81.9 − 83.8) · LiveCodeBench −1.2</span></div><div class=\"verdict\"><span class=\"vd-claim\">Stage 4 (General RL)</span><span class=\"vd-res vd-ok\">표: ToolUse +15.1 · ThinkFollow 98.9 · AIME'24 81.4 (−0.5)</span></div></div></div>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/qwen3-table22.png\" alt=\"Qwen3 Table 22\" data-glyph-px=\"19\" data-display-width=\"640\"><figcaption>원문 · Qwen3 Table 22 (p.21) · 전체 / 발표자 표시 없음</figcaption></figure><blockquote class=\"ev-quote\" lang=\"en\">“We conjecture this degradation is due to the model being trained on a broader range of general tasks, which may compromise its specialized capabilities in handling complex problems. During the development of Qwen3, we choose to accept this performance trade-off to enhance the model’s overall versatility.”<cite>Qwen3 §4.7 (p.22)</cite></blockquote><p>in-house 벤치: CounterFactQA(사실이 아닌 전제를 알아채는가) · LengthCtrl(요구 길이와의 차이) · ThinkFollow(모드 전환) · ToolUse(도구 호출 안정성).</p>",
+   "sources": [
+    {
+     "label": "Qwen3 Table 22 (p.21)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
+    },
+    {
+     "label": "Qwen3 §4.7 (p.21)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t22-cf",
+    "t22-lc",
+    "t22-aime",
+    "t22-claim"
+   ],
+   "ids": "Post-training · Table 22 단계별 변화",
+   "layout": "wide"
+  },
+  {
    "key": "eval-summary",
    "part": "main",
    "kind": "result",
    "seconds": 50,
    "term": "후학습 평가",
-   "section": "6",
+   "section": "7",
    "section_label": "§4.6 평가",
    "title": "후학습 평가: 저자 요약은 플래그십 · 32B · 경량 모델 세 줄이다",
    "body": "<p>다섯 축 · 두 모드를 따로 잽니다.</p>",
@@ -551,9 +584,9 @@
    "key": "t11",
    "part": "main",
    "kind": "result",
-   "seconds": 50,
+   "seconds": 45,
    "term": "235B Thinking",
-   "section": "6",
+   "section": "7",
    "section_label": "§4.6 평가",
    "title": "235B Thinking: DeepSeek-R1을 23개 중 17개에서 앞선다",
    "body": "<p>수학 · 에이전트 · 코딩에서 특히 앞섭니다.</p>",
@@ -581,9 +614,9 @@
    "key": "t12",
    "part": "main",
    "kind": "result",
-   "seconds": 50,
+   "seconds": 45,
    "term": "235B Non-thinking",
-   "section": "6",
+   "section": "7",
    "section_label": "§4.6 평가",
    "title": "235B Non-thinking: 생각 없이도 GPT-4o를 23개 중 18개에서 앞선다",
    "body": "<p>같은 모델도 모드에 따라 AIME'24가 85.7과 40.1로 크게 다릅니다.</p>",
@@ -611,9 +644,9 @@
    "key": "t13",
    "part": "main",
    "kind": "result",
-   "seconds": 50,
+   "seconds": 45,
    "term": "32B Thinking",
-   "section": "6",
+   "section": "7",
    "section_label": "§4.6 평가",
    "title": "32B Thinking: 이전 추론 모델 QwQ-32B를 23개 중 17개에서 앞선다",
    "body": "<p>o3-mini(medium)와는 비슷하고, 정렬 · 다국어에서 앞선다고 씁니다.</p>",
@@ -641,9 +674,9 @@
    "key": "t14",
    "part": "main",
    "kind": "result",
-   "seconds": 50,
+   "seconds": 45,
    "term": "32B Non-thinking",
-   "section": "6",
+   "section": "7",
    "section_label": "§4.6 평가",
    "title": "32B Non-thinking: 2배 큰 Qwen2.5-72B를 23개 중 18개에서 앞선다",
    "body": "<p>이전 세대 플래그십과의 직접 비교입니다.</p>",
@@ -668,35 +701,36 @@
    "layout": "wide"
   },
   {
-   "key": "t22",
+   "key": "summary",
    "part": "main",
-   "kind": "result",
-   "seconds": 50,
-   "term": "Table 22 Stage 3",
-   "section": "7",
-   "section_label": "§4.7 Discussion",
-   "title": "Table 22 Stage 3: 모드 전환과 일반 능력을 얻는 대신 어려운 추론은 조금 내준다",
-   "body": "<p>Qwen3-32B를 Stage 2 뒤와 Stage 3 뒤에 쟀습니다. 저자들은 범용성을 위해 이 trade-off를 받아들였다고 씁니다.</p>",
-   "visual": "<div style=\"display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:20px;align-items:center\"><figure class=\"crop\" data-main style=\"margin:0\"><img style=\"max-height:415px;width:auto;max-width:100%\" src=\"figures/qwen3-table22.png\" alt=\"Qwen3 Table 22\" data-glyph-px=\"19\"><figcaption>원문 · Qwen3 Table 22 (p.21) · 전체</figcaption></figure><div><div class=\"verdict\"><span class=\"vd-claim\">저자: “Stage 3에서 CounterFactQA +10.9, LengthCtrl +8.0”</span><span class=\"vd-res vd-ok\">표: 61.3 − 50.4 = +10.9 · 70.6 − 62.6 = +8.0</span></div><div class=\"verdict\"><span class=\"vd-claim\">저자: “어려운 과제의 thinking 성능은 오히려 떨어진다”</span><span class=\"vd-res vd-ok\">표: AIME'24 −1.9 (81.9 − 83.8) · LiveCodeBench −1.2</span></div></div></div>",
-   "evidence": "<figure class=\"crop\"><img src=\"figures/qwen3-table22.png\" alt=\"Qwen3 Table 22\" data-glyph-px=\"19\" data-display-width=\"640\"><figcaption>원문 · Qwen3 Table 22 (p.21) · 전체 / 발표자 표시 없음</figcaption></figure><blockquote class=\"ev-quote\" lang=\"en\">“We conjecture this degradation is due to the model being trained on a broader range of general tasks, which may compromise its specialized capabilities in handling complex problems. During the development of Qwen3, we choose to accept this performance trade-off to enhance the model’s overall versatility.”<cite>Qwen3 §4.7 (p.22)</cite></blockquote><p>in-house 벤치: CounterFactQA(사실이 아닌 전제를 알아채는가) · LengthCtrl(요구 길이와의 차이) · ThinkFollow(모드 전환) · ToolUse(도구 호출 안정성).</p>",
+   "kind": "summary",
+   "seconds": 40,
+   "term": "정리",
+   "section": "8",
+   "section_label": "정리 · 열린 질문",
+   "title": "정리: 생각하는 힘을 먼저 만들고, 바로 답하는 힘을 합쳤다",
+   "body": "<p>오늘 내용을 세 줄로 줄이면 이렇습니다.</p>",
+   "visual": "<div class=\"flow vertical\" data-main data-au=\"1\"><div class=\"bx gray\"><div class=\"t\">① Qwen2.5</div><div class=\"d\">SFT 데이터를 9개 영역 100만+ 예시로 넓히고, RL을 Offline · Online 둘로 나눴다</div></div><div class=\"bx orange\"><div class=\"t\">② Qwen3</div><div class=\"d\">Cold Start → Reasoning RL로 생각하는 힘을 먼저 만들고, Mode Fusion으로 바로 답하는 모드를 합쳐 flag · 예산으로 조절한다</div></div><div class=\"bx blue\"><div class=\"t\">③ 대가</div><div class=\"d\">Stage 3–4에서 일반 능력 · 모드 전환은 오르지만, 어려운 추론은 조금 내준다 (AIME'24 83.8 → 81.4)</div></div></div>",
    "sources": [
+    {
+     "label": "Qwen2.5 §4 (p.4–5)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=4"
+    },
+    {
+     "label": "Qwen3 §4 (p.9–11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=9"
+    },
     {
      "label": "Qwen3 Table 22 (p.21)",
      "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
-    },
-    {
-     "label": "Qwen3 §4.7 (p.21)",
-     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
     }
    ],
-   "src_visible": 1,
    "claims": [
-    "t22-cf",
-    "t22-lc",
-    "t22-aime",
-    "t22-claim"
+    "q25-pipeline",
+    "q3-pipeline",
+    "rl-t22"
    ],
-   "ids": "Post-training · Table 22 Stage 3",
+   "ids": "Post-training · 정리",
    "layout": "wide"
   },
   {
@@ -706,14 +740,22 @@
    "seconds": 45,
    "term": "열린 질문",
    "section": "8",
-   "section_label": "열린 질문",
+   "section_label": "정리 · 열린 질문",
    "title": "열린 질문: 작은 Cold Start · 빈 think 블록 · 예산 강제 중단은 왜 통하나",
    "body": "<p>원문이 근거를 보이지 않은 선택들입니다.</p>",
-   "visual": "<div class=\"summary-cols\" data-main><div class=\"sc-col\"><h3>관찰</h3><ul><li>Cold Start는 일부러 작게 [[@cs-filter]]</li><li>non-thinking에도 빈 think 블록 [[@tmpl]]</li><li>예산 강제 중단은 따로 학습하지 않음 [[@budget]]</li><li>Stage 3는 AIME'24 −1.9를 감수 [[@t22]]</li></ul></div><div class=\"sc-col\"><h3>열린 질문</h3><ul><li>Cold Start를 키우면 RL 뒤 성능이 정말 낮아지나? </li><li>빈 블록 대신 별도 special token이었다면?</li><li>강제 중단 문장 없이 &lt;/think&gt;만 넣으면?</li><li>Qwen2.5의 system prompt 제어와 flag 제어는 무엇이 다른가?</li></ul></div></div>",
+   "visual": "<div class=\"summary-cols\" data-main><div class=\"sc-col\"><h3>관찰</h3><ul><li>Cold Start는 일부러 작게 [[@cs-filter]]</li><li>non-thinking에도 빈 think 블록 [[@tmpl]]</li><li>예산 강제 중단은 따로 학습하지 않음 [[@budget]]</li><li>Stage 3는 AIME'24 −1.9를 감수 [[@t22]]</li><li>최근 Qwen3.8 · DeepSeek V4.1도 한 모델에 두 모드를 유지하되, 문장 속 flag보다 <code>enable_thinking</code> + effort 단계(low · high · max)로 조절</li></ul></div><div class=\"sc-col\"><h3>열린 질문</h3><ul><li>Cold Start를 키우면 RL 뒤 성능이 정말 낮아지나? </li><li>빈 블록 대신 별도 special token이었다면?</li><li>강제 중단 문장 없이 &lt;/think&gt;만 넣으면?</li><li>Qwen2.5의 system prompt 제어와 flag 제어는 무엇이 다른가?</li><li>한 모델에 두 모드 vs 모델 분리, 무엇이 나은가? 켜기/끄기 대신 effort 단계가 표준이면 flag는 아직 필요한가?</li></ul></div></div>",
    "sources": [
     {
      "label": "Qwen3 §4.1–§4.3 (p.10–11)",
      "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
+    },
+    {
+     "label": "Qwen3.8-27B 모델 카드",
+     "url": "https://huggingface.co/Qwen/Qwen3.8-27B"
+    },
+    {
+     "label": "DeepSeek-V4-Pro 모델 카드",
+     "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro"
     }
    ],
    "ids": "Post-training · 토론",

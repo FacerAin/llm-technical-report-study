@@ -64,7 +64,10 @@ Stage 4 General RL입니다. 20개가 넘는 태스크에 각각 보상을 붙�
 32B non-thinking은 두 배 큰 Qwen2.5 72B와 비교합니다. 일반 태스크 네 개는 2승 2패로 비슷하고, Arena-Hard나 AIME처럼 정렬과 추론에서는 크게 앞섭니다. 전체로는 18개 우위입니다.
 
 ## @t22
-Table 22는 3단계 전후 비교입니다. 생각 모드에서 CounterFactQA가 10.9, LengthCtrl이 8점 오릅니다. ThinkFollow 88.7은 모드 전환이 생겼다는 뜻입니다. 대신 AIME와 LiveCodeBench는 1~2점 떨어집니다. 저자들은 범용성을 위해 이 손해를 받아들였다고 씁니다. 4단계 결과는 다음 Alignment 파트에서 다룹니다.
+Table 22는 같은 32B 모델을 단계마다 잰 표입니다. 먼저 3단계를 보면, 생각 모드에서 CounterFactQA가 10.9, LengthCtrl이 8점 오릅니다. ThinkFollow 88.7은 모드 전환이 생겼다는 뜻입니다. 대신 AIME와 LiveCodeBench는 1~2점 떨어집니다. 4단계 General RL을 거치면 ToolUse가 15점, ThinkFollow가 98.9까지 오르고, AIME는 다시 조금 내려갑니다. 저자들은 범용성을 위해 이 손해를 받아들였다고 씁니다.
+
+## @summary
+정리하면 세 줄입니다. Qwen2.5는 SFT 데이터를 넓히고 RL을 둘로 나눴습니다. Qwen3는 생각하는 힘을 먼저 만들고, 바로 답하는 모드를 합쳐 flag와 예산으로 조절합니다. 그 대가로 일반 능력은 오르지만 어려운 추론은 조금 내줍니다.
 
 ## @open-q
-마지막으로 같이 이야기해 볼 질문입니다. Cold Start를 작게 한 게 정말 나은지, 빈 블록 대신 별도 토큰이었다면 어땠을지, 강제 중단 문장이 꼭 필요한지, 그리고 Qwen2.5의 system prompt 제어와 Qwen3 flag 제어는 무엇이 다른지입니다.
+마지막으로 같이 이야기해 볼 질문입니다. Cold Start를 작게 한 게 정말 나은지, 빈 블록 대신 별도 토큰이었다면 어땠을지, 강제 중단 문장이 꼭 필요한지, Qwen2.5의 system prompt 제어와 Qwen3 flag 제어는 무엇이 다른지입니다. 그리고 최근 Qwen3.8과 DeepSeek V4.1은 한 모델을 유지하면서 enable_thinking과 effort 단계로 조절하는데, 한 모델이 나은지 분리가 나은지, flag가 아직 필요한지도 같이 생각해 볼 만합니다.
