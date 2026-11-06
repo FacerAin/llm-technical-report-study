@@ -345,7 +345,7 @@
    "id": "rl-pairs",
    "statement": "Reasoning RL은 Cold Start에 쓰지 않은 query-verifier 3,995쌍을 쓴다",
    "kind": "orig",
-   "layer": "evidence",
+   "layer": "main",
    "sources": [
     {
      "label": "Qwen3 §4.2 (p.10)",
@@ -353,6 +353,42 @@
     }
    ],
    "display": "3,995"
+  },
+  {
+   "id": "rl-aime",
+   "statement": "Reasoning RL에서 235B의 AIME'24가 170 step 동안 70.1 → 85.1",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.2 (p.11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ]
+  },
+  {
+   "id": "gr-tasks",
+   "statement": "General RL은 20개 이상 태스크의 보상으로 지시 따르기 · 포맷 · 선호 · 에이전트 · 특수 시나리오를 다듬는다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.4 (p.11–12)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ]
+  },
+  {
+   "id": "gr-rewards",
+   "statement": "General RL 보상은 규칙 기반 · 참조답 + Qwen2.5-72B-Instruct 채점 · 참조답 없는 RM 3종",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.4 (p.12)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=12"
+    }
+   ]
   },
   {
    "id": "tmf-thinking-data",
