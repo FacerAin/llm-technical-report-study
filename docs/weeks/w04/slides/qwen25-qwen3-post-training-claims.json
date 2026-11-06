@@ -333,7 +333,7 @@
    "id": "cs-small-nd",
    "statement": "Cold Start 샘플 수 · step 수와 이를 뒷받침하는 실험은 미기술",
    "kind": "nd",
-   "layer": "main",
+   "layer": "evidence",
    "sources": [
     {
      "label": "Qwen3 §4.1 (p.10)",
@@ -345,7 +345,7 @@
    "id": "rl-pairs",
    "statement": "Reasoning RL은 Cold Start에 쓰지 않은 query-verifier 3,995쌍을 쓴다",
    "kind": "orig",
-   "layer": "main",
+   "layer": "evidence",
    "sources": [
     {
      "label": "Qwen3 §4.2 (p.10)",
