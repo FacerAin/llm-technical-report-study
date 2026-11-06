@@ -461,6 +461,32 @@
    "ids": "Post-training · 생각 예산과 강제 중단"
   },
   {
+   "key": "fig2",
+   "part": "main",
+   "kind": "result",
+   "seconds": 40,
+   "term": "예산별 성능",
+   "section": "5",
+   "section_label": "§4.3–4.4 Mode Fusion · RL",
+   "title": "예산별 성능: 생각 예산을 1K → 32K로 늘리면 꾸준히 오른다",
+   "body": "<p>235B-A22B에서 예산만 바꿨습니다. AIME'24 약 42 → 87 · 저자는 32K 너머도 오를 것으로 봅니다.</p>",
+   "visual": "<figure class=\"crop\" data-main style=\"max-width:58%;margin:0 auto\"><img src=\"figures/qwen3-fig2.png\" alt=\"Qwen3 Fig. 2: 생각 예산 1K–32K에 따른 AIME24 · AIME25 · LiveCodeBench v5 · GPQA Diamond Pass@1, 빨간 점선은 non-thinking\" data-glyph-px=\"15\"><figcaption>원문 · Qwen3 Fig. 2 (p.20) · 전체 / 빨간 점선 = non-thinking · 패널마다 y축 범위 다름</figcaption></figure>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“Qwen3 demonstrates scalable and smooth performance improvements correlated to the allocated thinking budget. Moreover, we observe that if we further extend the output length beyond 32K, the model’s performance is expected to improve further in the future. We leave this exploration as future work.”<cite>Qwen3 §4.7 (p.20)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"est\">추정</span> 그림에서 읽은 값(1K → 32K): AIME'24 약 42 → 87, AIME'25 약 31 → 82, LiveCodeBench v5 약 45 → 68, GPQA Diamond 약 64 → 72. 1K → 2K 구간은 AIME'24 · GPQA에서 거의 평평합니다.</p>",
+   "sources": [
+    {
+     "label": "Qwen3 §4.7 Fig. 2 (p.20)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=20"
+    }
+   ],
+   "claims": [
+    "fig2-claim",
+    "fig2-aime",
+    "fig2-hyp"
+   ],
+   "ids": "Post-training · 예산별 성능",
+   "layout": "wide"
+  },
+  {
    "key": "rl-general",
    "part": "main",
    "kind": "mechanism",
@@ -639,32 +665,6 @@
     "t14-verdict"
    ],
    "ids": "Post-training · 플래그십 평가",
-   "layout": "wide"
-  },
-  {
-   "key": "fig2",
-   "part": "main",
-   "kind": "result",
-   "seconds": 40,
-   "term": "예산별 성능",
-   "section": "7",
-   "section_label": "§4.7 Discussion",
-   "title": "예산별 성능: 생각 예산을 1K → 32K로 늘리면 꾸준히 오른다",
-   "body": "<p>235B-A22B에서 예산만 바꿨습니다. AIME'24 약 42 → 87 · 저자는 32K 너머도 오를 것으로 봅니다 .</p>",
-   "visual": "<figure class=\"crop\" data-main style=\"max-width:58%;margin:0 auto\"><img src=\"figures/qwen3-fig2.png\" alt=\"Qwen3 Fig. 2: 생각 예산 1K–32K에 따른 AIME24 · AIME25 · LiveCodeBench v5 · GPQA Diamond Pass@1, 빨간 점선은 non-thinking\" data-glyph-px=\"15\"><figcaption>원문 · Qwen3 Fig. 2 (p.20) · 전체 / 빨간 점선 = non-thinking · 패널마다 y축 범위 다름</figcaption></figure>",
-   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“Qwen3 demonstrates scalable and smooth performance improvements correlated to the allocated thinking budget. Moreover, we observe that if we further extend the output length beyond 32K, the model’s performance is expected to improve further in the future. We leave this exploration as future work.”<cite>Qwen3 §4.7 (p.20)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"est\">추정</span> 그림에서 읽은 값(1K → 32K): AIME'24 약 42 → 87, AIME'25 약 31 → 82, LiveCodeBench v5 약 45 → 68, GPQA Diamond 약 64 → 72. 1K → 2K 구간은 AIME'24 · GPQA에서 거의 평평합니다.</p>",
-   "sources": [
-    {
-     "label": "Qwen3 §4.7 Fig. 2 (p.20)",
-     "url": "https://arxiv.org/pdf/2505.09388v1#page=20"
-    }
-   ],
-   "claims": [
-    "fig2-claim",
-    "fig2-aime",
-    "fig2-hyp"
-   ],
-   "ids": "Post-training · 예산별 성능",
    "layout": "wide"
   },
   {
