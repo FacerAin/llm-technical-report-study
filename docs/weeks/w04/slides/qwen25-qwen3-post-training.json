@@ -379,8 +379,8 @@
    "section": "5",
    "section_label": "§4.3–4.4 Mode Fusion · RL",
    "title": "Chat template: non-thinking에서도 빈 think 블록을 남긴다",
-   "body": "<p>형식이 늘 같아지고, 빈 블록만 붙이면 생각을 끕니다(<code>enable_thinking=False</code>).</p>",
-   "visual": "<figure class=\"crop\" data-main style=\"max-width:62%;margin:0 auto\"><img src=\"figures/qwen3-table9.png\" alt=\"Qwen3 Table 9: thinking과 non-thinking 모드의 SFT 데이터 템플릿\" data-glyph-px=\"17\"><figcaption>원문 · Qwen3 Table 9 (p.11) · 표 본문 / 생략: 캡션</figcaption></figure>",
+   "body": "<p>모든 답이 <code>&lt;think&gt;…&lt;/think&gt; 답</code>의 같은 모양이 되고, 두 모드의 차이는 블록 안이 비었는지뿐입니다. 그래서 생각을 끄는 방법이 둘입니다.</p>",
+   "visual": "<div class=\"g c2\" data-main data-au=\"1\" style=\"align-items:center\"><figure class=\"crop\"><img src=\"figures/qwen3-table9.png\" alt=\"Qwen3 Table 9: thinking과 non-thinking 모드의 SFT 데이터 템플릿\" data-glyph-px=\"17\"><figcaption>원문 · Qwen3 Table 9 (p.11) · 학습 데이터 형식</figcaption></figure><div class=\"flow vertical\"><div class=\"bx blue\"><div class=\"t\">① <code>/no_think</code> flag</div><div class=\"d\"><b>사용자</b>가 질문 끝에 씀<br>→ 모델이 <b>스스로</b> 빈 블록을 출력하고 답<br>대화 중 턴마다 켰다 껐다 가능</div></div><div class=\"bx gray\"><div class=\"t\">② 빈 블록 미리 채우기</div><div class=\"d\"><b>개발자</b>가 템플릿에서 <code>enable_thinking=False</code><br>→ 답 앞에 <code>&lt;think&gt;&lt;/think&gt;</code>가 이미 들어감<br>→ 모델은 답부터 생성 · 항상 꺼짐</div></div></div></div>",
    "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“For non-thinking mode samples, we retain an empty thinking block in the assistant’s response. This design ensures internal format consistency within the model and allows developers to prevent the model from engaging in thinking behavior by concatenating an empty think block in the chat template.”<cite>Qwen3 §4.3 (p.11)</cite></blockquote><p>기본값은 thinking이라 flag 없는 thinking 샘플도 섞습니다.</p><p>Table 9 캡션: thinking 모드에서는 기본 동작이므로 <code>/think</code>를 생략할 수 있다. Hugging Face tokenizer의 chat template에서 <code>enable_thinking=False</code>로 끈다.</p>",
    "sources": [
     {
