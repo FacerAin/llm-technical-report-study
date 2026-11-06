@@ -205,6 +205,58 @@
    ]
   },
   {
+   "id": "tl-o1",
+   "statement": "o1은 RL(학습 계산)과 생각 시간(test-time compute)을 늘릴수록 성능이 오른다고 밝혔다 (2024-09-12)",
+   "kind": "cite",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "OpenAI · Learning to reason with LLMs (2024-09-12)",
+     "url": "https://openai.com/index/learning-to-reason-with-llms/"
+    }
+   ]
+  },
+  {
+   "id": "tl-dates",
+   "statement": "CoT 2022-01 · Zero-shot CoT 2022-05 · o1 2024-09 · QwQ-Preview 2024-11 · R1 2025-01 · Claude 3.7 2025-02 · Gemini 2.5 2025-03 · Qwen3 2025-04",
+   "kind": "cite",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "arXiv 2201.11903",
+     "url": "https://arxiv.org/abs/2201.11903"
+    },
+    {
+     "label": "arXiv 2205.11916",
+     "url": "https://arxiv.org/abs/2205.11916"
+    },
+    {
+     "label": "OpenAI · Learning to reason with LLMs (2024-09-12)",
+     "url": "https://openai.com/index/learning-to-reason-with-llms/"
+    },
+    {
+     "label": "Qwen · QwQ-32B-Preview",
+     "url": "https://qwenlm.github.io/blog/qwq-32b-preview/"
+    },
+    {
+     "label": "DeepSeek News",
+     "url": "https://api-docs.deepseek.com/news/news1120"
+    },
+    {
+     "label": "TechCrunch · Claude 3.7 Sonnet",
+     "url": "https://techcrunch.com/2025/02/24/anthropic-launches-a-new-ai-model-that-thinks-as-long-as-you-want"
+    },
+    {
+     "label": "Google · Gemini 2.5",
+     "url": "https://blog.google/technology/google-deepmind/gemini-model-thinking-updates-march-2025/"
+    },
+    {
+     "label": "Qwen · Qwen3 blog",
+     "url": "https://qwenlm.github.io/blog/qwen3/"
+    }
+   ]
+  },
+  {
    "id": "q3-two-modes",
    "statement": "Qwen3는 thinking 모드(복잡한 다단계 추론)와 non-thinking 모드(빠른 응답)를 한 모델에 합친다",
    "kind": "orig",
