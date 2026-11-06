@@ -368,7 +368,7 @@
   },
   {
    "id": "rl-t22",
-   "statement": "Qwen3-32B Thinking: Stage 2 뒤 AIME'24 83.8 · LiveCodeBench 68.4 · IFEval 73.0 · CounterFactQA 50.4 / Stage 4 뒤 81.4 · 65.7 · 85.0 · 68.1",
+   "statement": "Qwen3-32B Thinking: Stage 2 뒤 AIME'24 83.8 · IFEval 73.0 · CounterFactQA 50.4 / Stage 4 뒤 81.4 · 85.0 · 68.1",
    "kind": "table",
    "layer": "main",
    "sources": [
