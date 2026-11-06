@@ -28,7 +28,7 @@ Cold Start 데이터는 네 단계로 만듭니다. 먼저 정답이나 테스�
 Stage 2 Reasoning RL은 흐름만 짚겠습니다. Cold Start에 쓰지 않았고, 배울 수 있으면서도 최대한 어려운 문제 3,995개로 GRPO를 돌립니다. GRPO는 문제 하나에 답을 여러 개 뽑아 채점하고, 그룹 평균보다 나은 답은 강화하고 못한 답은 약화하는 방식입니다. 문제는 원문 4조건을 만족해야 합니다. Cold Start에 안 쓴 것, Cold Start 모델이 배울 수 있는 것, 최대한 어려운 것, 하위 도메인이 넓은 것입니다. 235B 기준 AIME'24가 170 step 만에 70.1에서 85.1로 올랐습니다. 32B를 보면 Stage 2 뒤 AIME는 이미 최종 점수 수준입니다. 반면 IFEval과 CounterFactQA는 아직 낮고, 이 부분을 Stage 3과 4가 채웁니다.
 
 ## @q3-modes
-이제 Stage 3 Thinking Mode Fusion입니다. Fusion 데이터를 보기 전에 무엇을 합치는지부터 보겠습니다. 같은 질문에 thinking 모드는 think 블록 안에서 길게 따져 보고 검산한 뒤 답하고, non-thinking 모드는 think 블록을 비워 두고 바로 답합니다. 예전에는 대화용 모델과 QwQ 같은 추론 전용 모델을 따로 썼는데, Qwen3는 Stage 3에서 이 둘을 한 모델에 합치고 질문 끝의 flag로 고르게 합니다.
+이제 Stage 3 Thinking Mode Fusion입니다. Fusion 데이터를 보기 전에 무엇을 합치는지부터 보겠습니다. thinking 모드는 수 비교처럼 따져 봐야 하는 문제에서 think 블록 안에서 길게 생각하고 검산한 뒤 답합니다. non-thinking 모드는 번역처럼 바로 답하면 되는 일에서 think 블록을 비워 두고 곧장 답합니다. 예전에는 대화용 모델과 QwQ 같은 추론 전용 모델을 따로 썼는데, Qwen3는 Stage 3에서 이 둘을 한 모델에 합치고 질문 끝의 flag로 고르게 합니다.
 
 ## @tmf-data
 3단계 Thinking Mode Fusion은 2단계 모델 위에 SFT를 더 합니다. 생각 데이터는 2단계 모델이 직접 만듭니다. 추가 SFT로 2단계 성능이 떨어지지 않게 하려는 겁니다. 바로 답 데이터는 코딩, 수학, 다국어, 롤플레이 등 일곱 태스크에서 모으고 checklist로 품질을 봅니다.
