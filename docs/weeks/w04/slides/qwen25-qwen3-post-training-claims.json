@@ -205,6 +205,18 @@
    ]
   },
   {
+   "id": "q3-two-modes",
+   "statement": "Qwen3는 thinking 모드(복잡한 다단계 추론)와 non-thinking 모드(빠른 응답)를 한 모델에 합친다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 Abstract (p.1)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=1"
+    }
+   ]
+  },
+  {
    "id": "q3-goals",
    "statement": "Qwen3 후학습의 두 목표는 Thinking Control과 Strong-to-Weak Distillation",
    "kind": "orig",
