@@ -207,7 +207,7 @@
    "key": "reasoning-timeline",
    "part": "main",
    "kind": "intro",
-   "seconds": 60,
+   "seconds": 50,
    "term": "Reasoning 시대",
    "section": "3",
    "section_label": "Qwen3 §4 서두",
@@ -236,7 +236,7 @@
    "key": "q3-modes",
    "part": "main",
    "kind": "intro",
-   "seconds": 50,
+   "seconds": 40,
    "term": "Thinking vs Non-thinking",
    "section": "3",
    "section_label": "Qwen3 §4 서두",
@@ -292,7 +292,7 @@
    "seconds": 80,
    "term": "Cold Start 데이터",
    "section": "4",
-   "section_label": "§4.1–4.4 Cold Start · RL",
+   "section_label": "§4.1–4.2 Cold Start · RL",
    "title": "Cold Start 데이터: 생각해야만 풀리는 문제에 깨끗한 긴 풀이만 남긴다",
    "body": "<p>문제를 거르고, 풀이를 거른 뒤, 그중 일부로만 학습합니다.</p>",
    "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><colgroup><col style=\"width:17%\"><col style=\"width:58%\"><col style=\"width:25%\"></colgroup><thead><tr><th>단계</th><th>무엇을 하나</th><th>목적</th></tr></thead><tbody><tr><td>① 재료</td><td>수학 · 코드 · 논리 · STEM 문제 + 검증된 정답 · 테스트 케이스</td><td>자동 채점 가능한 문제 확보</td></tr><tr><td>② Query 필터</td><td>Qwen2.5-72B-Instruct가 판정 · 검증 어려운 문제 제거(하위 질문 여럿 · 글쓰기 요청)<br><b>CoT 없이 맞히는 문제 제거</b> · 도메인 라벨로 균형</td><td>추론이 필요 없거나 검증이 어려운 문제 제거</td></tr><tr><td>③ Response 필터</td><td>QwQ-32B로 문제마다 풀이 N개 생성<br>계속 못 푸는 문제 → 사람이 확인<br>하나라도 맞힌 문제 → <b>풀이 중</b> 오답 · 반복 · 찍기 · 생각과 요약 불일치 · 언어 섞임 · 검증셋과 유사한 것 제거</td><td>풀이 가능 여부 확인 · 풀이 품질 체크</td></tr><tr><td>④ 학습</td><td>걸러낸 것 중 <b>일부만, 적은 step</b>으로 SFT<br>점수가 아니라 패턴만 · 성능까지 맞추면 다음 RL에서 더 오를 여지가 줄어든다(저자)</td><td>RL 전에 기초 추론 패턴 만들기</td></tr></tbody></table></div>",
@@ -313,35 +313,30 @@
    "layout": "wide"
   },
   {
-   "key": "rl-stages",
+   "key": "rl-reasoning",
    "part": "main",
    "kind": "mechanism",
    "seconds": 40,
-   "term": "RL 두 단계",
+   "term": "Reasoning RL",
    "section": "4",
-   "section_label": "§4.1–4.4 Cold Start · RL",
-   "title": "RL 두 단계: Stage 2는 추론 실력을 끌어올리고, Stage 4는 두 모드를 다듬는다",
-   "body": "<p>Stage 3 Mode Fusion은 다음 장에서 봅니다.</p>",
-   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><colgroup><col style=\"width:20%\"><col style=\"width:58%\"><col style=\"width:22%\"></colgroup><thead><tr><th>단계</th><th>무엇을 했나</th><th>결과</th></tr></thead><tbody><tr><td>Stage 2<br>Reasoning RL</td><td>Cold Start에 안 쓴 어려운 문제 + 자동 채점기 <b>3,995쌍</b>으로 GRPO<br>큰 batch · 많은 rollout · entropy 조절로 안정적 학습</td><td>235B AIME'24<br>70.1 → 85.1 (170 step)</td></tr><tr><td>Stage 4<br>General RL</td><td><b>20개 이상 태스크</b>: Instruction Following · Format Following(<code>/think</code> 따르기) · Preference Alignment · Agent(도구 호출) · RAG 등<br>보상 3종: 규칙 기반 · 참조답 + Qwen2.5-72B-Instruct 채점 · 참조답 없는 RM</td><td>32B 모드 전환 정확도(<dfn>ThinkFollow</dfn>)<br>88.7 → 98.9</td></tr></tbody></table></div>",
-   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“We ultimately collect a total of 3,995 query-verifier pairs, and employed GRPO (Shao et al., 2024) to update the model parameters.”<cite>Qwen3 §4.2 (p.10)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“For instance, the AIME’24 score of the Qwen3-235B-A22B model increases from 70.1 to 85.1 over a total of 170 RL training steps.”<cite>Qwen3 §4.2 (p.11)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“To facilitate this, we have established a sophisticated reward system covering over 20 distinct tasks, each with customized scoring criteria.”<cite>Qwen3 §4.4 (p.11)</cite></blockquote><p>ThinkFollow 88.7 → 98.9는 Qwen3-32B의 Stage 3 → Stage 4 값입니다(Table 22, p.21).</p>",
+   "section_label": "§4.1–4.2 Cold Start · RL",
+   "title": "Reasoning RL: 어려운 문제 3,995개로 GRPO를 돌려 추론 실력을 끌어올린다",
+   "body": "<p>Stage 2입니다. Cold Start에 안 쓴, 배울 수 있으면서 최대한 어려운 문제만 씁니다.</p>",
+   "visual": "<figure class=\"diagram\" data-main role=\"img\" aria-label=\"GRPO 한 step: 문제 하나에 답 여러 개를 생성하고, 채점기가 정답 여부를 매기고, 그룹 평균보다 나은 답은 강화 못한 답은 약화해 모델을 갱신\" style=\"margin:0\"><svg viewBox=\"0 0 1100 230\" style=\"width:100%;height:auto\"><defs><marker id=\"ra\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"8\" markerHeight=\"8\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#5D6570\"/></marker></defs>\n<g font-size=\"19\" text-anchor=\"middle\" fill=\"#1A1D23\">\n<rect x=\"10\" y=\"60\" width=\"190\" height=\"80\" rx=\"10\" fill=\"#fff\" stroke=\"#959BA5\" stroke-width=\"1.6\"/><text x=\"105\" y=\"95\">문제 1개</text><text x=\"105\" y=\"122\" font-size=\"15\" fill=\"#5D6570\">3,995쌍 중</text>\n<rect x=\"250\" y=\"20\" width=\"230\" height=\"160\" rx=\"10\" fill=\"#fff\" stroke=\"#A65A2E\" stroke-width=\"2.4\"/><text x=\"365\" y=\"52\">모델이 답 G개 생성</text>\n<text x=\"365\" y=\"88\" font-size=\"16\" fill=\"#5D6570\">답 1 · &lt;think&gt; … 정답</text><text x=\"365\" y=\"114\" font-size=\"16\" fill=\"#5D6570\">답 2 · &lt;think&gt; … 오답</text><text x=\"365\" y=\"140\" font-size=\"16\" fill=\"#5D6570\">⋮</text><text x=\"365\" y=\"166\" font-size=\"16\" fill=\"#5D6570\">답 G · &lt;think&gt; … 정답</text>\n<rect x=\"530\" y=\"60\" width=\"200\" height=\"80\" rx=\"10\" fill=\"#fff\" stroke=\"#2E55A5\" stroke-width=\"2\"/><text x=\"630\" y=\"95\">채점기</text><text x=\"630\" y=\"122\" font-size=\"15\" fill=\"#5D6570\">정답 · 테스트로 1 / 0</text>\n<rect x=\"780\" y=\"60\" width=\"300\" height=\"80\" rx=\"10\" fill=\"#FBEDE5\" stroke=\"#A65A2E\" stroke-width=\"2\"/><text x=\"930\" y=\"95\">그룹 평균보다 나은 답 ↑</text><text x=\"930\" y=\"122\" font-size=\"15\" fill=\"#5D6570\">못한 답 ↓ · 모델 갱신</text>\n</g>\n<g fill=\"none\" stroke=\"#5D6570\" stroke-width=\"2\"><path d=\"M200 100H247\" marker-end=\"url(#ra)\"/><path d=\"M480 100H527\" marker-end=\"url(#ra)\"/><path d=\"M730 100H777\" marker-end=\"url(#ra)\"/><path d=\"M930 140V196H365V183\" stroke-dasharray=\"6 5\" marker-end=\"url(#ra)\"/></g>\n<text x=\"650\" y=\"224\" font-size=\"15\" fill=\"#5D6570\" text-anchor=\"middle\">170 step 반복</text></svg></figure><p class=\"cond\"><span class=\"ev-chip\" data-ev=\"orig\">원문</span> 235B AIME'24 70.1 → 85.1 (170 step, 하이퍼파라미터 수동 조정 없이)</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“The query-verifier pairs used in the Reasoning RL stage must satisfy the following four criteria: (1) They were not used during the cold-start phase. (2) They are learnable for the cold-start model. (3) They are as challenging as possible. (4) They cover a broad range of sub-domains.”<cite>Qwen3 §4.2 (p.10)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“For instance, the AIME’24 score of the Qwen3-235B-A22B model increases from 70.1 to 85.1 over a total of 170 RL training steps.”<cite>Qwen3 §4.2 (p.11)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"illus\">설명용</span> 도식은 GRPO 한 step을 발표자가 그린 것입니다. 원문은 큰 batch · 많은 rollout · off-policy 학습 · entropy 조절이 도움이 됐다고만 적고 G 값은 밝히지 않았습니다.</p>",
    "sources": [
     {
      "label": "Qwen3 §4.2 (p.10–11)",
      "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
-    },
-    {
-     "label": "Qwen3 §4.4 (p.11–12)",
-     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
     }
    ],
    "src_visible": 1,
    "claims": [
     "rl-pairs",
-    "rl-aime",
-    "gr-tasks",
-    "gr-rewards"
+    "rl-criteria",
+    "rl-aime"
    ],
-   "ids": "흐름 · Reasoning RL · General RL",
+   "ids": "흐름 · Reasoning RL",
    "layout": "wide"
   },
   {
@@ -351,7 +346,7 @@
    "seconds": 60,
    "term": "Fusion 데이터",
    "section": "5",
-   "section_label": "§4.3 Thinking Mode Fusion",
+   "section_label": "§4.3–4.4 Mode Fusion · RL",
    "title": "Fusion 데이터: thinking 데이터는 Stage 2 모델이 직접 만든다",
    "body": "<p>Stage 2 모델 위에 SFT를 더 합니다. 추가 SFT로 Stage 2 성능이 떨어지지 않게 하려는 설계입니다.</p>",
    "visual": "<div class=\"g c2\" data-main data-au=\"1\"><div class=\"bx orange\"><div class=\"t\">thinking 데이터</div><div class=\"d\">Stage 1 query → Stage 2 모델로 rejection sampling</div><div class=\"m\">Stage 2 성능 유지</div></div><div class=\"bx blue\"><div class=\"t\">non-thinking 데이터</div><div class=\"d\">코딩 · 수학 · 지시 따르기 · 다국어 · 창작 · QA · 롤플레이</div><div class=\"m\">자동 checklist로 품질 평가 · 저자원 언어용 번역 비중 ↑</div></div></div>",
@@ -377,7 +372,7 @@
    "seconds": 60,
    "term": "Chat template",
    "section": "5",
-   "section_label": "§4.3 Thinking Mode Fusion",
+   "section_label": "§4.3–4.4 Mode Fusion · RL",
    "title": "Chat template: non-thinking에서도 빈 think 블록을 남긴다",
    "body": "<p>형식이 늘 같아지고, 빈 블록만 붙이면 생각을 끕니다(<code>enable_thinking=False</code>).</p>",
    "visual": "<figure class=\"crop\" data-main style=\"max-width:62%;margin:0 auto\"><img src=\"figures/qwen3-table9.png\" alt=\"Qwen3 Table 9: thinking과 non-thinking 모드의 SFT 데이터 템플릿\" data-glyph-px=\"17\"><figcaption>원문 · Qwen3 Table 9 (p.11) · 표 본문 / 생략: 캡션</figcaption></figure>",
@@ -403,9 +398,9 @@
    "seconds": 50,
    "term": "마지막 flag",
    "section": "5",
-   "section_label": "§4.3 Thinking Mode Fusion",
+   "section_label": "§4.3–4.4 Mode Fusion · RL",
    "title": "마지막 flag 규칙: 여러 턴에 flag가 섞이면 가장 마지막 것을 따른다",
-   "body": "<p>in-house ThinkFollow로 재며 Stage 3 뒤 88.7입니다.</p>",
+   "body": "<p>in-house <dfn>ThinkFollow</dfn>로 재며 Stage 3 뒤 88.7입니다.</p>",
    "visual": "<div class=\"flow vertical\" data-main data-au=\"1\"><div class=\"bx gray\" style=\"padding:10px 16px\"><div class=\"m\"><b>User</b> 이 적분 풀어 줘 <code>/think</code></div></div><div class=\"bx orange\" style=\"padding:10px 16px\"><div class=\"m\"><b>Assistant</b> &lt;think&gt; 치환하면 … &lt;/think&gt; 답은 …</div></div><div class=\"bx gray\" style=\"padding:10px 16px\"><div class=\"m\"><b>User</b> 단위만 다시 알려 줘 <code>/no_think</code></div></div><div class=\"bx blue\" style=\"padding:10px 16px\"><div class=\"m\"><b>Assistant</b> &lt;think&gt;&lt;/think&gt; 단위는 …</div></div><div class=\"bx gray\" style=\"padding:10px 16px\"><div class=\"m\"><b>User</b> <code>/no_think</code> 아니, 검산도 해 줘 <code>/think</code></div></div><div class=\"bx orange\" style=\"padding:10px 16px\"><div class=\"m\"><b>Assistant</b> &lt;think&gt; 다시 미분하면 … &lt;/think&gt; 맞습니다</div></div></div><p class=\"cond\"><span class=\"ev-chip\" data-ev=\"illus\">설명용</span> 발표자가 만든 대화 · 마지막 턴은 query 안 마지막 flag인 <code>/think</code>를 따름</p>",
    "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“For more complex multi-turn dialogs, we randomly insert multiple /think and /no_think flags into users’ queries, with the model response adhering to the last flag encountered.”<cite>Qwen3 §4.3 (p.11)</cite></blockquote><p>ThinkFollow: /think · /no_think를 무작위로 넣은 다회차 대화에서 모드를 맞게 바꾸는지 보는 in-house 벤치. Stage 3 88.7 → Stage 4 98.9 (Table 22, [[@t22]]).</p>",
    "sources": [
@@ -433,7 +428,7 @@
    "seconds": 70,
    "term": "Thinking budget",
    "section": "5",
-   "section_label": "§4.3 Thinking Mode Fusion",
+   "section_label": "§4.3–4.4 Mode Fusion · RL",
    "layout": "wide",
    "title": "Thinking budget: 생각이 예산에 닿으면 강제로 끊고 지금까지의 생각으로 답한다",
    "body": "<p>두 모드를 다 배운 모델은 덜 끝난 생각으로도 답할 수 있습니다. 저자들은 이 능력을 따로 학습하지 않았고 Fusion에서 저절로 생겼다고 적습니다.</p>",
@@ -450,6 +445,37 @@
     "budget-emerge"
    ],
    "ids": "Post-training · 생각 예산과 강제 중단"
+  },
+  {
+   "key": "rl-general",
+   "part": "main",
+   "kind": "mechanism",
+   "seconds": 40,
+   "term": "General RL",
+   "section": "5",
+   "section_label": "§4.3–4.4 Mode Fusion · RL",
+   "title": "General RL: 20개 넘는 태스크 보상으로 두 모드를 함께 다듬는다",
+   "body": "<p>Stage 4입니다. 다듬을 능력마다 맞는 보상을 붙였습니다.</p>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><colgroup><col style=\"width:34%\"><col style=\"width:66%\"></colgroup><thead><tr><th>다듬는 능력</th><th>예</th></tr></thead><tbody><tr><td>Instruction · Format Following</td><td>내용 · 길이 · 형식 지시 지키기 · <code>/think</code> · <code>/no_think</code>에 맞게 모드 전환</td></tr><tr><td>Preference Alignment</td><td>열린 질문에서 도움 · 몰입 · 문체</td></tr><tr><td>Agent Ability</td><td>실제 환경에서 여러 턴 도구 호출</td></tr><tr><td>Specialized Scenarios</td><td>RAG 등 · 환각 줄이기</td></tr></tbody></table></div><p class=\"cond\"><span class=\"ev-chip\" data-ev=\"orig\">원문</span> 보상 3종: 규칙 기반 · 참조답을 주고 Qwen2.5-72B-Instruct가 채점 · 참조답 없는 RM / 32B ThinkFollow 88.7 → 98.9</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“The General RL stage aims to broadly enhance the models’ capabilities and stability across diverse scenarios. To facilitate this, we have established a sophisticated reward system covering over 20 distinct tasks, each with customized scoring criteria.”<cite>Qwen3 §4.4 (p.11)</cite></blockquote><p>보상 3종: (1) Rule-based Reward — 정밀하고 reward hacking에 강함 (2) Model-based Reward with Reference Answer — 형식이 달라도 채점 (3) Model-based Reward without Reference Answer — 사람 선호 데이터로 학습한 RM.</p><p>ThinkFollow 88.7 → 98.9는 Qwen3-32B의 Stage 3 → Stage 4 값입니다(Table 22, p.21).</p>",
+   "sources": [
+    {
+     "label": "Qwen3 §4.4 (p.11–12)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    },
+    {
+     "label": "Qwen3 Table 22 (p.21)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "gr-tasks",
+    "gr-rewards",
+    "gr-thinkfollow"
+   ],
+   "ids": "흐름 · General RL",
+   "layout": "wide"
   },
   {
    "key": "eval-summary",
@@ -605,7 +631,7 @@
    "key": "fig2",
    "part": "main",
    "kind": "result",
-   "seconds": 50,
+   "seconds": 40,
    "term": "예산별 성능",
    "section": "7",
    "section_label": "§4.7 Discussion",
@@ -631,7 +657,7 @@
    "key": "t22",
    "part": "main",
    "kind": "result",
-   "seconds": 60,
+   "seconds": 50,
    "term": "Table 22 Stage 3",
    "section": "7",
    "section_label": "§4.7 Discussion",

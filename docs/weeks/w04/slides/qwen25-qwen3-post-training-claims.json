@@ -367,26 +367,14 @@
    ]
   },
   {
-   "id": "gr-tasks",
-   "statement": "General RL은 20개 이상 태스크의 보상으로 지시 따르기 · 포맷 · 선호 · 에이전트 · 특수 시나리오를 다듬는다",
+   "id": "rl-criteria",
+   "statement": "Reasoning RL 문제는 Cold Start에 안 씀 · Cold Start 모델이 배울 수 있음 · 최대한 어려움 · 넓은 하위 도메인 4조건",
    "kind": "orig",
    "layer": "main",
    "sources": [
     {
-     "label": "Qwen3 §4.4 (p.11–12)",
-     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
-    }
-   ]
-  },
-  {
-   "id": "gr-rewards",
-   "statement": "General RL 보상은 규칙 기반 · 참조답 + Qwen2.5-72B-Instruct 채점 · 참조답 없는 RM 3종",
-   "kind": "orig",
-   "layer": "main",
-   "sources": [
-    {
-     "label": "Qwen3 §4.4 (p.12)",
-     "url": "https://arxiv.org/pdf/2505.09388v1#page=12"
+     "label": "Qwen3 §4.2 (p.10)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
     }
    ]
   },
@@ -508,6 +496,42 @@
     {
      "label": "Qwen3 §4.3 (p.11)",
      "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ]
+  },
+  {
+   "id": "gr-tasks",
+   "statement": "General RL은 20개 이상 태스크의 보상으로 지시 따르기 · 포맷 · 선호 · 에이전트 · 특수 시나리오를 다듬는다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.4 (p.11–12)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ]
+  },
+  {
+   "id": "gr-rewards",
+   "statement": "General RL 보상은 규칙 기반 · 참조답 + Qwen2.5-72B-Instruct 채점 · 참조답 없는 RM 3종",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.4 (p.12)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=12"
+    }
+   ]
+  },
+  {
+   "id": "gr-thinkfollow",
+   "statement": "Qwen3-32B ThinkFollow는 Stage 3 88.7에서 Stage 4 98.9",
+   "kind": "table",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 Table 22 (p.21)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
     }
    ]
   },
