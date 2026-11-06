@@ -1,0 +1,592 @@
+{
+ "title": "W04 Qwen2.5 · Qwen3 — Post-training",
+ "subtitle": "송용우 · 검토용 초안",
+ "shell_version": 2,
+ "budget_minutes": 20,
+ "known_terms": [
+  "Qwen2.5",
+  "Qwen3",
+  "SFT",
+  "RL",
+  "DPO",
+  "GRPO",
+  "RM",
+  "CoT",
+  "QwQ-32B",
+  "STEM",
+  "GPU",
+  "Pass@1",
+  "Pass@64",
+  "LLaMA",
+  "GPT-4o",
+  "MMLU-Pro",
+  "MATH",
+  "IFEval",
+  "GPQA-Diamond",
+  "AIME",
+  "BFCL",
+  "QA",
+  "T",
+  "PDF",
+  "N",
+  "MMLU-Redux",
+  "MT-AIME2024",
+  "OpenAI-o1",
+  "DeepSeek-R1",
+  "DeepSeek-V3",
+  "Gemini2.5-Pro",
+  "Elo",
+  "K",
+  "API",
+  "MoE",
+  "LiveCodeBench",
+  "MBPP",
+  "MultiPL",
+  "CodeForces",
+  "CounterFactQA",
+  "LengthCtrl"
+ ],
+ "claims_file": "qwen25-qwen3-post-training-claims.json",
+ "slides": [
+  {
+   "key": "overview",
+   "part": "main",
+   "kind": "intro",
+   "seconds": 30,
+   "term": "후학습",
+   "section": "1",
+   "section_label": "들어가며",
+   "layout": "wide",
+   "title": "후학습: Qwen2.5는 SFT를 넓혔고, Qwen3는 생각 능력부터 만든다",
+   "body": "<p>오늘 범위는 두 보고서의 Post-training 서두와 Qwen3의 Cold Start · Mode Fusion · 평가 · Discussion입니다.</p>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl rowcards\"><thead><tr><th></th><th>Qwen2.5 (2024-12)</th><th>Qwen3 (2025-05)</th></tr></thead><tbody><tr><td data-label=\"항목\">순서</td><td data-label=\"Qwen2.5\">SFT → Offline RL → Online RL</td><td data-label=\"Qwen3\">Cold Start → Reasoning RL → Mode Fusion → General RL</td></tr><tr><td data-label=\"항목\">사용자 제어</td><td data-label=\"Qwen2.5\">system prompt</td><td data-label=\"Qwen3\"><code>/think</code> · <code>/no_think</code> · 생각 예산</td></tr><tr><td data-label=\"항목\">작은 모델</td><td data-label=\"Qwen2.5\">같은 과정</td><td data-label=\"Qwen3\">큰 모델에서 증류</td></tr></tbody></table></div>",
+   "sources": [
+    {
+     "label": "Qwen2.5 §4 (p.4–5)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=4"
+    },
+    {
+     "label": "Qwen3 §4 Fig. 1 (p.9)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=9"
+    }
+   ],
+   "claims": [
+    "q25-pipeline",
+    "q3-pipeline"
+   ],
+   "ids": "Post-training 범위"
+  },
+  {
+   "key": "q25-intro",
+   "part": "main",
+   "kind": "mechanism",
+   "seconds": 60,
+   "term": "Qwen2.5 후학습",
+   "section": "2",
+   "section_label": "Qwen2.5 §4",
+   "title": "Qwen2.5 후학습: RM이 못 채점하는 능력은 Offline, 미묘한 품질은 Online RL",
+   "body": "<p>서두가 꼽는 진전은 SFT 데이터의 폭과 RL을 둘로 나눈 것입니다.</p>",
+   "visual": "<div class=\"flow\" data-main data-au=\"1\"><div class=\"bx blue thick\"><div class=\"t\">SFT</div><div class=\"d\">100만+ 예시 · 9개 영역</div><div class=\"m\">긴 생성 · 수학 · 코드 · 지시 따르기 · 구조화 데이터 · 논리 · 교차 언어 · system prompt</div></div><div class=\"arrow\">→</div><div class=\"bx green\"><div class=\"t\">Offline RL · DPO</div><div class=\"d\">RM이 채점하기 어려운 능력</div><div class=\"m\">추론 · 사실성 · 지시 따르기</div></div><div class=\"arrow\">→</div><div class=\"bx orange\"><div class=\"t\">Online RL · GRPO</div><div class=\"d\">RM이 잡아내는 미묘한 품질</div><div class=\"m\">진실성 · 도움 · 간결 · 관련성 · 무해 · 편향 제거</div></div></div>",
+   "evidence": "<p>§4 서두가 Offline RL을 설명하는 이유 문장입니다.</p><blockquote class=\"ev-quote\" lang=\"en\">“Offline RL: This stage focuses on developing capabilities that are challenging for the reward model to evaluate, such as reasoning, factuality, and instruction-following.”<cite>Qwen2.5 §4 (p.5)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"nd\">미기술</span> 9개 영역별 데이터 양은 밝히지 않았습니다. 9번째 항목은 응답 필터(critic model + 다중 에이전트 채점)입니다.</p>",
+   "sources": [
+    {
+     "label": "Qwen2.5 §4 (p.4–5)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=4"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "q25-two-adv",
+    "q25-offline-focus",
+    "q25-online-focus"
+   ],
+   "ids": "Post-training · Qwen2.5 서두",
+   "layout": "wide"
+  },
+  {
+   "key": "q25-sft",
+   "part": "main",
+   "kind": "result",
+   "seconds": 50,
+   "term": "SFT 설정",
+   "section": "2",
+   "section_label": "Qwen2.5 §4",
+   "title": "SFT 설정: 100만+ 예시를 32K 길이로 2 epoch, 학습률은 7e-6 → 7e-7",
+   "body": "<p>§4.1 마지막 문단입니다. 과적합을 막으려고 weight decay와 gradient clipping을 둡니다.</p>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><thead><tr><th>설정</th><th>Llama 2-Chat (W02)</th><th>Qwen2.5</th></tr></thead><tbody><tr><td>예시 수</td><td>27,540</td><td class=\"em\">100만+</td></tr><tr><td>시퀀스 길이 · epoch</td><td>4,096 · 2</td><td class=\"em\">32,768 · 2</td></tr><tr><td>학습률</td><td>2×10⁻⁵ · cosine</td><td>7×10⁻⁶ → 7×10⁻⁷</td></tr><tr><td>weight decay · grad clip</td><td>0.1 · 미기술</td><td>0.1 · 1.0</td></tr></tbody></table></div><p class=\"cap\">파랑 칸 = 발표자 강조 · Llama 2 값은 §3.1 (p.9)</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“Ultimately, we construct a dataset of over 1 million SFT examples. The model is fine-tuned for two epochs with a sequence length of 32,768 tokens. To optimize learning, the learning rate is gradually decreased from 7 × 10−6 to 7 × 10−7. To address overfitting, we apply a weight decay of 0.1, and gradient norms are clipped at a maximum value of 1.0.”<cite>Qwen2.5 §4.1 마지막 문단 (p.6)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"nd\">미기술</span> 감소 스케줄의 모양(선형 · cosine)과 batch 크기는 적지 않았습니다.</p><p>Qwen2 SFT는 50만+ 예시였습니다(W03). 데이터가 약 2배로 늘었습니다.</p>",
+   "sources": [
+    {
+     "label": "Qwen2.5 §4.1 (p.6)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=6"
+    },
+    {
+     "label": "Llama 2 §3.1 (p.9)",
+     "url": "https://arxiv.org/pdf/2307.09288v2#page=9"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "q25-sft-n",
+    "q25-sft-ep",
+    "q25-sft-len",
+    "q25-sft-lr",
+    "q25-sft-reg",
+    "l2-sft"
+   ],
+   "ids": "Post-training · SFT 설정",
+   "layout": "wide"
+  },
+  {
+   "key": "q25-t6",
+   "part": "main",
+   "kind": "result",
+   "seconds": 50,
+   "term": "Table 6",
+   "section": "2",
+   "section_label": "Qwen2.5 §4",
+   "title": "Table 6: 72B-Instruct는 5배 큰 405B를 13개 중 7개에서 앞선다",
+   "body": "<p>Instruct 모델의 공개 벤치마크 13개 비교입니다.</p>",
+   "visual": "<div class=\"claim-table\" data-main><div class=\"table-wrap\"><table class=\"tbl ct\"><thead><tr><th>벤치마크</th><th class=\"numcol\">Llama-3.1-405B</th><th class=\"numcol\">Qwen2-72B</th><th class=\"numcol\">Qwen2.5-72B</th><th class=\"numcol\">Qwen2.5-Plus</th></tr></thead><tbody><tr><td>MATH</td><td class=\"numcol cl-vs\">73.8</td><td class=\"numcol \">69.0</td><td class=\"numcol cl-hi\">83.1</td><td class=\"numcol \">84.7</td></tr><tr><td>LiveCodeBench</td><td class=\"numcol cl-vs\">41.6</td><td class=\"numcol \">32.2</td><td class=\"numcol cl-hi\">55.5</td><td class=\"numcol \">51.4</td></tr><tr><td>Arena-Hard</td><td class=\"numcol cl-vs\">69.3</td><td class=\"numcol \">48.1</td><td class=\"numcol cl-hi\">81.2</td><td class=\"numcol \">81.4</td></tr></tbody></table></div><p class=\"claim-legend\"><span><i class=\"cl-hi\"></i>본문이 강조한 우위</span><span><i class=\"cl-vs\"></i>본문의 비교 대상</span><span>원문 굵게는 옮기지 않음</span></p><div class=\"verdict\"><span class=\"vd-claim\">저자: “72B가 7개 벤치에서 405B를 앞선다”</span><span class=\"vd-res vd-ok\">표: 7개 모두 앞섬 · 예 MATH +9.3 (83.1 − 73.8)</span></div><div class=\"verdict\"><span class=\"vd-claim\">저자: “Plus가 72B를 13개 중 9개에서 앞선다”</span><span class=\"vd-res vd-ok\">표: 9/13 · 예 MATH +1.6 (84.7 − 83.1)</span></div></div><p class=\"cap\">원문 · Qwen2.5 Table 6 (p.11) · 13행 중 3행 / 생략: 10행 · Llama-3.1-70B 열</p><figure class=\"crop crop-thumb only-wide\" data-au=\"0\"><img src=\"figures/qwen25-table6.png\" alt=\"Qwen2.5 Table 6 원본(눌러서 확대)\" width=\"99\" data-glyph-px=\"19\"></figure>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/qwen25-table6.png\" alt=\"Qwen2.5 Table 6\" data-glyph-px=\"19\" data-display-width=\"640\"><figcaption>원문 · Qwen2.5 Table 6 (p.11) · 전체 / 발표자 표시 없음</figcaption></figure><blockquote class=\"ev-quote\" lang=\"en\">“The Qwen2.5-72B-Instruct model delivers exceptional performance, even surpassing the larger Llama-3.1-405B-Instruct in several critical benchmarks including MMLU-redux, MATH, MBPP, MultiPL-E, LiveCodeBench, Arena-Hard and MTBench. Moreover, Qwen2.5-Plus outperforms Qwen2.5-72B-Instruct on 9 out of 13 benchmarks.”<cite>Qwen2.5 §5.2.1 (p.12)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> 72B 대 405B: 앞섬 7(MMLU-redux 86.8/86.2 · MATH · MBPP 88.2/84.5 · MultiPL-E 75.1/73.5 · LiveCodeBench · Arena-Hard · MT-Bench 9.35/9.08), 뒤짐 6(MMLU-Pro · LiveBench 52.3/53.2 · GPQA 49.0/51.1 · GSM8K 95.8/96.8 · HumanEval 86.6/89.0 · IFEval).</p>",
+   "sources": [
+    {
+     "label": "Qwen2.5 Table 6 (p.11)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=11"
+    },
+    {
+     "label": "Qwen2.5 §5.2.1 (p.12)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=12"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t6-72b-vs-405b",
+    "t6-plus",
+    "t6-verdict"
+   ],
+   "ids": "Post-training · 72B-Instruct · Plus 비교",
+   "layout": "wide"
+  },
+  {
+   "key": "q3-pipeline",
+   "part": "main",
+   "kind": "mechanism",
+   "seconds": 80,
+   "term": "Qwen3 후학습",
+   "section": "3",
+   "section_label": "Qwen3 §4 서두",
+   "layout": "wide",
+   "title": "Qwen3 후학습: 플래그십만 4단계로 만들고 작은 모델은 증류한다",
+   "body": "<p>목표는 생각 여부 · 길이를 사용자가 정하는 <dfn>Thinking Control</dfn>과, 작은 모델을 싸게 만드는 증류입니다. 1–2단계는 생각 능력, 3–4단계는 바로 답하는 능력을 더합니다.</p>",
+   "visual": "<figure class=\"diagram\" data-main role=\"img\" aria-label=\"Qwen3 후학습: 플래그십은 Base에서 Cold Start, Reasoning RL, Thinking Mode Fusion, General RL 4단계. 경량 모델은 Base에서 플래그십을 교사로 Strong-to-Weak Distillation\" style=\"margin:0\"><svg viewBox=\"0 0 1100 300\" style=\"width:100%;height:auto\">\n<defs><marker id=\"q3a\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"8\" markerHeight=\"8\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#5D6570\"/></marker></defs>\n<rect x=\"0\" y=\"0\" width=\"1100\" height=\"178\" rx=\"14\" fill=\"#FBF3EE\"/><rect x=\"0\" y=\"190\" width=\"1100\" height=\"110\" rx=\"14\" fill=\"#EEF2FA\"/>\n<text x=\"16\" y=\"24\" font-size=\"16\" fill=\"#A65A2E\">플래그십 · 235B-A22B · 32B</text><text x=\"16\" y=\"214\" font-size=\"16\" fill=\"#2E55A5\">경량 · 30B-A3B · 14B · 8B · 4B · 1.7B · 0.6B</text>\n<g font-size=\"19\" text-anchor=\"middle\" fill=\"#1A1D23\">\n<rect x=\"16\" y=\"40\" width=\"110\" height=\"56\" rx=\"10\" fill=\"#fff\" stroke=\"#959BA5\" stroke-width=\"1.6\"/><text x=\"71\" y=\"75\">Base</text>\n<rect x=\"156\" y=\"40\" width=\"200\" height=\"56\" rx=\"10\" fill=\"#fff\" stroke=\"#A65A2E\" stroke-width=\"2.4\"/><text x=\"256\" y=\"65\">① Cold Start</text><text x=\"256\" y=\"87\" font-size=\"15\" fill=\"#5D6570\">생각 · SFT</text>\n<rect x=\"386\" y=\"40\" width=\"200\" height=\"56\" rx=\"10\" fill=\"#fff\" stroke=\"#A65A2E\" stroke-width=\"1.6\"/><text x=\"486\" y=\"65\">② Reasoning RL</text><text x=\"486\" y=\"87\" font-size=\"15\" fill=\"#5D6570\">생각 · GRPO</text>\n<rect x=\"616\" y=\"40\" width=\"200\" height=\"56\" rx=\"10\" fill=\"#fff\" stroke=\"#A65A2E\" stroke-width=\"2.4\"/><text x=\"716\" y=\"65\">③ Mode Fusion</text><text x=\"716\" y=\"87\" font-size=\"15\" fill=\"#5D6570\">생각 + 바로 답 · SFT</text>\n<rect x=\"846\" y=\"40\" width=\"200\" height=\"56\" rx=\"10\" fill=\"#fff\" stroke=\"#A65A2E\" stroke-width=\"1.6\"/><text x=\"946\" y=\"65\">④ General RL</text><text x=\"946\" y=\"87\" font-size=\"15\" fill=\"#5D6570\">두 모드 · 20+ 태스크</text>\n<rect x=\"846\" y=\"118\" width=\"200\" height=\"44\" rx=\"10\" fill=\"#FBEDE5\" stroke=\"#A65A2E\" stroke-width=\"2\"/><text x=\"946\" y=\"147\">플래그십</text>\n<rect x=\"16\" y=\"230\" width=\"110\" height=\"56\" rx=\"10\" fill=\"#fff\" stroke=\"#959BA5\" stroke-width=\"1.6\"/><text x=\"71\" y=\"265\">Base</text>\n<rect x=\"296\" y=\"230\" width=\"460\" height=\"56\" rx=\"10\" fill=\"#fff\" stroke=\"#2E55A5\" stroke-width=\"2.4\"/><text x=\"526\" y=\"255\">Strong-to-Weak Distillation</text><text x=\"526\" y=\"277\" font-size=\"15\" fill=\"#5D6570\">off-policy → on-policy</text>\n<rect x=\"846\" y=\"236\" width=\"200\" height=\"44\" rx=\"10\" fill=\"#EEF2FA\" stroke=\"#2E55A5\" stroke-width=\"2\"/><text x=\"946\" y=\"265\">경량 모델</text>\n</g>\n<g fill=\"none\" stroke=\"#5D6570\" stroke-width=\"2\"><path d=\"M126 68H153\" marker-end=\"url(#q3a)\"/><path d=\"M356 68H383\" marker-end=\"url(#q3a)\"/><path d=\"M586 68H613\" marker-end=\"url(#q3a)\"/><path d=\"M816 68H843\" marker-end=\"url(#q3a)\"/><path d=\"M946 96V115\" marker-end=\"url(#q3a)\"/>\n<path d=\"M126 258H293\" marker-end=\"url(#q3a)\"/><path d=\"M756 258H843\" marker-end=\"url(#q3a)\"/><path d=\"M846 140H600V227\" stroke=\"#2E55A5\" stroke-dasharray=\"6 5\" marker-end=\"url(#q3a)\"/></g>\n<text x=\"612\" y=\"200\" font-size=\"15\" fill=\"#2E55A5\">교사</text></svg></figure><p class=\"cond\"><span class=\"ev-chip\" data-ev=\"orig\">원문</span> 예비 실험: 증류가 4단계 학습보다 Pass@1 · Pass@64 모두 높고 GPU 시간은 1/10</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“As illustrated in Figure 1, the flagship models in the Qwen3 series follow a sophisticated four-stage training process. The first two stages focus on developing the models’ “thinking” abilities. The next two stages aim to integrate strong “non-thinking” functionalities into the models.”<cite>Qwen3 §4 (p.10)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“It leads to better immediate performance, as indicated by higher Pass@1 scores, and also improves the model’s ability of exploration, as reflected in improved Pass@64 results. In addition, it achieves these gains with much greater training efficiency, requiring only 1/10 of the GPU hours compared to the four-stage training method.”<cite>Qwen3 §4 (p.10)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"illus\">설명용</span> 그림은 Fig. 1을 다시 그린 것입니다. 이 PDF 렌더에서 Fig. 1 글자가 보이지 않아 원본 crop은 싣지 않았습니다.</p>",
+   "sources": [
+    {
+     "label": "Qwen3 §4 Fig. 1 (p.9)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=9"
+    },
+    {
+     "label": "Qwen3 §4 (p.10)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
+    }
+   ],
+   "claims": [
+    "q3-goals",
+    "q3-distill-gpu"
+   ],
+   "ids": "Post-training · 4단계 파이프라인"
+  },
+  {
+   "key": "cs-filter",
+   "part": "main",
+   "kind": "mechanism",
+   "seconds": 80,
+   "term": "Cold Start 데이터",
+   "section": "4",
+   "section_label": "§4.1 Cold Start",
+   "title": "Cold Start 데이터: 생각이 필요한 문제와 깨끗한 답만 남긴다",
+   "body": "<p>재료는 정답 · 테스트가 붙은 수학 · 코드 · 논리 · STEM 문제입니다.</p>",
+   "visual": "<div class=\"g c2\" data-main data-au=\"1\"><div class=\"bx blue\"><div class=\"t\">① Query 필터 · Qwen2.5-72B-Instruct</div><div class=\"d\">검증 어려운 query 제거(하위 질문 여럿 · 일반 글쓰기)<br>CoT 없이 맞히는 query 제거<br>도메인 라벨로 균형</div></div><div class=\"bx green\"><div class=\"t\">② Response 필터 · QwQ-32B 답 N개</div><div class=\"d\">오답 · 반복 · 근거 없는 찍기<br>생각과 요약의 불일치<br>언어 섞임 · 문체 급변 · validation과 유사</div><div class=\"m\">QwQ가 계속 틀린 query는 사람이 확인</div></div></div>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“we exclude queries that Qwen2.5-72B-Instruct can answer correctly without using CoT reasoning. This helps prevent the model from relying on superficial guessing and ensures that only complex problems requiring deeper reasoning are included.”<cite>Qwen3 §4.1 (p.10)</cite></blockquote><p>Response 필터 6가지: (1) 오답 (2) 반복이 많음 (3) 충분한 추론 없이 찍음 (4) 생각과 요약 불일치 (5) 부적절한 언어 섞임 · 문체 변화 (6) validation 문항과 지나치게 비슷함.</p><p><span class=\"ev-chip\" data-ev=\"nd\">미기술</span> N, 남은 query 수, 도메인 비율은 밝히지 않았습니다.</p>",
+   "sources": [
+    {
+     "label": "Qwen3 §4.1 (p.10)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
+    }
+   ],
+   "claims": [
+    "cs-query-filter",
+    "cs-resp-filter"
+   ],
+   "ids": "Post-training · query와 response 필터",
+   "layout": "wide"
+  },
+  {
+   "key": "cs-small",
+   "part": "main",
+   "kind": "mechanism",
+   "seconds": 60,
+   "term": "작은 Cold Start",
+   "section": "4",
+   "section_label": "§4.1 Cold Start",
+   "title": "작은 Cold Start: 추론 패턴만 심고, 성능은 다음 RL에 맡긴다",
+   "body": "<p>거른 데이터에서도 일부만 고릅니다. 지금 점수를 쫓으면 모델의 잠재력이 묶인다는 것이 원문의 이유입니다.</p>",
+   "visual": "<div class=\"flow vertical\" data-main data-au=\"1\"><div class=\"bx blue thick\"><div class=\"t\">Stage 1 · Cold Start</div><div class=\"d\">기초 추론 패턴만</div><div class=\"m\">샘플 수 · 학습 step 최소화</div></div><div class=\"arrow\">↓</div><div class=\"bx gray\"><div class=\"t\">Stage 2 · Reasoning RL</div><div class=\"d\">여기서 성능을 끌어올림</div><div class=\"m\">Cold Start에 안 쓴 query-verifier 3,995쌍 · GRPO</div></div></div><p class=\"cond\"><span class=\"ev-chip\" data-ev=\"nd\">미기술</span> 실제 샘플 수 · step 수, ‘작을수록 낫다’는 비교 실험은 없음</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“The objective at this stage is to instill foundational reasoning patterns in the model without overly emphasizing immediate reasoning performance. This approach ensures that the model’s potential is not limited, allowing for greater flexibility and improvement during the subsequent reinforcement learning (RL) phase. To achieve this objective effectively, it is preferable to minimize both the number of training samples and the training steps during this preparatory phase.”<cite>Qwen3 §4.1 (p.10)</cite></blockquote><p>Reasoning RL(§4.2)은 Alignment &amp; RL 파트입니다. 여기서는 연결만 짚습니다.</p>",
+   "sources": [
+    {
+     "label": "Qwen3 §4.1 (p.10)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
+    },
+    {
+     "label": "Qwen3 §4.2 (p.10)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "cs-small",
+    "cs-small-nd",
+    "rl-pairs"
+   ],
+   "ids": "Post-training · 작은 cold start",
+   "layout": "wide"
+  },
+  {
+   "key": "tmf-data",
+   "part": "main",
+   "kind": "mechanism",
+   "seconds": 60,
+   "term": "Fusion 데이터",
+   "section": "5",
+   "section_label": "§4.3 Thinking Mode Fusion",
+   "title": "Fusion 데이터: 생각 데이터는 Stage 2 모델이 직접 만든다",
+   "body": "<p>Stage 2 모델 위에 SFT를 더 합니다. 추가 SFT로 Stage 2 성능이 떨어지지 않게 하려는 설계입니다.</p>",
+   "visual": "<div class=\"g c2\" data-main data-au=\"1\"><div class=\"bx orange\"><div class=\"t\">thinking 데이터</div><div class=\"d\">Stage 1 query → Stage 2 모델로 rejection sampling</div><div class=\"m\">Stage 2 성능 유지</div></div><div class=\"bx blue\"><div class=\"t\">non-thinking 데이터</div><div class=\"d\">코딩 · 수학 · 지시 따르기 · 다국어 · 창작 · QA · 롤플레이</div><div class=\"m\">자동 checklist로 품질 평가 · 저자원 언어용 번역 비중 ↑</div></div></div>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“To ensure that the performance of the Stage 2 model is not compromised by the additional SFT, the “thinking” data is generated via rejection sampling on Stage 1 queries using the Stage 2 model itself.”<cite>Qwen3 §4.3 (p.11)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"nd\">미기술</span> 두 데이터의 비율과 양, checklist 형식은 밝히지 않았습니다.</p>",
+   "sources": [
+    {
+     "label": "Qwen3 §4.3 (p.11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ],
+   "claims": [
+    "tmf-thinking-data",
+    "tmf-why",
+    "tmf-nonthinking"
+   ],
+   "ids": "Post-training · thinking과 non-thinking 데이터",
+   "layout": "wide"
+  },
+  {
+   "key": "tmpl",
+   "part": "main",
+   "kind": "mechanism",
+   "seconds": 60,
+   "term": "Chat template",
+   "section": "5",
+   "section_label": "§4.3 Thinking Mode Fusion",
+   "title": "Chat template: 바로 답할 때도 빈 think 블록을 남긴다",
+   "body": "<p>형식이 늘 같아지고, 빈 블록만 붙이면 생각을 끕니다(<code>enable_thinking=False</code>).</p>",
+   "visual": "<figure class=\"crop\" data-main style=\"max-width:62%;margin:0 auto\"><img src=\"figures/qwen3-table9.png\" alt=\"Qwen3 Table 9: thinking과 non-thinking 모드의 SFT 데이터 템플릿\" data-glyph-px=\"17\"><figcaption>원문 · Qwen3 Table 9 (p.11) · 표 본문 / 생략: 캡션</figcaption></figure>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“For non-thinking mode samples, we retain an empty thinking block in the assistant’s response. This design ensures internal format consistency within the model and allows developers to prevent the model from engaging in thinking behavior by concatenating an empty think block in the chat template.”<cite>Qwen3 §4.3 (p.11)</cite></blockquote><p>기본값은 thinking이라 flag 없는 thinking 샘플도 섞습니다.</p><p>Table 9 캡션: thinking 모드에서는 기본 동작이므로 <code>/think</code>를 생략할 수 있다. Hugging Face tokenizer의 chat template에서 <code>enable_thinking=False</code>로 끈다.</p>",
+   "sources": [
+    {
+     "label": "Qwen3 Table 9 (p.11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ],
+   "claims": [
+    "tmpl-flags",
+    "tmpl-empty",
+    "tmpl-default"
+   ],
+   "ids": "Post-training · /think와 /no think · 빈 think 블록",
+   "layout": "wide"
+  },
+  {
+   "key": "last-flag",
+   "part": "main",
+   "kind": "mechanism",
+   "seconds": 50,
+   "term": "마지막 flag",
+   "section": "5",
+   "section_label": "§4.3 Thinking Mode Fusion",
+   "title": "마지막 flag 규칙: 여러 턴에 flag가 섞이면 가장 마지막 것을 따른다",
+   "body": "<p>in-house <dfn>ThinkFollow</dfn>로 재며 Stage 3 뒤 88.7입니다.</p>",
+   "visual": "<div class=\"flow vertical\" data-main data-au=\"1\"><div class=\"bx gray\" style=\"padding:10px 16px\"><div class=\"m\"><b>User</b> 이 적분 풀어 줘 <code>/think</code></div></div><div class=\"bx orange\" style=\"padding:10px 16px\"><div class=\"m\"><b>Assistant</b> &lt;think&gt; 치환하면 … &lt;/think&gt; 답은 …</div></div><div class=\"bx gray\" style=\"padding:10px 16px\"><div class=\"m\"><b>User</b> 단위만 다시 알려 줘 <code>/no_think</code></div></div><div class=\"bx blue\" style=\"padding:10px 16px\"><div class=\"m\"><b>Assistant</b> &lt;think&gt;&lt;/think&gt; 단위는 …</div></div><div class=\"bx gray\" style=\"padding:10px 16px\"><div class=\"m\"><b>User</b> <code>/no_think</code> 아니, 검산도 해 줘 <code>/think</code></div></div><div class=\"bx orange\" style=\"padding:10px 16px\"><div class=\"m\"><b>Assistant</b> &lt;think&gt; 다시 미분하면 … &lt;/think&gt; 맞습니다</div></div></div><p class=\"cond\"><span class=\"ev-chip\" data-ev=\"illus\">설명용</span> 발표자가 만든 대화 · 마지막 턴은 query 안 마지막 flag인 <code>/think</code>를 따름</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“For more complex multi-turn dialogs, we randomly insert multiple /think and /no_think flags into users’ queries, with the model response adhering to the last flag encountered.”<cite>Qwen3 §4.3 (p.11)</cite></blockquote><p>ThinkFollow: /think · /no_think를 무작위로 넣은 다회차 대화에서 모드를 맞게 바꾸는지 보는 in-house 벤치. Stage 3 88.7 → Stage 4 98.9 (Table 22, [[@t22]]).</p>",
+   "sources": [
+    {
+     "label": "Qwen3 §4.3 (p.11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    },
+    {
+     "label": "Qwen3 Table 22 (p.21)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "tmpl-last",
+    "thinkfollow-s3"
+   ],
+   "ids": "Post-training · 마지막 flag 규칙",
+   "layout": "wide"
+  },
+  {
+   "key": "budget",
+   "part": "main",
+   "kind": "mechanism",
+   "seconds": 70,
+   "term": "Thinking budget",
+   "section": "5",
+   "section_label": "§4.3 Thinking Mode Fusion",
+   "layout": "wide",
+   "title": "Thinking budget: 생각이 예산에 닿으면 강제로 끊고 지금까지의 생각으로 답한다",
+   "body": "<p>두 모드를 다 배운 모델은 덜 끝난 생각으로도 답할 수 있습니다. 저자들은 이 능력을 따로 학습하지 않았고 Fusion에서 저절로 생겼다고 적습니다.</p>",
+   "visual": "<div class=\"flow\" data-main data-au=\"1\"><div class=\"bx orange\"><div class=\"t\">&lt;think&gt; 생각 …</div><div class=\"d\">예산 N 토큰까지 생성</div></div><div class=\"arrow\">→</div><div class=\"bx gray thick\"><div class=\"t\">강제 삽입</div><div class=\"d\"><span style=\"font-family:ui-monospace,monospace;font-size:15px\">Considering the limited time by the user, I have to give the solution based on the thinking directly now.&lt;/think&gt;</span></div></div><div class=\"arrow\">→</div><div class=\"bx blue\"><div class=\"t\">최종 답</div><div class=\"d\">쌓인 생각을 바탕으로</div></div></div>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“Specifically, when the length of the model’s thinking reaches a user-defined threshold, we manually halt the thinking process and insert the stop-thinking instruction … After this instruction is inserted, the model proceeds to generate a final response based on its accumulated reasoning up to that point. It is worth noting that this ability is not explicitly trained but emerges naturally as a result of applying Thinking Mode Fusion.”<cite>Qwen3 §4.3 (p.11)</cite></blockquote><p>삽입 문자열 끝에는 <code>.\\n&lt;/think&gt;.\\n\\n</code>이 붙습니다. 예산별 성능은 [[@fig2]].</p>",
+   "sources": [
+    {
+     "label": "Qwen3 §4.3 (p.11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ],
+   "claims": [
+    "budget-stop",
+    "budget-emerge"
+   ],
+   "ids": "Post-training · 생각 예산과 강제 중단"
+  },
+  {
+   "key": "eval-summary",
+   "part": "main",
+   "kind": "result",
+   "seconds": 50,
+   "term": "후학습 평가",
+   "section": "6",
+   "section_label": "§4.6 평가",
+   "title": "후학습 평가: 저자 요약은 플래그십 · 32B · 경량 모델 세 줄이다",
+   "body": "<p>다섯 축 · 두 모드를 따로 잽니다.</p>",
+   "visual": "<div class=\"g\" data-main data-au=\"1\"><div class=\"bx orange thick\"><div class=\"t\">① 235B-A22B</div><div class=\"d\">두 모드 모두 오픈 모델 최고 · o1 · Gemini2.5-Pro · GPT-4o와 경쟁</div></div><div class=\"bx gray\"><div class=\"t\">② 32B</div><div class=\"d\">thinking은 QwQ-32B를 넘고 o3-mini(medium)와 비슷 · non-thinking은 Qwen2.5-72B-Instruct를 넘음</div></div><div class=\"bx blue\"><div class=\"t\">③ 30B-A3B · 14B 이하</div><div class=\"d\">같거나 더 큰 오픈 모델보다 우수 → 증류가 통했다는 근거</div></div></div>",
+   "evidence": "<p>샘플링: thinking T 0.6 · top-p 0.95 / non-thinking T 0.7 · top-p 0.8 · 최대 출력 32,768 (AIME 38,912).</p><p>General: MMLU-Redux · GPQA-Diamond(10회 평균) · C-Eval · LiveBench. Alignment: IFEval · Arena-Hard · AlignBench · Creative Writing v3 · WritingBench. Math &amp; Text: MATH-500 · AIME'24/'25(문제당 64회 평균) · ZebraLogic · AutoLogi. Agent &amp; Coding: BFCL v3 · LiveCodeBench v5 · CodeForces Elo. Multilingual: Multi-IF · INCLUDE · MMMLU · MT-AIME2024 · PolyMath · MLogiQA(Table 10, 8–55개 언어).</p><p>top-k는 두 모드 모두 20, Creative Writing · WritingBench와 non-thinking에는 presence penalty 1.5.</p>",
+   "sources": [
+    {
+     "label": "Qwen3 §4.6 (p.13)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=13"
+    },
+    {
+     "label": "Qwen3 §4.6 Summary (p.15)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=15"
+    }
+   ],
+   "claims": [
+    "eval-axes",
+    "eval-sampling",
+    "eval-summary"
+   ],
+   "ids": "Post-training · 벤치마크 · 요약",
+   "layout": "wide"
+  },
+  {
+   "key": "t11",
+   "part": "main",
+   "kind": "result",
+   "seconds": 50,
+   "term": "235B Thinking",
+   "section": "6",
+   "section_label": "§4.6 평가",
+   "title": "235B Thinking: DeepSeek-R1을 23개 중 17개에서 앞선다",
+   "body": "<p>수학 · 에이전트 · 코딩에서 특히 앞섭니다.</p>",
+   "visual": "<div class=\"claim-table\" data-main><div class=\"table-wrap\"><table class=\"tbl ct\"><thead><tr><th>벤치마크</th><th class=\"numcol\">OpenAI-o1</th><th class=\"numcol\">DeepSeek-R1</th><th class=\"numcol\">Gemini2.5-Pro</th><th class=\"numcol\">Qwen3-235B</th></tr></thead><tbody><tr><td>GPQA-Diamond</td><td class=\"numcol \">78.0</td><td class=\"numcol cl-vs\">71.5</td><td class=\"numcol \">84.0</td><td class=\"numcol \">71.1</td></tr><tr><td>AIME'24</td><td class=\"numcol \">74.3</td><td class=\"numcol cl-vs\">79.8</td><td class=\"numcol \">92.0</td><td class=\"numcol cl-hi\">85.7</td></tr><tr><td>BFCL v3</td><td class=\"numcol \">67.8</td><td class=\"numcol cl-vs\">56.9</td><td class=\"numcol \">62.9</td><td class=\"numcol cl-hi\">70.8</td></tr></tbody></table></div><p class=\"claim-legend\"><span><i class=\"cl-hi\"></i>본문이 강조한 우위</span><span><i class=\"cl-vs\"></i>본문의 비교 대상</span><span>원문 굵게는 옮기지 않음</span></p><div class=\"verdict\"><span class=\"vd-claim\">저자: “R1을 23개 중 17개에서 앞선다”</span><span class=\"vd-res vd-ok\">표: 17/23 · 뒤지는 6개 중 GPQA −0.4 (71.1 − 71.5)</span></div></div><p class=\"cap\">원문 · Qwen3 Table 11 (p.14) · 23행 중 3행 / 생략: Grok-3-Beta 열 · 20행</p><figure class=\"crop crop-thumb only-wide\" data-au=\"0\"><img src=\"figures/qwen3-table11.png\" alt=\"Qwen3 Table 11 원본(눌러서 확대)\" width=\"91\" data-glyph-px=\"19\"></figure>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/qwen3-table11.png\" alt=\"Qwen3 Table 11\" data-glyph-px=\"19\" data-display-width=\"640\"><figcaption>원문 · Qwen3 Table 11 (p.14) · 전체 / 발표자 표시 없음</figcaption></figure><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> R1보다 낮은 6개: MMLU-Redux · GPQA-Diamond · C-Eval · Creative Writing v3 · INCLUDE · MMMLU.</p>",
+   "sources": [
+    {
+     "label": "Qwen3 Table 11 (p.14)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=14"
+    },
+    {
+     "label": "Qwen3 §4.6 (p.15)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=15"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t11-claim",
+    "t11-verdict"
+   ],
+   "ids": "Post-training · 플래그십 평가",
+   "layout": "wide"
+  },
+  {
+   "key": "t12",
+   "part": "main",
+   "kind": "result",
+   "seconds": 50,
+   "term": "235B Non-thinking",
+   "section": "6",
+   "section_label": "§4.6 평가",
+   "title": "235B Non-thinking: 생각 없이도 GPT-4o를 23개 중 18개에서 앞선다",
+   "body": "<p>같은 모델도 모드에 따라 AIME'24가 85.7과 40.1로 크게 다릅니다.</p>",
+   "visual": "<div class=\"claim-table\" data-main><div class=\"table-wrap\"><table class=\"tbl ct\"><thead><tr><th>벤치마크</th><th class=\"numcol\">GPT-4o</th><th class=\"numcol\">DeepSeek-V3</th><th class=\"numcol\">Qwen2.5-72B</th><th class=\"numcol\">Qwen3-235B</th></tr></thead><tbody><tr><td>Arena-Hard</td><td class=\"numcol cl-vs\">85.3</td><td class=\"numcol \">85.5</td><td class=\"numcol \">81.2</td><td class=\"numcol \">96.1</td></tr><tr><td>AIME'24</td><td class=\"numcol cl-vs\">11.1</td><td class=\"numcol \">39.2</td><td class=\"numcol \">18.9</td><td class=\"numcol \">40.1</td></tr><tr><td>BFCL v3</td><td class=\"numcol cl-vs\">72.5</td><td class=\"numcol \">57.6</td><td class=\"numcol \">63.4</td><td class=\"numcol \">68.0</td></tr></tbody></table></div><p class=\"claim-legend\"><span><i class=\"cl-vs\"></i>본문의 비교 대상</span><span>원문 굵게는 옮기지 않음</span></p><div class=\"verdict\"><span class=\"vd-claim\">저자: “GPT-4o-2024-11-20을 23개 중 18개에서 앞선다”</span><span class=\"vd-res vd-ok\">표: 18/23 · 예외 BFCL v3 −4.5 (68.0 − 72.5)</span></div></div><p class=\"cap\">원문 · Qwen3 Table 12 (p.14) · 23행 중 3행 / 생략: LLaMA-4-Maverick 열 · 20행</p><figure class=\"crop crop-thumb only-wide\" data-au=\"0\"><img src=\"figures/qwen3-table12.png\" alt=\"Qwen3 Table 12 원본(눌러서 확대)\" width=\"90\" data-glyph-px=\"19\"></figure>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/qwen3-table12.png\" alt=\"Qwen3 Table 12\" data-glyph-px=\"19\" data-display-width=\"640\"><figcaption>원문 · Qwen3 Table 12 (p.14) · 전체 / 발표자 표시 없음</figcaption></figure><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> GPT-4o보다 낮은 5개: IFEval · Creative Writing v3 · BFCL v3 · INCLUDE · MMMLU.</p>",
+   "sources": [
+    {
+     "label": "Qwen3 Table 12 (p.14)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=14"
+    },
+    {
+     "label": "Qwen3 §4.6 (p.15)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=15"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t12-claim",
+    "t12-verdict"
+   ],
+   "ids": "Post-training · 플래그십 평가",
+   "layout": "wide"
+  },
+  {
+   "key": "t13",
+   "part": "main",
+   "kind": "result",
+   "seconds": 50,
+   "term": "32B Thinking",
+   "section": "6",
+   "section_label": "§4.6 평가",
+   "title": "32B Thinking: 이전 추론 모델 QwQ-32B를 23개 중 17개에서 앞선다",
+   "body": "<p>o3-mini(medium)와는 비슷하고, 정렬 · 다국어에서 앞선다고 씁니다.</p>",
+   "visual": "<div class=\"claim-table\" data-main><div class=\"table-wrap\"><table class=\"tbl ct\"><thead><tr><th>벤치마크</th><th class=\"numcol\">QwQ-32B</th><th class=\"numcol\">o3-mini</th><th class=\"numcol\">Qwen3-32B</th></tr></thead><tbody><tr><td>Arena-Hard</td><td class=\"numcol cl-vs\">89.5</td><td class=\"numcol \">89.0</td><td class=\"numcol \">93.8</td></tr><tr><td>AIME'24</td><td class=\"numcol cl-vs\">79.5</td><td class=\"numcol \">79.6</td><td class=\"numcol \">81.4</td></tr><tr><td>BFCL v3</td><td class=\"numcol cl-vs\">66.4</td><td class=\"numcol \">64.6</td><td class=\"numcol \">70.3</td></tr></tbody></table></div><p class=\"claim-legend\"><span><i class=\"cl-vs\"></i>본문의 비교 대상</span><span>원문 굵게는 옮기지 않음</span></p><div class=\"verdict\"><span class=\"vd-claim\">저자: “QwQ-32B를 23개 중 17개에서 앞선다”</span><span class=\"vd-res vd-ok\">표: 17/23 · 예외 CodeForces 1977 대 1982 (−5)</span></div></div><p class=\"cap\">원문 · Qwen3 Table 13 (p.16) · 23행 중 3행 / 생략: R1-Distill-Llama-70B 열 · 20행 · o3-mini = medium</p><figure class=\"crop crop-thumb only-wide\" data-au=\"0\"><img src=\"figures/qwen3-table13.png\" alt=\"Qwen3 Table 13 원본(눌러서 확대)\" width=\"91\" data-glyph-px=\"19\"></figure>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/qwen3-table13.png\" alt=\"Qwen3 Table 13\" data-glyph-px=\"19\" data-display-width=\"640\"><figcaption>원문 · Qwen3 Table 13 (p.16) · 전체 / 발표자 표시 없음</figcaption></figure><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> QwQ-32B보다 낮은 6개: C-Eval · Creative Writing v3 · MATH-500 · AutoLogi · CodeForces · MMMLU.</p>",
+   "sources": [
+    {
+     "label": "Qwen3 Table 13 (p.16)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=16"
+    },
+    {
+     "label": "Qwen3 §4.6 (p.15)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=15"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t13-claim",
+    "t13-verdict"
+   ],
+   "ids": "Post-training · 플래그십 평가",
+   "layout": "wide"
+  },
+  {
+   "key": "t14",
+   "part": "main",
+   "kind": "result",
+   "seconds": 50,
+   "term": "32B Non-thinking",
+   "section": "6",
+   "section_label": "§4.6 평가",
+   "title": "32B Non-thinking: 2배 큰 Qwen2.5-72B를 23개 중 18개에서 앞선다",
+   "body": "<p>이전 세대 플래그십과의 직접 비교입니다.</p>",
+   "visual": "<div class=\"claim-table\" data-main><div class=\"table-wrap\"><table class=\"tbl ct\"><thead><tr><th>벤치마크</th><th class=\"numcol\">GPT-4o-mini</th><th class=\"numcol\">Qwen2.5-72B</th><th class=\"numcol\">Qwen3-32B</th></tr></thead><tbody><tr><td>MMLU-Redux</td><td class=\"numcol \">81.5</td><td class=\"numcol cl-vs\">86.8</td><td class=\"numcol cl-par\">85.7</td></tr><tr><td>Arena-Hard</td><td class=\"numcol \">74.9</td><td class=\"numcol cl-vs\">81.2</td><td class=\"numcol cl-hi\">92.8</td></tr><tr><td>AIME'24</td><td class=\"numcol \">8.1</td><td class=\"numcol cl-vs\">18.9</td><td class=\"numcol cl-hi\">31.0</td></tr></tbody></table></div><p class=\"claim-legend\"><span><i class=\"cl-hi\"></i>본문이 강조한 우위</span><span><i class=\"cl-vs\"></i>본문의 비교 대상</span><span><i class=\"cl-par\"></i>‘비슷하다’고 쓴 곳</span><span>원문 굵게는 옮기지 않음</span></p><div class=\"verdict\"><span class=\"vd-claim\">저자: “일반 태스크는 72B와 비슷, 정렬 · 다국어 · 추론은 크게 앞선다”</span><span class=\"vd-res vd-ok\">표: General 4개 2승 2패(MMLU-Redux −1.1) · 전체 18/23</span></div></div><p class=\"cap\">원문 · Qwen3 Table 14 (p.16) · 23행 중 3행 / 생략: LLaMA-4-Scout 열 · 20행</p><figure class=\"crop crop-thumb only-wide\" data-au=\"0\"><img src=\"figures/qwen3-table14.png\" alt=\"Qwen3 Table 14 원본(눌러서 확대)\" width=\"90\" data-glyph-px=\"19\"></figure>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/qwen3-table14.png\" alt=\"Qwen3 Table 14\" data-glyph-px=\"19\" data-display-width=\"640\"><figcaption>원문 · Qwen3 Table 14 (p.16) · 전체 / 발표자 표시 없음</figcaption></figure><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> 72B보다 낮은 5개: MMLU-Redux · C-Eval · IFEval · BFCL v3 · MMMLU. General 4개 중 GPQA-Diamond(54.6 대 49.0) · LiveBench(59.8 대 51.4)는 앞섭니다.</p>",
+   "sources": [
+    {
+     "label": "Qwen3 Table 14 (p.16)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=16"
+    },
+    {
+     "label": "Qwen3 §4.6 (p.15)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=15"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t14-claim",
+    "t14-verdict"
+   ],
+   "ids": "Post-training · 플래그십 평가",
+   "layout": "wide"
+  },
+  {
+   "key": "fig2",
+   "part": "main",
+   "kind": "result",
+   "seconds": 50,
+   "term": "예산별 성능",
+   "section": "7",
+   "section_label": "§4.7 Discussion",
+   "title": "예산별 성능: 생각 예산을 1K → 32K로 늘리면 꾸준히 오른다",
+   "body": "<p>235B-A22B에서 예산만 바꿨습니다. AIME'24 약 42 → 87 <span class=\"ev-chip\" data-ev=\"est\">추정</span> · 저자는 32K 너머도 오를 것으로 봅니다 <span class=\"ev-chip\" data-ev=\"hyp\">저자 가설</span>.</p>",
+   "visual": "<figure class=\"crop\" data-main style=\"max-width:58%;margin:0 auto\"><img src=\"figures/qwen3-fig2.png\" alt=\"Qwen3 Fig. 2: 생각 예산 1K–32K에 따른 AIME24 · AIME25 · LiveCodeBench v5 · GPQA Diamond Pass@1, 빨간 점선은 non-thinking\" data-glyph-px=\"15\"><figcaption>원문 · Qwen3 Fig. 2 (p.20) · 전체 / 빨간 점선 = non-thinking · 패널마다 y축 범위 다름</figcaption></figure>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“Qwen3 demonstrates scalable and smooth performance improvements correlated to the allocated thinking budget. Moreover, we observe that if we further extend the output length beyond 32K, the model’s performance is expected to improve further in the future. We leave this exploration as future work.”<cite>Qwen3 §4.7 (p.20)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"est\">추정</span> 그림에서 읽은 값(1K → 32K): AIME'24 약 42 → 87, AIME'25 약 31 → 82, LiveCodeBench v5 약 45 → 68, GPQA Diamond 약 64 → 72. 1K → 2K 구간은 AIME'24 · GPQA에서 거의 평평합니다.</p>",
+   "sources": [
+    {
+     "label": "Qwen3 §4.7 Fig. 2 (p.20)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=20"
+    }
+   ],
+   "claims": [
+    "fig2-claim",
+    "fig2-aime",
+    "fig2-hyp"
+   ],
+   "ids": "Post-training · 예산별 성능",
+   "layout": "wide"
+  },
+  {
+   "key": "t22",
+   "part": "main",
+   "kind": "result",
+   "seconds": 60,
+   "term": "Table 22 Stage 3",
+   "section": "7",
+   "section_label": "§4.7 Discussion",
+   "title": "Table 22 Stage 3: 모드 전환과 일반 능력을 얻는 대신 어려운 추론은 조금 내준다",
+   "body": "<p>Qwen3-32B를 Stage 2 뒤와 Stage 3 뒤에 쟀습니다. 저자들은 범용성을 위해 이 trade-off를 받아들였다고 씁니다.</p>",
+   "visual": "<div class=\"claim-table\" data-main><div class=\"table-wrap\"><table class=\"tbl ct\"><thead><tr><th>벤치마크</th><th class=\"numcol\">Stage 2 Thinking</th><th class=\"numcol\">Stage 3 Thinking</th><th class=\"numcol\">Stage 3 Non-thinking</th></tr></thead><tbody><tr><td>CounterFactQA*</td><td class=\"numcol cl-vs\">50.4</td><td class=\"numcol cl-hi\">61.3</td><td class=\"numcol \">64.3</td></tr><tr><td>LengthCtrl*</td><td class=\"numcol cl-vs\">62.6</td><td class=\"numcol cl-hi\">70.6</td><td class=\"numcol \">84.9</td></tr><tr><td>AIME'24</td><td class=\"numcol cl-vs\">83.8</td><td class=\"numcol cl-x\">81.9</td><td class=\"numcol \">28.5</td></tr></tbody></table></div><p class=\"claim-legend\"><span><i class=\"cl-hi\"></i>본문이 강조한 우위</span><span><i class=\"cl-vs\"></i>본문의 비교 대상</span><span><i class=\"cl-x\"></i>본문이 짚은 하락</span><span>원문 굵게는 옮기지 않음</span></p><div class=\"verdict\"><span class=\"vd-claim\">저자: “Stage 3에서 CounterFactQA +10.9, LengthCtrl +8.0”</span><span class=\"vd-res vd-ok\">표: 61.3 − 50.4 = +10.9 · 70.6 − 62.6 = +8.0</span></div><div class=\"verdict\"><span class=\"vd-claim\">저자: “어려운 과제의 thinking 성능은 오히려 떨어진다”</span><span class=\"vd-res vd-ok\">표: AIME'24 −1.9 (81.9 − 83.8) · LiveCodeBench −1.2</span></div></div><p class=\"cap\">원문 · Qwen3 Table 22 (p.21) · Stage 2–3 열 · 13행 중 3행 / 생략: Stage 4 열 · 10행 · * = in-house</p><figure class=\"crop crop-thumb only-wide\" data-au=\"0\"><img src=\"figures/qwen3-table22.png\" alt=\"Qwen3 Table 22 원본(눌러서 확대)\" width=\"134\" data-glyph-px=\"19\"></figure>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/qwen3-table22.png\" alt=\"Qwen3 Table 22\" data-glyph-px=\"19\" data-display-width=\"640\"><figcaption>원문 · Qwen3 Table 22 (p.21) · 전체 / 발표자 표시 없음</figcaption></figure><blockquote class=\"ev-quote\" lang=\"en\">“We conjecture this degradation is due to the model being trained on a broader range of general tasks, which may compromise its specialized capabilities in handling complex problems. During the development of Qwen3, we choose to accept this performance trade-off to enhance the model’s overall versatility.”<cite>Qwen3 §4.7 (p.22)</cite></blockquote><p>in-house 벤치: CounterFactQA(사실이 아닌 전제를 알아채는가) · LengthCtrl(요구 길이와의 차이) · ThinkFollow(모드 전환) · ToolUse(도구 호출 안정성).</p>",
+   "sources": [
+    {
+     "label": "Qwen3 Table 22 (p.21)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
+    },
+    {
+     "label": "Qwen3 §4.7 (p.21)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t22-cf",
+    "t22-lc",
+    "t22-aime",
+    "t22-claim"
+   ],
+   "ids": "Post-training · Table 22 Stage 3",
+   "layout": "wide"
+  },
+  {
+   "key": "open-q",
+   "part": "main",
+   "kind": "summary",
+   "seconds": 45,
+   "term": "열린 질문",
+   "section": "8",
+   "section_label": "열린 질문",
+   "title": "열린 질문: 작은 Cold Start · 빈 think 블록 · 예산 강제 중단은 왜 통하나",
+   "body": "<p>원문이 근거를 보이지 않은 선택들입니다.</p>",
+   "visual": "<div class=\"summary-cols\" data-main><div class=\"sc-col\"><h3>관찰</h3><ul><li>Cold Start는 일부러 작게 [[@cs-small]]</li><li>non-thinking에도 빈 think 블록 [[@tmpl]]</li><li>예산 강제 중단은 따로 학습하지 않음 [[@budget]]</li><li>Stage 3는 AIME'24 −1.9를 감수 [[@t22]]</li></ul></div><div class=\"sc-col\"><h3>열린 질문</h3><ul><li>Cold Start를 키우면 RL 뒤 성능이 정말 낮아지나? <span class=\"ev-chip\" data-ev=\"nd\">미기술</span></li><li>빈 블록 대신 별도 special token이었다면?</li><li>강제 중단 문장 없이 &lt;/think&gt;만 넣으면?</li><li>Qwen2.5의 system prompt 제어와 flag 제어는 무엇이 다른가?</li></ul></div></div>",
+   "sources": [
+    {
+     "label": "Qwen3 §4.1–§4.3 (p.10–11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
+    }
+   ],
+   "ids": "Post-training · 토론",
+   "layout": "wide"
+  }
+ ]
+}

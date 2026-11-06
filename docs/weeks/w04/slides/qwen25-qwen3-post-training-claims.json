@@ -1,0 +1,583 @@
+{
+ "deck": "W04 Qwen2.5 · Qwen3 — Post-training",
+ "claims": [
+  {
+   "id": "q25-pipeline",
+   "statement": "Qwen2.5 후학습 순서는 SFT → Offline RL → Online RL",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen2.5 §4 (p.4–5)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=4"
+    }
+   ]
+  },
+  {
+   "id": "q3-pipeline",
+   "statement": "Qwen3 플래그십 후학습은 Cold Start → Reasoning RL → Mode Fusion → General RL 4단계",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4 Fig. 1 (p.9)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=9"
+    }
+   ]
+  },
+  {
+   "id": "q25-two-adv",
+   "statement": "저자: Qwen2.5 후학습의 두 진전은 SFT 데이터 확장과 2단계 RL",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen2.5 §4 (p.4–5)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=4"
+    }
+   ]
+  },
+  {
+   "id": "q25-offline-focus",
+   "statement": "Offline RL은 RM이 평가하기 어려운 추론 · 사실성 · 지시 따르기를 맡는다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen2.5 §4 (p.4–5)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=4"
+    }
+   ]
+  },
+  {
+   "id": "q25-online-focus",
+   "statement": "Online RL은 RM으로 진실성 · 도움 · 간결 · 관련성 · 무해 · 편향 제거를 맡는다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen2.5 §4 (p.4–5)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=4"
+    }
+   ]
+  },
+  {
+   "id": "q25-sft-n",
+   "statement": "Qwen2.5 SFT 데이터는 100만 예시 이상",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen2.5 §4.1 (p.6)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=6"
+    }
+   ],
+   "display": "100만+"
+  },
+  {
+   "id": "q25-sft-ep",
+   "statement": "Qwen2.5 SFT는 2 epoch",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen2.5 §4.1 (p.6)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=6"
+    }
+   ]
+  },
+  {
+   "id": "q25-sft-len",
+   "statement": "Qwen2.5 SFT 시퀀스 길이는 32,768",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen2.5 §4.1 (p.6)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=6"
+    }
+   ],
+   "display": "32,768"
+  },
+  {
+   "id": "q25-sft-lr",
+   "statement": "Qwen2.5 SFT 학습률은 7×10⁻⁶에서 7×10⁻⁷로 줄인다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen2.5 §4.1 (p.6)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=6"
+    }
+   ]
+  },
+  {
+   "id": "q25-sft-reg",
+   "statement": "과적합 방지로 weight decay 0.1, gradient clip 1.0",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen2.5 §4.1 (p.6)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=6"
+    }
+   ]
+  },
+  {
+   "id": "l2-sft",
+   "statement": "Llama 2-Chat SFT는 27,540건 · 4,096 · 2×10⁻⁵ · 2 epoch",
+   "kind": "orig",
+   "layer": "evidence",
+   "sources": [
+    {
+     "label": "Llama 2 §3.1 (p.9)",
+     "url": "https://arxiv.org/pdf/2307.09288v2#page=9"
+    }
+   ]
+  },
+  {
+   "id": "t6-72b-vs-405b",
+   "statement": "저자: 72B-Instruct는 MMLU-redux · MATH · MBPP · MultiPL-E · LiveCodeBench · Arena-Hard · MT-Bench에서 405B를 앞선다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen2.5 §5.2.1 (p.12)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=12"
+    }
+   ]
+  },
+  {
+   "id": "t6-plus",
+   "statement": "저자: Qwen2.5-Plus는 13개 중 9개에서 72B-Instruct를 앞선다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen2.5 §5.2.1 (p.12)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=12"
+    }
+   ]
+  },
+  {
+   "id": "t6-verdict",
+   "statement": "Table 6에서 72B는 405B를 13개 중 7개에서 앞서고 나머지 6개는 405B가 높다",
+   "kind": "verdict",
+   "layer": "main",
+   "inputs": [
+    "t6-72b-vs-405b"
+   ]
+  },
+  {
+   "id": "q3-goals",
+   "statement": "Qwen3 후학습의 두 목표는 Thinking Control과 Strong-to-Weak Distillation",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4 (p.10)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
+    }
+   ]
+  },
+  {
+   "id": "q3-distill-gpu",
+   "statement": "저자: 교사 logit 증류는 4단계 학습 대비 GPU 시간 1/10로 Pass@1 · Pass@64가 더 높다(예비 실험)",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4 (p.10)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
+    }
+   ],
+   "display": "1/10"
+  },
+  {
+   "id": "cs-query-filter",
+   "statement": "Query 필터는 Qwen2.5-72B-Instruct로 검증 어려운 query와 CoT 없이 맞히는 query를 뺀다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.1 (p.10)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
+    }
+   ]
+  },
+  {
+   "id": "cs-resp-filter",
+   "statement": "Response 필터는 QwQ-32B 답 N개에서 6가지 기준으로 거른다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.1 (p.10)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
+    }
+   ]
+  },
+  {
+   "id": "cs-small",
+   "statement": "저자: Cold Start는 샘플 수와 학습 step을 최소화하는 편이 낫다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.1 (p.10)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
+    }
+   ]
+  },
+  {
+   "id": "cs-small-nd",
+   "statement": "Cold Start 샘플 수 · step 수와 이를 뒷받침하는 실험은 미기술",
+   "kind": "nd",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.1 (p.10)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
+    }
+   ]
+  },
+  {
+   "id": "rl-pairs",
+   "statement": "Reasoning RL은 Cold Start에 쓰지 않은 query-verifier 3,995쌍을 쓴다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.2 (p.10)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=10"
+    }
+   ],
+   "display": "3,995"
+  },
+  {
+   "id": "tmf-thinking-data",
+   "statement": "thinking 데이터는 Stage 1 query에 Stage 2 모델로 rejection sampling해 만든다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.3 (p.11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ]
+  },
+  {
+   "id": "tmf-why",
+   "statement": "저자: Stage 2 모델이 직접 만드는 이유는 추가 SFT로 Stage 2 성능이 떨어지지 않게 하기 위함",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.3 (p.11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ]
+  },
+  {
+   "id": "tmf-nonthinking",
+   "statement": "non-thinking 데이터는 7개 태스크를 다루고 자동 checklist로 품질을 평가한다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.3 (p.11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ]
+  },
+  {
+   "id": "tmpl-flags",
+   "statement": "/think · /no_think flag를 user query나 system message에 넣는다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.3 Table 9 (p.11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ]
+  },
+  {
+   "id": "tmpl-empty",
+   "statement": "non-thinking 응답에도 빈 think 블록을 남긴다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.3 (p.11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ]
+  },
+  {
+   "id": "tmpl-default",
+   "statement": "기본은 thinking 모드라 flag 없는 thinking 샘플도 넣는다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.3 (p.11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ]
+  },
+  {
+   "id": "tmpl-last",
+   "statement": "다회차 대화에서 flag를 무작위로 여러 개 넣고, 답은 마지막 flag를 따르게 학습한다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.3 (p.11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ]
+  },
+  {
+   "id": "thinkfollow-s3",
+   "statement": "Stage 3 뒤 ThinkFollow는 88.7",
+   "kind": "table",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 Table 22 (p.21)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
+    }
+   ],
+   "display": "88.7"
+  },
+  {
+   "id": "budget-stop",
+   "statement": "생각 길이가 사용자 기준에 닿으면 멈추고 stop-thinking 문장과 </think>를 넣는다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.3 (p.11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ]
+  },
+  {
+   "id": "budget-emerge",
+   "statement": "저자: 예산 제어 능력은 명시적으로 학습하지 않았고 Fusion에서 자연스럽게 생겼다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.3 (p.11)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    }
+   ]
+  },
+  {
+   "id": "eval-axes",
+   "statement": "후학습 평가는 General · Alignment · Math & Text Reasoning · Agent & Coding · Multilingual 다섯 축",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.6 (p.13)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=13"
+    }
+   ]
+  },
+  {
+   "id": "eval-sampling",
+   "statement": "thinking은 T 0.6 · top-p 0.95, non-thinking은 T 0.7 · top-p 0.8, 최대 출력 32,768",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.6 (p.13)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=13"
+    }
+   ]
+  },
+  {
+   "id": "eval-summary",
+   "statement": "저자 요약: 235B는 두 모드 모두 오픈 모델 최고, 32B는 QwQ-32B를 넘음, 경량 모델은 증류 덕분에 우수",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.6 Summary (p.15)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=15"
+    }
+   ]
+  },
+  {
+   "id": "t11-claim",
+   "statement": "저자: 235B(Thinking)는 DeepSeek-R1을 23개 중 17개에서 앞선다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.6 (p.15)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=15"
+    }
+   ]
+  },
+  {
+   "id": "t11-verdict",
+   "statement": "Table 11에서 235B Thinking은 R1을 17/23 앞선다",
+   "kind": "verdict",
+   "layer": "main",
+   "inputs": [
+    "t11-claim"
+   ]
+  },
+  {
+   "id": "t12-claim",
+   "statement": "저자: 235B(Non-thinking)는 GPT-4o-2024-11-20을 23개 중 18개에서 앞선다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.6 (p.15)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=15"
+    }
+   ]
+  },
+  {
+   "id": "t12-verdict",
+   "statement": "Table 12에서 235B Non-thinking은 GPT-4o를 18/23 앞선다",
+   "kind": "verdict",
+   "layer": "main",
+   "inputs": [
+    "t12-claim"
+   ]
+  },
+  {
+   "id": "t13-claim",
+   "statement": "저자: 32B(Thinking)는 QwQ-32B를 23개 중 17개에서 앞선다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.6 (p.15)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=15"
+    }
+   ]
+  },
+  {
+   "id": "t13-verdict",
+   "statement": "Table 13에서 32B Thinking은 QwQ-32B를 17/23 앞선다",
+   "kind": "verdict",
+   "layer": "main",
+   "inputs": [
+    "t13-claim"
+   ]
+  },
+  {
+   "id": "t14-claim",
+   "statement": "저자: 32B(Non-thinking)는 일반 태스크에서 Qwen2.5-72B-Instruct와 비슷하고 정렬 · 다국어 · 추론에서 앞선다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.6 (p.15)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=15"
+    }
+   ]
+  },
+  {
+   "id": "t14-verdict",
+   "statement": "Table 14에서 32B Non-thinking은 72B를 23개 중 18개 앞서고 General 4개는 2승 2패",
+   "kind": "verdict",
+   "layer": "main",
+   "inputs": [
+    "t14-claim"
+   ]
+  },
+  {
+   "id": "fig2-claim",
+   "statement": "저자: 생각 예산을 늘리면 4개 벤치에서 성능이 부드럽게 오른다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.7 Fig. 2 (p.20)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=20"
+    }
+   ]
+  },
+  {
+   "id": "fig2-aime",
+   "statement": "Fig. 2에서 AIME'24 Pass@1은 예산 1K에서 약 42, 32K에서 약 87",
+   "kind": "est",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 Fig. 2 (p.20)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=20"
+    }
+   ]
+  },
+  {
+   "id": "fig2-hyp",
+   "statement": "저자 가설: 32K를 넘기면 성능이 더 오를 것",
+   "kind": "hyp",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.7 (p.20)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=20"
+    }
+   ]
+  },
+  {
+   "id": "t22-cf",
+   "statement": "Stage 3에서 thinking CounterFactQA +10.9 (50.4 → 61.3)",
+   "kind": "table",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 Table 22 (p.21)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
+    }
+   ]
+  },
+  {
+   "id": "t22-lc",
+   "statement": "Stage 3에서 thinking LengthCtrl +8.0 (62.6 → 70.6)",
+   "kind": "table",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 Table 22 (p.21)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
+    }
+   ]
+  },
+  {
+   "id": "t22-aime",
+   "statement": "Stage 3에서 thinking AIME'24 −1.9 (83.8 → 81.9)",
+   "kind": "table",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 Table 22 (p.21)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
+    }
+   ]
+  },
+  {
+   "id": "t22-claim",
+   "statement": "저자: Stage 3에서 모드 전환 능력이 생기고 thinking의 일반 · 지시 따르기 능력이 오른다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 §4.7 (p.21)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
+    }
+   ]
+  }
+ ]
+}
