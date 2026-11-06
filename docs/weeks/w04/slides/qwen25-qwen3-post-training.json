@@ -438,12 +438,20 @@
    "layout": "wide",
    "title": "Thinking budget: 생각이 예산에 닿으면 강제로 끊고 지금까지의 생각으로 답한다",
    "body": "<p>두 모드를 다 배운 모델은 덜 끝난 생각으로도 답할 수 있습니다. 저자들은 이 능력을 따로 학습하지 않았고 Fusion에서 저절로 생겼다고 적습니다.</p>",
-   "visual": "<div class=\"flow\" data-main data-au=\"1\"><div class=\"bx orange\"><div class=\"t\">&lt;think&gt; 생각 …</div><div class=\"d\">예산 N 토큰까지 생성</div></div><div class=\"arrow\">→</div><div class=\"bx gray thick\"><div class=\"t\">강제 삽입</div><div class=\"d\"><span style=\"font-family:ui-monospace,monospace;font-size:15px\">Considering the limited time by the user, I have to give the solution based on the thinking directly now.&lt;/think&gt;</span></div></div><div class=\"arrow\">→</div><div class=\"bx blue\"><div class=\"t\">최종 답</div><div class=\"d\">쌓인 생각을 바탕으로</div></div></div>",
-   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“Specifically, when the length of the model’s thinking reaches a user-defined threshold, we manually halt the thinking process and insert the stop-thinking instruction … After this instruction is inserted, the model proceeds to generate a final response based on its accumulated reasoning up to that point. It is worth noting that this ability is not explicitly trained but emerges naturally as a result of applying Thinking Mode Fusion.”<cite>Qwen3 §4.3 (p.11)</cite></blockquote><p>삽입 문자열 끝에는 <code>.\\n&lt;/think&gt;.\\n\\n</code>이 붙습니다. 예산별 성능은 [[@fig2]].</p>",
+   "visual": "<div class=\"flow\" data-main data-au=\"1\"><div class=\"bx orange\"><div class=\"t\">&lt;think&gt; 생각 …</div><div class=\"d\">예산 N 토큰까지 생성<br>예: <code>thinking_budget=1000</code><br>추론 서버가 토큰 수를 세다 끊음</div></div><div class=\"arrow\">→</div><div class=\"bx gray thick\"><div class=\"t\">강제 삽입</div><div class=\"d\"><span style=\"font-family:ui-monospace,monospace;font-size:15px\">Considering the limited time by the user, I have to give the solution based on the thinking directly now.&lt;/think&gt;</span></div></div><div class=\"arrow\">→</div><div class=\"bx blue\"><div class=\"t\">최종 답</div><div class=\"d\">쌓인 생각을 바탕으로</div></div></div><p class=\"cond\"><code>thinking_budget</code>은 Qwen API 파라미터입니다. Hugging Face chat template에는 <code>enable_thinking</code>(빈 블록 삽입)만 있고 예산 로직은 없습니다.</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“Specifically, when the length of the model’s thinking reaches a user-defined threshold, we manually halt the thinking process and insert the stop-thinking instruction … After this instruction is inserted, the model proceeds to generate a final response based on its accumulated reasoning up to that point. It is worth noting that this ability is not explicitly trained but emerges naturally as a result of applying Thinking Mode Fusion.”<cite>Qwen3 §4.3 (p.11)</cite></blockquote><p>삽입 문자열 끝에는 <code>.\\n&lt;/think&gt;.\\n\\n</code>이 붙습니다. 예산별 성능은 [[@fig2]].</p><p>논문은 ‘user-defined threshold’라고만 쓰고 구현 위치는 밝히지 않았습니다. Qwen3-235B-A22B tokenizer_config.json의 chat template에는 enable_thinking=False일 때 빈 &lt;think&gt; 블록을 넣는 분기만 있고 budget · /think 처리는 없습니다(2026-11-06 확인). thinking_budget은 QwenCloud API 문서에 있는 파라미터입니다.</p>",
    "sources": [
     {
      "label": "Qwen3 §4.3 (p.11)",
      "url": "https://arxiv.org/pdf/2505.09388v1#page=11"
+    },
+    {
+     "label": "Qwen3-235B-A22B tokenizer_config.json",
+     "url": "https://huggingface.co/Qwen/Qwen3-235B-A22B/blob/main/tokenizer_config.json"
+    },
+    {
+     "label": "QwenCloud Thinking 문서",
+     "url": "https://docs.qwencloud.com/developer-guides/text-generation/thinking"
     }
    ],
    "claims": [
