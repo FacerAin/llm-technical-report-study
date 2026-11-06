@@ -367,6 +367,18 @@
    ]
   },
   {
+   "id": "rl-t22",
+   "statement": "Qwen3-32B Thinking: Stage 2 뒤 AIME'24 83.8 · LiveCodeBench 68.4 · IFEval 73.0 · CounterFactQA 50.4 / Stage 4 뒤 81.4 · 65.7 · 85.0 · 68.1",
+   "kind": "table",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Qwen3 Table 22 (p.21)",
+     "url": "https://arxiv.org/pdf/2505.09388v1#page=21"
+    }
+   ]
+  },
+  {
    "id": "rl-criteria",
    "statement": "Reasoning RL 문제는 Cold Start에 안 씀 · Cold Start 모델이 배울 수 있음 · 최대한 어려움 · 넓은 하위 도메인 4조건",
    "kind": "orig",
