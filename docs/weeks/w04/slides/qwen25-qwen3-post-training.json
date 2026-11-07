@@ -70,8 +70,12 @@
    "layout": "wide",
    "title": "후학습: Qwen2.5는 SFT를 넓혔고, Qwen3는 thinking 능력부터 만든다",
    "body": "<p>오늘 범위는 Qwen2.5의 SFT와 Qwen3 후학습 4단계(Cold Start · Reasoning RL · Mode Fusion · General RL), 그리고 평가 · Discussion입니다.</p>",
-   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl rowcards\"><thead><tr><th></th><th>Qwen2.5 (2024-12)</th><th>Qwen3 (2025-05)</th></tr></thead><tbody><tr><td data-label=\"항목\">순서</td><td data-label=\"Qwen2.5\">SFT → Offline RL → Online RL</td><td data-label=\"Qwen3\">Cold Start → Reasoning RL → Mode Fusion → General RL</td></tr><tr><td data-label=\"항목\">사용자 제어</td><td data-label=\"Qwen2.5\">system prompt</td><td data-label=\"Qwen3\"><code>/think</code> · <code>/no_think</code> · 생각 예산</td></tr><tr><td data-label=\"항목\">작은 모델</td><td data-label=\"Qwen2.5\">같은 과정</td><td data-label=\"Qwen3\">큰 모델에서 증류</td></tr></tbody></table></div>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl rowcards\"><thead><tr><th></th><th>Qwen2 (2024-07)</th><th>Qwen2.5 (2024-12)</th><th>Qwen3 (2025-05)</th></tr></thead><tbody><tr><td data-label=\"항목\">순서</td><td data-label=\"Qwen2\">SFT → Offline DPO → Online DPO</td><td data-label=\"Qwen2.5\">SFT → Offline RL(DPO) → Online RL(GRPO)</td><td data-label=\"Qwen3\">Cold Start → Reasoning RL → Mode Fusion → General RL</td></tr><tr><td data-label=\"항목\">SFT 규모</td><td data-label=\"Qwen2\">50만+</td><td data-label=\"Qwen2.5\">100만+</td><td data-label=\"Qwen3\">미공개</td></tr><tr><td data-label=\"항목\">사용자 제어</td><td data-label=\"Qwen2\">system prompt</td><td data-label=\"Qwen2.5\">system prompt</td><td data-label=\"Qwen3\"><code>/think</code> · <code>/no_think</code> · 생각 예산</td></tr><tr><td data-label=\"항목\">작은 모델</td><td data-label=\"Qwen2\">같은 과정</td><td data-label=\"Qwen2.5\">같은 과정</td><td data-label=\"Qwen3\">큰 모델에서 증류</td></tr></tbody></table></div>",
    "sources": [
+    {
+     "label": "Qwen2 §4.2–4.3 (p.8)",
+     "url": "https://arxiv.org/pdf/2407.10671#page=8"
+    },
     {
      "label": "Qwen2.5 §4 (p.4–5)",
      "url": "https://arxiv.org/pdf/2412.15115v2#page=4"
