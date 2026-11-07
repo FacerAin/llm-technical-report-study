@@ -1,7 +1,7 @@
 # W04 Post-training 발표 대본
 
 ## @overview
-제 파트는 두 보고서의 Post-training입니다. 지난주 Qwen2는 SFT 50만 개 뒤에 DPO를 offline, online 두 번 했습니다. 이와 비교하면, Qwen2.5는 SFT 데이터를 넓히고 RL을 둘로 나눴고, Qwen3는 생각하는 능력부터 만든 뒤 바로 답하는 능력을 합칩니다. 작은 모델은 큰 모델에서 증류합니다.
+제 파트는 두 보고서의 Post-training입니다. 오늘 강조하고 싶은 건 두 가지입니다. Qwen2.5는 SFT 확장으로, Qwen2 대비 데이터를 50만에서 100만 이상으로 늘리고 영역을 넓혔습니다. Qwen3는 thinking mode와 thinking budget으로, 한 모델에서 생각을 켜고 끄고 생각 길이까지 조절할 수 있게 됐습니다.
 
 ## @q25-intro
 Qwen2.5 서두가 꼽는 진전은 두 가지입니다. 첫째, SFT 데이터를 100만 개 넘게 늘리고 긴 생성·수학·코드 같은 아홉 영역을 다룹니다. 둘째, RL을 둘로 나눴습니다. 기준은 보상 모델이 채점할 수 있느냐입니다. 추론이나 사실성처럼 RM이 채점하기 어려운 건 정답이 있는 데이터로 DPO를 하고, 간결함·무해함처럼 미묘한 품질은 RM을 써서 GRPO로 올립니다.
@@ -67,7 +67,7 @@ Stage 4 General RL입니다. 20개가 넘는 태스크에 각각 보상을 붙�
 Table 22는 같은 32B 모델을 단계마다 잰 표입니다. 먼저 3단계를 보면, 생각 모드에서 CounterFactQA가 10.9, LengthCtrl이 8점 오릅니다. ThinkFollow 88.7은 모드 전환이 생겼다는 뜻입니다. 대신 AIME와 LiveCodeBench는 1~2점 떨어집니다. 4단계 General RL을 거치면 ToolUse가 15점, ThinkFollow가 98.9까지 오르고, AIME는 다시 조금 내려갑니다. 저자들은 범용성을 위해 이 손해를 받아들였다고 씁니다.
 
 ## @summary
-정리하면 세 줄입니다. Qwen2.5는 SFT 데이터를 넓히고 RL을 둘로 나눴습니다. Qwen3는 생각하는 힘을 먼저 만들고, 바로 답하는 모드를 합쳐 flag와 예산으로 조절합니다. 그 대가로 일반 능력은 오르지만 어려운 추론은 조금 내줍니다.
+정리하면, Qwen2.5의 핵심은 SFT 확장입니다. 학습 설정은 Qwen2와 같고 데이터를 두 배로 늘리며 긴 생성, 구조화 데이터, system prompt 같은 영역을 새로 넣었습니다. Qwen3의 핵심은 thinking mode와 thinking budget입니다. 한 모델에서 flag로 생각을 켜고 끄고, 예산으로 생각 길이를 자를 수 있으며, 예산을 늘릴수록 점수가 오릅니다. 그 대가로 일반 능력은 오르지만 어려운 추론은 조금 내줍니다.
 
 ## @open-q
 마지막으로 같이 이야기해 볼 질문입니다. Cold Start를 작게 한 게 정말 나은지, 빈 블록 대신 별도 토큰이었다면 어땠을지, 강제 중단 문장이 꼭 필요한지, Qwen2.5의 system prompt 제어와 Qwen3 flag 제어는 무엇이 다른지입니다. 그리고 최근 Qwen3.8과 DeepSeek V4.1은 한 모델을 유지하면서 enable_thinking과 effort 단계로 조절하는데, 한 모델이 나은지 분리가 나은지, flag가 아직 필요한지도 같이 생각해 볼 만합니다.

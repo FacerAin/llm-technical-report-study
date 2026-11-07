@@ -68,9 +68,9 @@
    "section": "1",
    "section_label": "들어가며",
    "layout": "wide",
-   "title": "후학습: Qwen2.5는 SFT를 넓혔고, Qwen3는 thinking 능력부터 만든다",
+   "title": "후학습: Qwen2.5는 SFT를 키웠고, Qwen3는 thinking mode와 thinking budget을 더했다",
    "body": "<p>오늘 범위는 Qwen2.5의 SFT와 Qwen3 후학습 4단계(Cold Start · Reasoning RL · Mode Fusion · General RL), 그리고 평가 · Discussion입니다.</p>",
-   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl rowcards\"><thead><tr><th></th><th>Qwen2 (2024-07)</th><th>Qwen2.5 (2024-12)</th><th>Qwen3 (2025-05)</th></tr></thead><tbody><tr><td data-label=\"항목\">순서</td><td data-label=\"Qwen2\">SFT → Offline DPO → Online DPO</td><td data-label=\"Qwen2.5\">SFT → Offline RL(DPO) → Online RL(GRPO)</td><td data-label=\"Qwen3\">Cold Start → Reasoning RL → Mode Fusion → General RL</td></tr><tr><td data-label=\"항목\">SFT 규모</td><td data-label=\"Qwen2\">50만+</td><td data-label=\"Qwen2.5\">100만+</td><td data-label=\"Qwen3\">미공개</td></tr><tr><td data-label=\"항목\">사용자 제어</td><td data-label=\"Qwen2\">system prompt</td><td data-label=\"Qwen2.5\">system prompt</td><td data-label=\"Qwen3\"><code>/think</code> · <code>/no_think</code> · 생각 예산</td></tr><tr><td data-label=\"항목\">작은 모델</td><td data-label=\"Qwen2\">같은 과정</td><td data-label=\"Qwen2.5\">같은 과정</td><td data-label=\"Qwen3\">큰 모델에서 증류</td></tr></tbody></table></div>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl rowcards\"><thead><tr><th></th><th>Qwen2 (2024-07)</th><th>Qwen2.5 (2024-12)</th><th>Qwen3 (2025-05)</th></tr></thead><tbody><tr><td data-label=\"항목\">순서</td><td data-label=\"Qwen2\">SFT → Offline DPO → Online DPO</td><td data-label=\"Qwen2.5\">SFT → Offline RL(DPO) → Online RL(GRPO)</td><td data-label=\"Qwen3\">Cold Start → Reasoning RL → Mode Fusion → General RL</td></tr><tr><td data-label=\"항목\">SFT 규모</td><td data-label=\"Qwen2\">50만+ · 7개 능력</td><td data-label=\"Qwen2.5\" class=\"em\"><b>100만+ · 9개 영역</b></td><td data-label=\"Qwen3\">미공개</td></tr><tr><td data-label=\"항목\">사용자 제어</td><td data-label=\"Qwen2\">system prompt</td><td data-label=\"Qwen2.5\">system prompt</td><td data-label=\"Qwen3\" class=\"em\"><b>thinking mode</b> (<code>/think</code> · <code>/no_think</code>)<br><b>thinking budget</b> (생각 길이 상한)</td></tr><tr><td data-label=\"항목\">작은 모델</td><td data-label=\"Qwen2\">같은 과정</td><td data-label=\"Qwen2.5\">같은 과정</td><td data-label=\"Qwen3\">큰 모델에서 증류</td></tr></tbody></table></div>",
    "sources": [
     {
      "label": "Qwen2 §4.2–4.3 (p.8)",
@@ -725,9 +725,9 @@
    "term": "정리",
    "section": "8",
    "section_label": "정리 · 열린 질문",
-   "title": "정리: 생각하는 힘을 먼저 만들고, 바로 답하는 힘을 합쳤다",
+   "title": "정리: Qwen2.5는 SFT 확장, Qwen3는 thinking mode · thinking budget",
    "body": "<p>오늘 내용을 세 줄로 줄이면 이렇습니다.</p>",
-   "visual": "<div class=\"flow vertical\" data-main data-au=\"1\"><div class=\"bx gray\"><div class=\"t\">① Qwen2.5</div><div class=\"d\">SFT 데이터를 9개 영역 100만+ 예시로 넓히고, RL을 Offline · Online 둘로 나눴다</div></div><div class=\"bx orange\"><div class=\"t\">② Qwen3</div><div class=\"d\">Cold Start → Reasoning RL로 생각하는 힘을 먼저 만들고, Mode Fusion으로 바로 답하는 모드를 합쳐 flag · 예산으로 조절한다</div></div><div class=\"bx blue\"><div class=\"t\">③ 대가</div><div class=\"d\">Stage 3–4에서 일반 능력 · 모드 전환은 오르지만, 어려운 추론은 조금 내준다 (AIME'24 83.8 → 81.4)</div></div></div>",
+   "visual": "<div class=\"flow vertical\" data-main data-au=\"1\"><div class=\"bx gray\"><div class=\"t\">① Qwen2.5 · SFT 확장</div><div class=\"d\">설정은 Qwen2와 같고 데이터만 50만+ → 100만+ · 긴 생성 · 구조화 데이터 · system prompt 영역 신설</div></div><div class=\"bx orange\"><div class=\"t\">② Qwen3 · thinking mode + thinking budget</div><div class=\"d\">한 모델에서 생각을 켜고 끄고(<code>/think</code> · <code>/no_think</code>), 생각 길이를 예산으로 자른다 · 예산을 늘릴수록 점수 ↑ (Fig. 2)</div></div><div class=\"bx blue\"><div class=\"t\">③ 대가</div><div class=\"d\">Stage 3–4에서 일반 능력 · 모드 전환은 오르지만, 어려운 추론은 조금 내준다 (AIME'24 83.8 → 81.4)</div></div></div>",
    "sources": [
     {
      "label": "Qwen2.5 §4 (p.4–5)",
