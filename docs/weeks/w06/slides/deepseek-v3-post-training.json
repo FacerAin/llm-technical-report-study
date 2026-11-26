@@ -1,0 +1,644 @@
+{
+ "title": "W06 DeepSeek-V3 — Post-training",
+ "subtitle": "송용우 · 검토용 초안",
+ "shell_version": 2,
+ "budget_minutes": 20,
+ "known_terms": [
+  "SFT",
+  "RL",
+  "DeepSeek-V3",
+  "DeepSeek-V2",
+  "V2",
+  "V2.5",
+  "V3",
+  "Qwen2.5",
+  "LLaMA-3.1",
+  "LLaMA",
+  "Llama 2",
+  "Llama",
+  "GPT-4o",
+  "Claude",
+  "Claude-3.5",
+  "GPT-4-Turbo-1106",
+  "MMLU",
+  "MMLU-Pro",
+  "MMLU-Redux",
+  "BBH",
+  "DROP",
+  "GPQA",
+  "GPQA-Diamond",
+  "SimpleQA",
+  "C-SimpleQA",
+  "FRAMES",
+  "LongBench",
+  "IFEval",
+  "IF-Eval",
+  "HumanEval",
+  "HumanEval-Mul",
+  "LiveCodeBench",
+  "Codeforces",
+  "SWE",
+  "SWE-Bench",
+  "Aider",
+  "Aider-Edit",
+  "Aider-Polyglot",
+  "AIME",
+  "MATH",
+  "MATH-500",
+  "CNMO",
+  "C-Eval",
+  "CLUEWSC",
+  "CMMLU",
+  "RACE",
+  "RACE-High",
+  "RACE-Middle",
+  "PIQA",
+  "HellaSwag",
+  "ARC",
+  "C-Eval",
+  "GSM8K",
+  "TriviaQA",
+  "Arena-Hard",
+  "AlpacaEval",
+  "H800",
+  "GPU",
+  "USD",
+  "MoE",
+  "LLM",
+  "BPB",
+  "HAI-LLM",
+  "R1",
+  "API",
+  "CoT",
+  "K",
+  "M",
+  "B",
+  "T",
+  "LR",
+  "EM",
+  "Pile-test",
+  "Table",
+  "GSM",
+  "SOTA",
+  "W02",
+  "W04",
+  "MBPP",
+  "CRUXEval",
+  "MGSM",
+  "CMath",
+  "AGIEval",
+  "CMRC",
+  "CCPM",
+  "C3",
+  "WinoGrande",
+  "NaturalQuestions",
+  "MMMLU",
+  "JS",
+  "TS",
+  "PHP",
+  "Bash",
+  "Python",
+  "Java",
+  "Cpp",
+  "C#",
+  "Correct",
+  "Pass@1",
+  "Epoch"
+ ],
+ "claims_file": "deepseek-v3-post-training-claims.json",
+ "slides": [
+  {
+   "key": "overview",
+   "kind": "intro",
+   "seconds": 40,
+   "term": "Post-training",
+   "section": "1",
+   "section_label": "들어가며",
+   "title": "Post-training: SFT는 짧게, 평가는 Base · Chat 두 번",
+   "body": "<p>제 범위는 SFT 설정과 평가 세 절입니다.</p>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><thead><tr><th>절</th><th>무엇</th><th>핵심</th></tr></thead><tbody><tr><td data-label=\"절\">§5.1 SFT Settings</td><td data-label=\"무엇\">SFT 학습 설정</td><td data-label=\"핵심\">1.5M 샘플 · 2 epoch</td></tr><tr><td data-label=\"절\">§4.4 Evaluations</td><td data-label=\"무엇\">Base 모델 평가 (Table 3)</td><td data-label=\"핵심\" class=\"em\">V3-Base 31개 중 22개 최고</td></tr><tr><td data-label=\"절\">§5.3.1 Evaluation Settings</td><td data-label=\"무엇\">Chat 모델 평가 설정</td><td data-label=\"핵심\">벤치마크 · 비교 대상 · 세부 설정</td></tr><tr><td data-label=\"절\">§5.3.2 Standard Evaluation</td><td data-label=\"무엇\">표준 벤치마크 (Table 6)</td><td data-label=\"핵심\" class=\"em\">오픈모델 22개 중 20개 최고</td></tr><tr><td data-label=\"절\">§5.3.3 Open-Ended Evaluation</td><td data-label=\"무엇\">LLM judge 평가 (Table 7)</td><td data-label=\"핵심\">Arena-Hard 85.5 · AlpacaEval 70.0</td></tr><tr><td data-label=\"절\">Table 1</td><td data-label=\"무엇\">학습 비용</td><td data-label=\"핵심\">후학습 5K GPU hours</td></tr></tbody></table></div><p class=\"cap\">파랑 칸 = 발표자 계산</p>",
+   "evidence": "<p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> 22/31은 Table 3, 20/22는 Table 6 값을 발표자가 센 것입니다. 자세한 셈은 [[@t3]] · [[@t6]].</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §4.4 · §5.1 · §5.3 (p.24)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=24"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "scope",
+    "t3-best",
+    "t6-open"
+   ],
+   "ids": "Post-training 범위",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "cost",
+   "kind": "result",
+   "seconds": 50,
+   "term": "Table 1",
+   "section": "1",
+   "section_label": "들어가며",
+   "title": "Table 1: 후학습은 5K GPU hours, 전체의 약 0.18%",
+   "body": "<p>H800 대여료를 GPU·시간당 $2로 가정한 공식 학습 비용입니다.</p>",
+   "visual": "<figure class=\"crop\" data-main style=\"margin:0\"><img src=\"figures/v3-table1.png\" alt=\"DeepSeek-V3 Table 1: 학습 단계별 H800 GPU hours와 USD\" data-glyph-px=\"23\"><figcaption>Table 1 (p.5) · 전체</figcaption></figure><div class=\"verdict\"><span class=\"vd-claim\">저자: “only $5.576M” · 선행 연구 · ablation 비용 제외</span><span class=\"vd-res vd-ok\">표: Post-Training 5K / Total 2788K = 약 0.18%</span></div>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/v3-table1.png\" alt=\"DeepSeek-V3 Table 1\" data-glyph-px=\"23\" data-display-width=\"720\"><figcaption>원문 · DeepSeek-V3 Table 1 (p.5) · 전체 / 발표자 표시 없음</figcaption></figure><blockquote class=\"ev-quote\" lang=\"en\">“Combined with 119K GPU hours for the context length extension and 5K GPU hours for post-training, DeepSeek-V3 costs only 2.788M GPU hours for its full training. … Note that the aforementioned costs include only the official training of DeepSeek-V3, excluding the costs associated with prior research and ablation experiments on architectures, algorithms, or data.”<cite>DeepSeek-V3 §1 (p.5)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> 5K ÷ 2788K = 0.00179 → 약 0.18%</p><p class=\"subst\">사전학습 1T 토큰당 180K GPU hours × 14.8T ≈ 2664K</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 1 (p.5)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=5"
+    },
+    {
+     "label": "DeepSeek-V3 §1 (p.5)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=5"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "cost-post",
+    "cost-total",
+    "cost-share",
+    "cost-excl"
+   ],
+   "ids": "Post-training · 후학습 비용(Table 1)",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "sft",
+   "kind": "result",
+   "seconds": 60,
+   "term": "SFT Settings",
+   "section": "2",
+   "section_label": "§5.1 SFT",
+   "title": "SFT Settings: 1.5M 샘플을 2 epoch, lr 5×10⁻⁶ → 1×10⁻⁶",
+   "body": "<p>지난 주차 모델들과 같은 틀(2 epoch · 작은 lr 감소)이고, 데이터가 가장 큽니다.</p>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><thead><tr><th>설정</th><th>Llama 2-Chat (W02)</th><th>Qwen2.5 (W04)</th><th>DeepSeek-V3</th></tr></thead><tbody><tr><td data-label=\"설정\">데이터</td><td data-label=\"Llama 2-Chat (W02)\">27,540</td><td data-label=\"Qwen2.5 (W04)\">100만+</td><td data-label=\"DeepSeek-V3\" class=\"em\">1.5M</td></tr><tr><td data-label=\"설정\">Epoch</td><td data-label=\"Llama 2-Chat (W02)\">2</td><td data-label=\"Qwen2.5 (W04)\">2</td><td data-label=\"DeepSeek-V3\">2</td></tr><tr><td data-label=\"설정\">LR</td><td data-label=\"Llama 2-Chat (W02)\">2×10⁻⁵ · cosine</td><td data-label=\"Qwen2.5 (W04)\">7×10⁻⁶ → 7×10⁻⁷</td><td data-label=\"DeepSeek-V3\" class=\"em\">5×10⁻⁶ → 1×10⁻⁶ · cosine</td></tr><tr><td data-label=\"설정\">Sequence 길이</td><td data-label=\"Llama 2-Chat (W02)\">4,096</td><td data-label=\"Qwen2.5 (W04)\">32,768</td><td data-label=\"DeepSeek-V3\">미기술</td></tr><tr><td data-label=\"설정\">Packing</td><td data-label=\"Llama 2-Chat (W02)\">프롬프트 · 답을 이어 붙임</td><td data-label=\"Qwen2.5 (W04)\">미기술</td><td data-label=\"DeepSeek-V3\" class=\"em\">packing + sample masking</td></tr></tbody></table></div><p class=\"cap\">파랑 칸 = 발표자 강조 · Llama 2 §3.1 (p.9) · Qwen2.5 §4.1 (p.6) · DeepSeek-V3 §5.1 (p.28–29)</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“We fine-tune DeepSeek-V3-Base for two epochs using the SFT dataset, using the cosine decay learning rate scheduling that starts at 5 × 10−6 and gradually decreases to 1 × 10−6. During training, each single sequence is packed from multiple samples. However, we adopt a sample masking strategy to ensure that these examples remain isolated and mutually invisible.”<cite>DeepSeek-V3 §5.1 SFT Settings (p.29)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“We curate our instruction-tuning datasets to include 1.5M instances spanning multiple domains”<cite>DeepSeek-V3 §5.1 (p.28)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"nd\">미기술</span> batch size · sequence 길이 · weight decay는 적지 않았습니다.</p><p>데이터 구성(Reasoning · Non-Reasoning)은 Data &amp; Synthesis 파트 범위입니다.</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.1 SFT Settings (p.29)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=29"
+    },
+    {
+     "label": "DeepSeek-V3 §5.1 (p.28)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=28"
+    },
+    {
+     "label": "Llama 2 §3.1 (p.9)",
+     "url": "https://arxiv.org/pdf/2307.09288v2#page=9"
+    },
+    {
+     "label": "Qwen2.5 §4.1 (p.6)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=6"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "sft-n",
+    "sft-ep",
+    "sft-lr",
+    "sft-pack",
+    "sft-nd",
+    "prev-sft"
+   ],
+   "ids": "Post-training · SFT 설정",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "packing",
+   "kind": "mechanism",
+   "seconds": 70,
+   "term": "Sample masking",
+   "section": "2",
+   "section_label": "§5.1 SFT",
+   "title": "Sample masking: 한 sequence에 묶어도 샘플끼리는 서로 못 본다",
+   "body": "<p><dfn>Packing</dfn>은 짧은 샘플 여러 개를 한 sequence에 이어 padding 낭비를 줄이는 것입니다. 그냥 이으면 B가 A를 보게 되므로, 샘플 경계에서 attention을 끊습니다.</p>",
+   "visual": "<div class=\"ba\" data-main><div class=\"ba-side ba-before\"><span class=\"ba-tag\">packing만</span><p style=\"margin:6px 0\"><b>[A1 A2 A3][B1 B2]</b> → B1은 A1–A3도 attend</p><p style=\"margin:6px 0\">causal mask = 아래 삼각형 전체</p></div><div class=\"ba-arrow\" aria-hidden=\"true\">→</div><div class=\"ba-side ba-after\"><span class=\"ba-tag\">packing + sample masking</span><table style=\"border-collapse:collapse;margin:0 auto\"><thead><tr><th></th><th style=\"padding:4px 8px\">A1</th><th style=\"padding:4px 8px\">A2</th><th style=\"padding:4px 8px\">A3</th><th style=\"padding:4px 8px\">B1</th><th style=\"padding:4px 8px\">B2</th></tr></thead><tbody><tr><th style=\"padding:4px 8px\">A1</th><td style=\"width:42px;height:34px;text-align:center;background:#2f6fd6;color:#fff;border:1px solid #fff\">✓</td><td style=\"width:42px;height:34px;text-align:center;background:#eee;color:#a33;border:1px solid #fff\"></td><td style=\"width:42px;height:34px;text-align:center;background:#eee;color:#a33;border:1px solid #fff\"></td><td style=\"width:42px;height:34px;text-align:center;background:#eee;color:#a33;border:1px solid #fff\"></td><td style=\"width:42px;height:34px;text-align:center;background:#eee;color:#a33;border:1px solid #fff\"></td></tr><tr><th style=\"padding:4px 8px\">A2</th><td style=\"width:42px;height:34px;text-align:center;background:#2f6fd6;color:#fff;border:1px solid #fff\">✓</td><td style=\"width:42px;height:34px;text-align:center;background:#2f6fd6;color:#fff;border:1px solid #fff\">✓</td><td style=\"width:42px;height:34px;text-align:center;background:#eee;color:#a33;border:1px solid #fff\"></td><td style=\"width:42px;height:34px;text-align:center;background:#eee;color:#a33;border:1px solid #fff\"></td><td style=\"width:42px;height:34px;text-align:center;background:#eee;color:#a33;border:1px solid #fff\"></td></tr><tr><th style=\"padding:4px 8px\">A3</th><td style=\"width:42px;height:34px;text-align:center;background:#2f6fd6;color:#fff;border:1px solid #fff\">✓</td><td style=\"width:42px;height:34px;text-align:center;background:#2f6fd6;color:#fff;border:1px solid #fff\">✓</td><td style=\"width:42px;height:34px;text-align:center;background:#2f6fd6;color:#fff;border:1px solid #fff\">✓</td><td style=\"width:42px;height:34px;text-align:center;background:#eee;color:#a33;border:1px solid #fff\"></td><td style=\"width:42px;height:34px;text-align:center;background:#eee;color:#a33;border:1px solid #fff\"></td></tr><tr><th style=\"padding:4px 8px\">B1</th><td style=\"width:42px;height:34px;text-align:center;background:#f3c9c9;color:#a33;border:1px solid #fff\">✕</td><td style=\"width:42px;height:34px;text-align:center;background:#f3c9c9;color:#a33;border:1px solid #fff\">✕</td><td style=\"width:42px;height:34px;text-align:center;background:#f3c9c9;color:#a33;border:1px solid #fff\">✕</td><td style=\"width:42px;height:34px;text-align:center;background:#2f6fd6;color:#fff;border:1px solid #fff\">✓</td><td style=\"width:42px;height:34px;text-align:center;background:#eee;color:#a33;border:1px solid #fff\"></td></tr><tr><th style=\"padding:4px 8px\">B2</th><td style=\"width:42px;height:34px;text-align:center;background:#f3c9c9;color:#a33;border:1px solid #fff\">✕</td><td style=\"width:42px;height:34px;text-align:center;background:#f3c9c9;color:#a33;border:1px solid #fff\">✕</td><td style=\"width:42px;height:34px;text-align:center;background:#f3c9c9;color:#a33;border:1px solid #fff\">✕</td><td style=\"width:42px;height:34px;text-align:center;background:#2f6fd6;color:#fff;border:1px solid #fff\">✓</td><td style=\"width:42px;height:34px;text-align:center;background:#2f6fd6;color:#fff;border:1px solid #fff\">✓</td></tr></tbody></table><p style=\"margin:6px 0;font-size:.9em\">✓ = 볼 수 있음 · ✕ = 막힘 (다른 샘플)</p></div></div><p class=\"cap\">설명용 도식 · A, B = 서로 다른 SFT 샘플의 토큰 · 행 = 현재 토큰, 열 = 참조 토큰</p>",
+   "evidence": "<p><span class=\"ev-chip\" data-ev=\"illus\">설명용</span> 도식은 원문 문장을 설명하려고 그린 것입니다. 원문은 그림 · 수식 없이 한 문장으로만 적었습니다.</p><blockquote class=\"ev-quote\" lang=\"en\">“During training, each single sequence is packed from multiple samples. However, we adopt a sample masking strategy to ensure that these examples remain isolated and mutually invisible.”<cite>DeepSeek-V3 §5.1 SFT Settings (p.29)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"nd\">미기술</span> position id를 샘플마다 다시 0부터 세는지, 구현(block-diagonal mask · varlen attention 등)은 적지 않았습니다.</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.1 SFT Settings (p.29)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=29"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "sft-pack",
+    "pack-illus",
+    "sft-nd"
+   ],
+   "ids": "Post-training · packing · sample masking",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "base-method",
+   "kind": "mechanism",
+   "seconds": 60,
+   "term": "Base 평가 방식",
+   "section": "3",
+   "section_label": "§4.4 Base 평가",
+   "title": "Base 평가 방식: 객관식은 perplexity, 풀이형은 generation, 언어모델링은 BPB",
+   "body": "<p>모든 base 모델을 사내 HAI-LLM 프레임워크에서 같은 설정으로 다시 평가합니다.</p>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><thead><tr><th>방식</th><th>무엇을 재나</th><th>대상 예</th><th>목적</th></tr></thead><tbody><tr><td data-label=\"방식\">Perplexity-based</td><td data-label=\"무엇을 재나\">보기 중 모델이 가장 그럴듯하다고 본 답</td><td data-label=\"대상 예\">MMLU 계열 · HellaSwag · ARC · C-Eval · CMMLU</td><td data-label=\"목적\">생성 없이 선택지 비교</td></tr><tr><td data-label=\"방식\">Generation-based</td><td data-label=\"무엇을 재나\">직접 생성한 답을 채점</td><td data-label=\"대상 예\">GSM8K · MATH · HumanEval · BBH · DROP · TriviaQA</td><td data-label=\"목적\">풀이 · 코드 · 단답</td></tr><tr><td data-label=\"방식\">Language-modeling (BPB)</td><td data-label=\"무엇을 재나\">바이트당 비트 (낮을수록 좋음)</td><td data-label=\"대상 예\">Pile-test</td><td data-label=\"목적\" class=\"em\">tokenizer가 달라도 공정 비교</td></tr></tbody></table></div><p class=\"cap\">DeepSeek-V3 §4.4.1 (p.24) · 파랑 칸 = 원문이 밝힌 이유 · 다른 목적 칸은 발표자 정리</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“we adopt perplexity-based evaluation for datasets including HellaSwag, PIQA, WinoGrande, RACE-Middle, RACE-High, MMLU, MMLU-Redux, MMLU-Pro, MMMLU, ARC-Easy, ARC-Challenge, C-Eval, CMMLU, C3, and CCPM, and adopt generation-based evaluation for TriviaQA, NaturalQuestions, DROP, MATH, GSM8K, MGSM, HumanEval, MBPP, LiveCodeBench-Base, CRUXEval, BBH, AGIEval, CLUEWSC, CMRC, and CMath. In addition, we perform language-modeling-based evaluation for Pile-test and use Bits-Per-Byte (BPB) as the metric to guarantee fair comparison among models using different tokenizers.”<cite>DeepSeek-V3 §4.4.1 (p.24)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"interp\">해석</span> perplexity · generation 칸의 목적은 원문이 밝히지 않아 발표자가 정리했습니다.</p><blockquote class=\"ev-quote\" lang=\"en\">“We evaluate all these models with our internal evaluation framework, and ensure that they share the same evaluation setting.”<cite>DeepSeek-V3 §4.4.2 (p.24)</cite></blockquote>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §4.4.1 (p.24)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=24"
+    },
+    {
+     "label": "DeepSeek-V3 §4.4.2 (p.24)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=24"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "base-method",
+    "base-bpb",
+    "base-same"
+   ],
+   "ids": "Post-training · Base 평가 방식",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "t3",
+   "kind": "result",
+   "seconds": 80,
+   "term": "Table 3",
+   "section": "3",
+   "section_label": "§4.4 Base 평가",
+   "title": "Table 3: 활성 37B인 V3-Base가 31개 중 22개에서 최고",
+   "body": "<p>Base 모델 4개 비교입니다. 영역별로 V3가 각 모델을 앞선 개수를 셌습니다.</p>",
+   "visual": "<div class=\"claim-table\" data-main><div class=\"table-wrap\"><table class=\"tbl\"><thead><tr><th>영역 (개수)</th><th>vs V2-Base 21B/236B</th><th>vs Qwen2.5 72B</th><th>vs LLaMA-3.1 405B</th></tr></thead><tbody><tr><td data-label=\"영역 (개수)\">English (15)</td><td data-label=\"vs V2-Base 21B/236B\">12</td><td data-label=\"vs Qwen2.5 72B\">14</td><td data-label=\"vs LLaMA-3.1 405B\">7 (동급 4)</td></tr><tr><td data-label=\"영역 (개수)\">Code (5)</td><td data-label=\"vs V2-Base 21B/236B\">5</td><td data-label=\"vs Qwen2.5 72B\">5</td><td data-label=\"vs LLaMA-3.1 405B\" class=\"em\">5</td></tr><tr><td data-label=\"영역 (개수)\">Math (4)</td><td data-label=\"vs V2-Base 21B/236B\">4</td><td data-label=\"vs Qwen2.5 72B\">4</td><td data-label=\"vs LLaMA-3.1 405B\" class=\"em\">4</td></tr><tr><td data-label=\"영역 (개수)\">Chinese (6)</td><td data-label=\"vs V2-Base 21B/236B\">4</td><td data-label=\"vs Qwen2.5 72B\">4 (동급 1)</td><td data-label=\"vs LLaMA-3.1 405B\">3 (동급 2)</td></tr><tr><td data-label=\"영역 (개수)\">Multilingual (1)</td><td data-label=\"vs V2-Base 21B/236B\">1</td><td data-label=\"vs Qwen2.5 72B\">1</td><td data-label=\"vs LLaMA-3.1 405B\" class=\"em\">1</td></tr></tbody></table></div><p class=\"claim-legend\"><span>칸 = V3가 앞선 개수 · 0.3 이내는 동급</span><span>파랑 칸 = 발표자 강조</span></p><div class=\"verdict\"><span class=\"vd-claim\">저자: “V2-Base · Qwen2.5 72B를 전반적으로 앞서고, LLaMA-3.1 405B는 대부분 앞선다”</span><span class=\"vd-res vd-part\">표: V2-Base도 5개에서 더 높음 (예 RACE-Middle 73.1 vs 67.1) · LLaMA는 31개 중 20개 앞섬</span></div></div><p class=\"cap\">DeepSeek-V3 Table 3 (p.25) 값으로 발표자 계산 · Pile-test(BPB) 제외 31개</p>",
+   "evidence": "<p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> V3가 행 최고(0.3 이내 동급 포함): 31개 중 22개. Qwen2.5 대비 28개 · LLaMA 대비 20개 앞섬. 최고가 아닌 9개: PIQA · WinoGrande · RACE-Middle · RACE-High · NaturalQuestions · CMMLU · CMRC · C3 · CCPM.</p><p class=\"subst\">V2-Base가 더 높은 5개: WinoGrande 86.3/84.9 · RACE-Middle 73.1/67.1 · RACE-High 52.6/51.3 · CMRC 77.4/76.3 · CCPM 93.0/92.0</p><blockquote class=\"ev-quote\" lang=\"en\">“Overall, DeepSeek-V3-Base comprehensively outperforms DeepSeek-V2-Base and Qwen2.5 72B Base, and surpasses LLaMA-3.1 405B Base in the majority of benchmarks, essentially becoming the strongest open-source model.”<cite>DeepSeek-V3 §4.4.2 (p.25)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“Scores with a gap not exceeding 0.3 are considered to be at the same level.”<cite>DeepSeek-V3 Table 3 캡션 (p.25)</cite></blockquote><p>원본 표는 [[@t3-en]] · [[@t3-code]] 화면에 나눠 두었습니다.</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 3 (p.25)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=25"
+    },
+    {
+     "label": "DeepSeek-V3 §4.4.2 (p.25)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=25"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t3",
+    "t3-best",
+    "t3-claim",
+    "t3-vs-v2",
+    "t3-vs-qwen",
+    "t3-vs-llama"
+   ],
+   "ids": "Post-training · Base 평가(Table 3)",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "t3-en",
+   "kind": "result",
+   "seconds": 70,
+   "term": "Table 3 English",
+   "section": "3",
+   "section_label": "§4.4 Base 평가",
+   "title": "Table 3 English: MMLU · BBH · DROP은 1위, RACE 독해는 뒤진다",
+   "body": "<p>LLaMA-3.1 405B 대비 7개 앞섬 · 4개 동급 · 4개 뒤짐.</p>",
+   "visual": "<div style=\"display:grid;grid-template-columns:minmax(0,2.3fr) minmax(0,1fr);gap:20px;align-items:center\"><figure class=\"crop\" data-main style=\"margin:0;max-width:880px\"><img src=\"figures/v3-table3-english.png\" alt=\"DeepSeek-V3 Table 3 English 행: 4개 base 모델 15개 벤치마크\" data-glyph-px=\"19\"><figcaption>Table 3 (p.25) · English 행 · 굵게 = 원문 행 최고</figcaption></figure><div style=\"display:flex;flex-direction:column;gap:12px\"><div class=\"verdict\"><span class=\"vd-claim\">저자: LLaMA-3.1 405B 대비 English는 “competitive or better” · 특히 BBH · MMLU 계열 · DROP</span><span class=\"vd-res vd-ok\">표: BBH +4.6 · MMLU-Pro +11.6 · DROP +3.0 · 뒤짐 4개 (RACE-High −5.5 · RACE-Middle −7.1 · PIQA · NaturalQuestions)</span></div><div class=\"verdict\"><span class=\"vd-claim\">저자: Qwen2.5 72B 대비 English에서 우위</span><span class=\"vd-res vd-ok\">표: 15개 중 14개 · RACE-Middle만 −1.0 (67.1 − 68.1)</span></div></div></div>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/v3-table3-english.png\" alt=\"DeepSeek-V3 Table 3 English\" data-glyph-px=\"19\" data-display-width=\"720\"><figcaption>원문 · DeepSeek-V3 Table 3 (p.25) · 머리글 + English 행 / 생략: Code · Math · Chinese · Multilingual 행</figcaption></figure><blockquote class=\"ev-quote\" lang=\"en\">“As for English and Chinese language benchmarks, DeepSeek-V3-Base shows competitive or better performance, and is especially good on BBH, MMLU-series, DROP, C-Eval, CMMLU, and CCPM.”<cite>DeepSeek-V3 §4.4.2 (p.26)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> Qwen2.5 대비 English 14/15. LLaMA 대비 English: 앞섬 7 · 동급(0.3 이내) 4 (ARC-Challenge · HellaSwag · WinoGrande · TriviaQA) · 뒤짐 4.</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 3 (p.25)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=25"
+    },
+    {
+     "label": "DeepSeek-V3 §4.4.2 (p.26)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=26"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t3",
+    "t3-vs-llama",
+    "t3-vs-qwen"
+   ],
+   "ids": "Post-training · Table 3 English",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "t3-code",
+   "kind": "result",
+   "seconds": 70,
+   "term": "Table 3 Code · Math",
+   "section": "3",
+   "section_label": "§4.4 Base 평가",
+   "title": "Table 3 Code · Math: 9개 모두 1위, 차이가 가장 크다",
+   "body": "<p>LLaMA-3.1 405B보다 활성 파라미터가 11배 적습니다.</p>",
+   "visual": "<div style=\"display:grid;grid-template-columns:minmax(0,2.3fr) minmax(0,1fr);gap:20px;align-items:center\"><figure class=\"crop\" data-main style=\"margin:0;max-width:760px\"><img src=\"figures/v3-table3-code-math-zh.png\" alt=\"DeepSeek-V3 Table 3 Code · Math · Chinese · Multilingual 행\" data-glyph-px=\"19\"><figcaption>Table 3 (p.25) · Code · Math · Chinese · Multilingual 행 · 굵게 = 원문 행 최고</figcaption></figure><div style=\"display:flex;flex-direction:column;gap:12px\"><div class=\"verdict\"><span class=\"vd-claim\">저자: Qwen2.5 72B · LLaMA-3.1 405B 대비 code · math · 다국어 우위</span><span class=\"vd-res vd-ok\">표: 10개 모두 앞섬 · 예 MATH 61.6 vs 54.4 (+7.2) · 49.0 (+12.6)</span></div><div class=\"verdict\"><span class=\"vd-claim\">저자: Chinese는 CMMLU를 빼고 Qwen2.5보다 낫다</span><span class=\"vd-res vd-part\">표: CMMLU −0.7 (88.8 − 89.5) · CLUEWSC +0.2는 동급</span></div></div></div>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/v3-table3-code-math-zh.png\" alt=\"DeepSeek-V3 Table 3 Code Math Chinese\" data-glyph-px=\"19\" data-display-width=\"720\"><figcaption>원문 · DeepSeek-V3 Table 3 (p.25) · 머리글 + Code · Math · Chinese · Multilingual 행 / 생략: English 행</figcaption></figure><blockquote class=\"ev-quote\" lang=\"en\">“Compared with Qwen2.5 72B Base, the state-of-the-art Chinese open-source model, with only half of the activated parameters, DeepSeek-V3-Base also demonstrates remarkable advantages, especially on English, multilingual, code, and math benchmarks. As for Chinese benchmarks, except for CMMLU, a Chinese multi-subject multiple-choice task, DeepSeek-V3-Base also shows better performance than Qwen2.5 72B.”<cite>DeepSeek-V3 §4.4.2 (p.25–26)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“Compared with LLaMA-3.1 405B Base, the largest open-source model with 11 times the activated parameters, DeepSeek-V3-Base also exhibits much better performance on multilingual, code, and math benchmarks.”<cite>DeepSeek-V3 §4.4.2 (p.26)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> Code · Math · Multilingual 10개는 Qwen2.5 · LLaMA 모두 앞섬. 활성 405B ÷ 37B ≈ 10.9 → 저자 “11 times”.</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 3 (p.25)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=25"
+    },
+    {
+     "label": "DeepSeek-V3 §4.4.2 (p.26)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=26"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t3",
+    "t3-vs-qwen",
+    "t3-vs-llama"
+   ],
+   "ids": "Post-training · Table 3 Code · Math · Chinese",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "chat-bench",
+   "kind": "intro",
+   "seconds": 60,
+   "term": "Evaluation Settings",
+   "section": "4",
+   "section_label": "§5.3.1 Chat 평가 설정",
+   "title": "Evaluation Settings: Chat 모델은 지시 따르기 · 긴 문맥 · 실전 코딩 · 경시 수학을 더 본다",
+   "body": "<p>Base에서 쓴 벤치마크에 아래를 더하고, 오픈 4개 · 폐쇄 2개 모델과 비교합니다.</p>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><thead><tr><th>영역</th><th>추가 Benchmark</th><th>목적</th></tr></thead><tbody><tr><td data-label=\"영역\">Instruction following</td><td data-label=\"추가 Benchmark\">IFEval</td><td data-label=\"목적\">형식 제약을 지키나</td></tr><tr><td data-label=\"영역\">Long context</td><td data-label=\"추가 Benchmark\">FRAMES · LongBench v2</td><td data-label=\"목적\">긴 문서 질의응답</td></tr><tr><td data-label=\"영역\">Knowledge</td><td data-label=\"추가 Benchmark\">GPQA · SimpleQA · C-SimpleQA</td><td data-label=\"목적\">전문 지식 · 사실 정확성</td></tr><tr><td data-label=\"영역\">Code (engineering)</td><td data-label=\"추가 Benchmark\">SWE-Bench Verified · Aider</td><td data-label=\"목적\">실제 저장소 수정</td></tr><tr><td data-label=\"영역\">Code (algorithm)</td><td data-label=\"추가 Benchmark\">LiveCodeBench (2024.08–11) · Codeforces</td><td data-label=\"목적\">경쟁 프로그래밍</td></tr><tr><td data-label=\"영역\">Math</td><td data-label=\"추가 Benchmark\">AIME 2024 · CNMO 2024</td><td data-label=\"목적\">경시 수학</td></tr></tbody></table></div><p class=\"cap\">DeepSeek-V3 §5.3.1 (p.30) · 목적 칸은 발표자 정리 · 비교 대상: DeepSeek-V2-0506 · V2.5-0905 · Qwen2.5 72B Instruct · LLaMA-3.1 405B Instruct · Claude-Sonnet-3.5-1022 · GPT-4o-0513</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“Apart from the benchmark we used for base model testing, we further evaluate instructed models on IFEval, FRAMES, LongBench v2, GPQA, SimpleQA, C-SimpleQA, SWE-Bench Verified, Aider, LiveCodeBench (questions from August 2024 to November 2024), Codeforces, Chinese National High School Mathematics Olympiad (CNMO 2024), and American Invitational Mathematics Examination 2024 (AIME 2024).”<cite>DeepSeek-V3 §5.3.1 (p.30)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“For the DeepSeek-V2 model series, we select the most representative variants for comparison. For closed-source models, evaluations are performed through their respective APIs.”<cite>DeepSeek-V3 §5.3.1 (p.30)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"interp\">해석</span> 목적 칸은 각 벤치마크의 일반적 용도를 발표자가 적은 것입니다.</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.1 (p.30)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=30"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "chat-bench",
+    "chat-base"
+   ],
+   "ids": "Post-training · Chat 평가 벤치마크",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "chat-cfg",
+   "kind": "result",
+   "seconds": 70,
+   "term": "Detailed Configurations",
+   "section": "4",
+   "section_label": "§5.3.1 Chat 평가 설정",
+   "title": "Detailed Configurations: 출력은 모두 8K, 경시 수학은 16회 평균",
+   "body": "<p>Table 6 숫자를 읽기 전의 조건입니다.</p>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><thead><tr><th>영역</th><th>설정</th></tr></thead><tbody><tr><td data-label=\"영역\">Prompt</td><td data-label=\"설정\">MMLU · DROP · GPQA · SimpleQA = simple-evals · MMLU-Redux = Zero-Eval, zero-shot</td></tr><tr><td data-label=\"영역\">Code (algorithm)</td><td data-label=\"설정\">HumanEval-Mul = 8개 언어 · LiveCodeBench = CoT · non-CoT · Codeforces = percentile</td></tr><tr><td data-label=\"영역\">Code (engineering)</td><td data-label=\"설정\">SWE-Bench Verified = agentless framework · Aider = “diff” format</td></tr><tr><td data-label=\"영역\">Math</td><td data-label=\"설정\" class=\"em\">AIME · CNMO = temperature 0.7, 16회 평균</td></tr><tr><td data-label=\"영역\">Math</td><td data-label=\"설정\">MATH-500 = greedy decoding</td></tr><tr><td data-label=\"영역\">공통</td><td data-label=\"설정\" class=\"em\">최대 출력 8192 tokens</td></tr></tbody></table></div><p class=\"cap\">DeepSeek-V3 §5.3.1 (p.30–31) · 파랑 칸 = 발표자 강조</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“For mathematical assessments, AIME and CNMO 2024 are evaluated with a temperature of 0.7, and the results are averaged over 16 runs, while MATH-500 employs greedy decoding. We allow all models to output a maximum of 8192 tokens for each benchmark.”<cite>DeepSeek-V3 §5.3.1 (p.31)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“SWE-Bench verified is evaluated using the agentless framework (Xia et al., 2024). We use the “diff” format to evaluate the Aider-related benchmarks.”<cite>DeepSeek-V3 §5.3.1 (p.31)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“Benchmarks containing fewer than 1000 samples are tested multiple times using varying temperature settings to derive robust final results.”<cite>DeepSeek-V3 Table 6 캡션 (p.31)</cite></blockquote><p><dfn>Agentless</dfn>: 에이전트 루프 없이 정해진 단계(위치 찾기 → 수정 → 검증)로 이슈를 푸는 방식.</p><p><span class=\"ev-chip\" data-ev=\"nd\">미기술</span> 설정마다 고른 이유는 적지 않았습니다.</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.1 (p.31)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
+    },
+    {
+     "label": "DeepSeek-V3 Table 6 (p.31)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "chat-cfg",
+    "chat-nd"
+   ],
+   "ids": "Post-training · Chat 평가 세부 설정",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "t6",
+   "kind": "result",
+   "seconds": 80,
+   "term": "Table 6",
+   "section": "5",
+   "section_label": "§5.3.2 Standard Evaluation",
+   "title": "Table 6: 오픈모델 대비 22개 중 20개 1위, 폐쇄 모델과도 경쟁",
+   "body": "<p>Chat 모델 7개 · 22개 벤치마크.</p>",
+   "visual": "<div class=\"claim-table\" data-main><div class=\"table-wrap\"><table class=\"tbl\"><thead><tr><th>영역 (개수)</th><th>오픈 4개 중 V3 1위</th><th>vs Claude-3.5 앞섬</th><th>vs GPT-4o 앞섬</th></tr></thead><tbody><tr><td data-label=\"영역 (개수)\">English (9)</td><td data-label=\"오픈 4개 중 V3 1위\">8</td><td data-label=\"vs Claude-3.5 앞섬\">5</td><td data-label=\"vs GPT-4o 앞섬\">7</td></tr><tr><td data-label=\"영역 (개수)\">Code (7)</td><td data-label=\"오픈 4개 중 V3 1위\">7</td><td data-label=\"vs Claude-3.5 앞섬\">5</td><td data-label=\"vs GPT-4o 앞섬\">7</td></tr><tr><td data-label=\"영역 (개수)\">Math (3)</td><td data-label=\"오픈 4개 중 V3 1위\" class=\"em\">3</td><td data-label=\"vs Claude-3.5 앞섬\" class=\"em\">3</td><td data-label=\"vs GPT-4o 앞섬\" class=\"em\">3</td></tr><tr><td data-label=\"영역 (개수)\">Chinese (3)</td><td data-label=\"오픈 4개 중 V3 1위\">2</td><td data-label=\"vs Claude-3.5 앞섬\">3</td><td data-label=\"vs GPT-4o 앞섬\">3</td></tr></tbody></table></div><p class=\"claim-legend\"><span>칸 = V3가 앞선 개수</span><span>파랑 칸 = 발표자 강조</span></p><div class=\"verdict\"><span class=\"vd-claim\">저자: “best-performing open-source model”</span><span class=\"vd-res vd-part\">표: 오픈 4개 대비 22개 중 20개 최고 · 예외 MMLU (88.5 vs LLaMA 88.6) · CLUEWSC (90.9 vs Qwen 91.4)</span></div><div class=\"verdict\"><span class=\"vd-claim\">저자: “competitive against frontier closed-source models”</span><span class=\"vd-res vd-ok\">표: Claude보다 높음 16개 · GPT-4o보다 높음 20개</span></div></div><p class=\"cap\">DeepSeek-V3 Table 6 (p.31) 값으로 발표자 계산 · 영역별 원본은 다음 장들</p>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/v3-table6.png\" alt=\"DeepSeek-V3 Table 6\" data-glyph-px=\"19\" data-display-width=\"720\"><figcaption>원문 · DeepSeek-V3 Table 6 (p.31) · 전체 / 발표자 표시 없음</figcaption></figure><blockquote class=\"ev-quote\" lang=\"en\">“Table 6 presents the evaluation results, showcasing that DeepSeek-V3 stands as the best-performing open-source model. Additionally, it is competitive against frontier closed-source models like GPT-4o and Claude-3.5-Sonnet.”<cite>DeepSeek-V3 §5.3.2 (p.31)</cite></blockquote><p>영역별 원본은 [[@t6-en]] · [[@t6-code]] · [[@t6-math]].</p><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> 7개 모델 전체 최고는 13개. 최고가 아닌 9개: MMLU · MMLU-Pro · IF-Eval · GPQA · SimpleQA · FRAMES · SWE Verified · Aider-Edit · CLUEWSC.</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 6 (p.31)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
+    },
+    {
+     "label": "DeepSeek-V3 §5.3.2 (p.31)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t6",
+    "t6-claim",
+    "t6-open",
+    "t6-closed"
+   ],
+   "ids": "Post-training · Chat 평가(Table 6)",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "t6-en",
+   "kind": "result",
+   "seconds": 70,
+   "term": "Table 6 English",
+   "section": "5",
+   "section_label": "§5.3.2 Standard Evaluation",
+   "title": "Table 6 English: 긴 문맥은 1위, GPQA는 Claude 다음",
+   "body": "<p>FRAMES는 100K 토큰 문맥 위의 질의응답입니다.</p>",
+   "visual": "<div><figure class=\"crop\" data-main style=\"margin:0;max-width:900px\"><img src=\"figures/v3-table6-english.png\" alt=\"DeepSeek-V3 Table 6 English 행\" data-glyph-px=\"19\"><figcaption>Table 6 (p.31) · English 행 · 굵게 = 원문 행 최고</figcaption></figure></div><div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px\"><div class=\"verdict\"><span class=\"vd-claim\">저자: MMLU-Pro · GPQA-Diamond는 Claude-3.5 바로 다음</span><span class=\"vd-res vd-ok\">표: MMLU-Pro −2.1 (75.9 − 78.0) · GPQA −5.9 (59.1 − 65.0)</span></div><div class=\"verdict\"><span class=\"vd-claim\">저자: DROP · LongBench v2 최고, FRAMES는 GPT-4o 다음</span><span class=\"vd-res vd-ok\">표: DROP 91.6 (+2.9) · LongBench v2 48.7 (+0.6) · FRAMES −7.2</span></div><div class=\"verdict\"><span class=\"vd-claim\">저자: IF-Eval은 V2 계열보다 크게 개선</span><span class=\"vd-res vd-ok\">표: 86.1 vs 57.7 · 80.6</span></div></div>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/v3-table6-english.png\" alt=\"DeepSeek-V3 Table 6 English\" data-glyph-px=\"19\" data-display-width=\"720\"><figcaption>원문 · DeepSeek-V3 Table 6 (p.31) · 머리글 + English 행 / 생략: Code · Math · Chinese 행</figcaption></figure><blockquote class=\"ev-quote\" lang=\"en\">“on GPQA-Diamond, a PhD-level evaluation testbed, DeepSeek-V3 achieves remarkable results, ranking just behind Claude 3.5 Sonnet and outperforming all other competitors by a substantial margin.”<cite>DeepSeek-V3 §5.3.2 (p.32)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“On FRAMES, a benchmark requiring question-answering over 100k token contexts, DeepSeek-V3 closely trails GPT-4o while outperforming all other models by a significant margin.”<cite>DeepSeek-V3 §5.3.2 (p.32)</cite></blockquote><p>표의 차이는 V3 − 해당 행의 다른 모델 최고값입니다.</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 6 (p.31)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
+    },
+    {
+     "label": "DeepSeek-V3 §5.3.2 (p.32)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t6",
+    "t6-en"
+   ],
+   "ids": "Post-training · Table 6 English",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "t6-sqa",
+   "kind": "result",
+   "seconds": 60,
+   "term": "SimpleQA",
+   "section": "5",
+   "section_label": "§5.3.2 Standard Evaluation",
+   "title": "SimpleQA: 영어 사실 지식은 밀리고, 중국어 사실 지식은 1위",
+   "body": "<p>저자는 중국어 지식에 학습 토큰을 더 배정했기 때문이라고 설명합니다.</p>",
+   "visual": "<div class=\"ba\" data-main><div class=\"ba-side ba-before\"><span class=\"ba-tag\">SimpleQA (English)</span><div class=\"table-wrap\"><table class=\"tbl\"><thead><tr><th>모델</th><th>Correct</th></tr></thead><tbody><tr><td data-label=\"모델\">GPT-4o</td><td data-label=\"Correct\">38.2</td></tr><tr><td data-label=\"모델\">Claude-3.5</td><td data-label=\"Correct\">28.4</td></tr><tr><td data-label=\"모델\" class=\"em\">DeepSeek-V3</td><td data-label=\"Correct\" class=\"em\">24.9</td></tr><tr><td data-label=\"모델\">Qwen2.5 72B</td><td data-label=\"Correct\">9.1</td></tr></tbody></table></div></div><div class=\"ba-arrow\" aria-hidden=\"true\">↔</div><div class=\"ba-side ba-after\"><span class=\"ba-tag\">C-SimpleQA (Chinese)</span><div class=\"table-wrap\"><table class=\"tbl\"><thead><tr><th>모델</th><th>Correct</th></tr></thead><tbody><tr><td data-label=\"모델\" class=\"em\">DeepSeek-V3</td><td data-label=\"Correct\" class=\"em\">64.8</td></tr><tr><td data-label=\"모델\">GPT-4o</td><td data-label=\"Correct\">59.3</td></tr><tr><td data-label=\"모델\">Claude-3.5</td><td data-label=\"Correct\">51.3</td></tr><tr><td data-label=\"모델\">Qwen2.5 72B</td><td data-label=\"Correct\">48.4</td></tr></tbody></table></div></div></div><p class=\"cap\">Table 6 (p.31)에서 네 모델만 · 파랑 칸 = 발표자 강조 · 저자 설명: “design focus and resource allocation” (§5.3.2)</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“On the factual knowledge benchmark, SimpleQA, DeepSeek-V3 falls behind GPT-4o and Claude-Sonnet, primarily due to its design focus and resource allocation. DeepSeek-V3 assigns more training tokens to learn Chinese knowledge, leading to exceptional performance on the C-SimpleQA.”<cite>DeepSeek-V3 §5.3.2 (p.32)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“On the factual benchmark Chinese SimpleQA, DeepSeek-V3 surpasses Qwen2.5-72B by 16.4 points, despite Qwen2.5 being trained on a larger corpus compromising 18T tokens, which are 20% more than the 14.8T tokens that DeepSeek-V3 is pre-trained on.”<cite>DeepSeek-V3 §5.3.2 (p.32–33)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"hyp\">저자 가설</span> 토큰 배정이 원인이라는 설명은 실험으로 보이지 않았습니다. 언어별 토큰 비율도 미기술입니다.</p><p>원본 행은 [[@t6-en]] · [[@t6-math]] 화면에 있습니다.</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 6 (p.31)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
+    },
+    {
+     "label": "DeepSeek-V3 §5.3.2 (p.32)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t6",
+    "t6-sqa"
+   ],
+   "ids": "Post-training · SimpleQA 대 C-SimpleQA",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "t6-code",
+   "kind": "result",
+   "seconds": 70,
+   "term": "Table 6 Code",
+   "section": "5",
+   "section_label": "§5.3.2 Standard Evaluation",
+   "title": "Table 6 Code: 알고리즘은 1위, SWE · Aider-Edit은 Claude 다음",
+   "body": "<p>Codeforces percentile 51.6은 2위보다 16.0 높습니다.</p>",
+   "visual": "<div><figure class=\"crop\" data-main style=\"margin:0\"><img src=\"figures/v3-table6-code.png\" alt=\"DeepSeek-V3 Table 6 Code 행\" data-glyph-px=\"19\"><figcaption>Table 6 (p.31) · Code 행 · 굵게 = 원문 행 최고</figcaption></figure></div><div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px\"><div class=\"verdict\"><span class=\"vd-claim\">저자: 알고리즘(HumanEval-Mul · LiveCodeBench) 전부 최고 · 원인은 knowledge distillation</span><span class=\"vd-res vd-ok\">표: LiveCodeBench CoT +4.2 (40.5 − 36.3) · Codeforces +16.0</span></div><div class=\"verdict\"><span class=\"vd-claim\">저자: 엔지니어링은 Claude-3.5에 뒤지지만 오픈모델은 크게 앞선다</span><span class=\"vd-res vd-ok\">표: SWE −8.8 (42.0 − 50.8) · 오픈 최고 24.5보다 +17.5</span></div></div>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/v3-table6-code.png\" alt=\"DeepSeek-V3 Table 6 Code\" data-glyph-px=\"19\" data-display-width=\"720\"><figcaption>원문 · DeepSeek-V3 Table 6 (p.31) · 머리글 + Code 행 / 생략: English · Math · Chinese 행</figcaption></figure><blockquote class=\"ev-quote\" lang=\"en\">“In engineering tasks, DeepSeek-V3 trails behind Claude-Sonnet-3.5-1022 but significantly outperforms open-source models. … In algorithmic tasks, DeepSeek-V3 demonstrates superior performance, outperforming all baselines on benchmarks like HumanEval-Mul and LiveCodeBench. This success can be attributed to its advanced knowledge distillation technique”<cite>DeepSeek-V3 §5.3.2 (p.32)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"hyp\">저자 가설</span> distillation이 원인이라는 근거는 §5.4.1(Data &amp; Synthesis 파트)의 Table 9입니다.</p><p>Aider-Polyglot은 49.6으로 1위지만, Aider-Edit은 79.7로 Claude(84.2) 다음입니다.</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 6 (p.31)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
+    },
+    {
+     "label": "DeepSeek-V3 §5.3.2 (p.32)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t6",
+    "t6-code"
+   ],
+   "ids": "Post-training · Table 6 Code",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "t6-math",
+   "kind": "result",
+   "seconds": 70,
+   "term": "Table 6 Math",
+   "section": "5",
+   "section_label": "§5.3.2 Standard Evaluation",
+   "title": "Table 6 Math: 경시 수학 3개 모두 1위, 2위와 10–27점 차",
+   "body": "<p>저자는 R1 distillation 효과로 설명합니다.</p>",
+   "visual": "<div><figure class=\"crop\" data-main style=\"margin:0\"><img src=\"figures/v3-table6-math-zh.png\" alt=\"DeepSeek-V3 Table 6 Math · Chinese 행\" data-glyph-px=\"19\"><figcaption>Table 6 (p.31) · Math · Chinese 행 · 굵게 = 원문 행 최고</figcaption></figure></div><div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px\"><div class=\"verdict\"><span class=\"vd-claim\">저자: 2위 Qwen2.5 72B보다 “approximately 10%” 높다</span><span class=\"vd-res vd-part\">표: AIME +15.9 · MATH-500 +10.2 · CNMO +27.3</span></div><div class=\"verdict\"><span class=\"vd-claim\">저자: C-Eval · CLUEWSC는 Qwen2.5와 비슷</span><span class=\"vd-res vd-ok\">표: C-Eval +0.4 (86.5 − 86.1) · CLUEWSC −0.5 (90.9 − 91.4)</span></div></div>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/v3-table6-math-zh.png\" alt=\"DeepSeek-V3 Table 6 Math Chinese\" data-glyph-px=\"19\" data-display-width=\"720\"><figcaption>원문 · DeepSeek-V3 Table 6 (p.31) · 머리글 + Math · Chinese 행 / 생략: English · Code 행</figcaption></figure><blockquote class=\"ev-quote\" lang=\"en\">“Specifically, on AIME, MATH-500, and CNMO 2024, DeepSeek-V3 outperforms the second-best model, Qwen2.5 72B, by approximately 10% in absolute scores, which is a substantial margin for such challenging benchmarks. This remarkable capability highlights the effectiveness of the distillation technique from DeepSeek-R1, which has been proven highly beneficial for non-o1-like models.”<cite>DeepSeek-V3 §5.3.2 (p.32)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> 2위와의 차: AIME 39.2 − 23.3 = 15.9 · MATH-500 90.2 − 80.0 = 10.2 · CNMO 43.2 − 15.9 = 27.3. “약 10%”는 최소값에 가깝습니다.</p><p><dfn>non-o1-like</dfn>: o1처럼 긴 추론(long CoT)을 하도록 만든 모델이 아닌 일반 chat 모델 (발표자 풀이).</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 6 (p.31)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
+    },
+    {
+     "label": "DeepSeek-V3 §5.3.2 (p.32)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t6",
+    "t6-math",
+    "t6-zh"
+   ],
+   "ids": "Post-training · Table 6 Math · Chinese",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "t7",
+   "kind": "result",
+   "seconds": 70,
+   "term": "Table 7",
+   "section": "6",
+   "section_label": "§5.3.3 Open-Ended",
+   "title": "Table 7: LLM judge 평가도 1위, AlpacaEval은 2위보다 18점 높다",
+   "body": "<p>두 벤치마크 모두 GPT-4-Turbo-1106이 두 답을 비교해 승패를 매깁니다.</p>",
+   "visual": "<div style=\"max-width:760px;margin:0 auto\"><figure class=\"crop\" data-main style=\"margin:0\"><img src=\"figures/v3-table7.png\" alt=\"DeepSeek-V3 Table 7: Arena-Hard와 AlpacaEval 2.0\" data-glyph-px=\"23\"><figcaption>Table 7 (p.33) · 전체 · AlpacaEval = length-controlled win rate</figcaption></figure></div><div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px\"><div class=\"verdict\"><span class=\"vd-claim\">저자: Arena-Hard 85% 넘은 첫 오픈모델, Claude-3.5와 동급</span><span class=\"vd-res vd-ok\">표: 85.5 vs Claude 85.2 (+0.3)</span></div><div class=\"verdict\"><span class=\"vd-claim\">저자: Arena-Hard 승률 “over 86%”</span><span class=\"vd-res vd-no\">표: 85.5 · 본문과 표가 다름</span></div><div class=\"verdict\"><span class=\"vd-claim\">저자: AlpacaEval은 V2.5보다 “20%” 높다</span><span class=\"vd-res vd-ok\">표: 70.0 − 50.5 = +19.5 · 2위 Claude보다 +18.0</span></div></div>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/v3-table7.png\" alt=\"DeepSeek-V3 Table 7\" data-glyph-px=\"23\" data-display-width=\"720\"><figcaption>원문 · DeepSeek-V3 Table 7 (p.33) · 전체 / 발표자 표시 없음</figcaption></figure><blockquote class=\"ev-quote\" lang=\"en\">“we adhere to the original configurations of AlpacaEval 2.0 (Dubois et al., 2024) and Arena-Hard (Li et al., 2024a), which leverage GPT-4-Turbo-1106 as judges for pairwise comparisons. On Arena-Hard, DeepSeek-V3 achieves an impressive win rate of over 86% against the baseline GPT-4-0314, performing on par with top-tier models like Claude-Sonnet-3.5-1022.”<cite>DeepSeek-V3 §5.3.3 (p.33)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“DeepSeek-V3 achieves a groundbreaking milestone as the first open-source model to surpass 85% on the Arena-Hard benchmark.”<cite>DeepSeek-V3 §5.3.3 (p.33)</cite></blockquote><p><dfn>Length-controlled win rate</dfn>: judge가 긴 답을 선호하는 편향을 보정한 승률.</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 7 (p.33)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=33"
+    },
+    {
+     "label": "DeepSeek-V3 §5.3.3 (p.33)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=33"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "t7",
+    "t7-claim",
+    "t7-x",
+    "t7-judge"
+   ],
+   "ids": "Post-training · Open-ended 평가(Table 7)",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "summary",
+   "kind": "summary",
+   "seconds": 40,
+   "term": "정리",
+   "section": "7",
+   "section_label": "정리",
+   "title": "정리: 5K GPU hours 후학습으로 오픈모델 1위 · 폐쇄 모델급",
+   "body": "<p>오늘 내용을 세 줄로 줄이면 이렇습니다.</p>",
+   "visual": "<div class=\"flow vertical\" data-main data-au=\"1\"><div class=\"bx gray\"><div class=\"t\">① SFT는 단순하다</div><div class=\"d\">1.5M · 2 epoch · lr 5×10⁻⁶ → 1×10⁻⁶ · 샘플끼리 가린 packing · 후학습 비용 5K GPU hours (전체의 약 0.18%)</div></div><div class=\"bx blue\"><div class=\"t\">② Base · Chat 모두 오픈모델 최고</div><div class=\"d\">Base 31개 중 22개 최고 · Chat 오픈모델 대비 22개 중 20개 최고 · Arena-Hard 85.5 · AlpacaEval 70.0</div></div><div class=\"bx orange\"><div class=\"t\">③ 강점과 약점</div><div class=\"d\">강점: 수학 · 알고리즘 코딩 (저자: R1 distillation) · 약점: SimpleQA · SWE · Aider-Edit (Claude · GPT-4o 다음)</div></div></div>",
+   "evidence": "<p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> 0.18% · 22/31 · 20/22는 발표자 계산입니다. [[@cost]] · [[@t3]] · [[@t6]]</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.1 SFT Settings (p.29)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=29"
+    },
+    {
+     "label": "DeepSeek-V3 Table 3 (p.25)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=25"
+    },
+    {
+     "label": "DeepSeek-V3 Table 6 (p.31)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "sft-ep",
+    "cost-share",
+    "t3-best",
+    "t6-open",
+    "t7"
+   ],
+   "ids": "Post-training · 정리",
+   "part": "main",
+   "layout": "wide"
+  }
+ ]
+}

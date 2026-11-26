@@ -1,0 +1,470 @@
+{
+ "deck": "W06 DeepSeek-V3 — Post-training",
+ "claims": [
+  {
+   "id": "scope",
+   "statement": "담당 범위는 §5.1 SFT Settings · §4.4 · §5.3.1–5.3.3",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §4.4 · §5.1 · §5.3 (p.24)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=24"
+    }
+   ]
+  },
+  {
+   "id": "cost-post",
+   "statement": "후학습 비용은 5K H800 GPU hours ($0.01M)",
+   "kind": "table",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 1 (p.5)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=5"
+    }
+   ]
+  },
+  {
+   "id": "cost-total",
+   "statement": "전체 학습 비용 2788K GPU hours · $5.576M ($2/GPU·h 가정)",
+   "kind": "table",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 1 (p.5)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=5"
+    }
+   ]
+  },
+  {
+   "id": "cost-share",
+   "statement": "후학습은 전체 GPU hours의 약 0.18%",
+   "kind": "calc",
+   "layer": "evidence",
+   "value": 0.0017934,
+   "expr": "5 / 2788",
+   "tol": 1e-06,
+   "inputs": [
+    "cost-post",
+    "cost-total"
+   ],
+   "display": "약 0.18%"
+  },
+  {
+   "id": "cost-excl",
+   "statement": "비용에는 선행 연구 · ablation 비용이 빠져 있다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §1 (p.5)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=5"
+    }
+   ]
+  },
+  {
+   "id": "sft-n",
+   "statement": "SFT 데이터 1.5M instances",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.1 (p.28)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=28"
+    }
+   ]
+  },
+  {
+   "id": "sft-ep",
+   "statement": "SFT 2 epoch",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.1 SFT Settings (p.29)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=29"
+    }
+   ]
+  },
+  {
+   "id": "sft-lr",
+   "statement": "lr cosine decay 5×10⁻⁶ → 1×10⁻⁶",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.1 SFT Settings (p.29)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=29"
+    }
+   ]
+  },
+  {
+   "id": "sft-pack",
+   "statement": "한 sequence에 여러 샘플을 packing하고 sample masking으로 서로 보이지 않게 한다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.1 SFT Settings (p.29)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=29"
+    }
+   ]
+  },
+  {
+   "id": "sft-nd",
+   "statement": "batch size · sequence 길이 · masking 구현은 미기술",
+   "kind": "nd",
+   "layer": "evidence",
+   "inputs": [
+    "sft-pack"
+   ]
+  },
+  {
+   "id": "pack-illus",
+   "statement": "packing · masking 도식은 설명용 재구성",
+   "kind": "illus",
+   "layer": "evidence",
+   "inputs": [
+    "sft-pack"
+   ]
+  },
+  {
+   "id": "prev-sft",
+   "statement": "Llama 2-Chat · Qwen2.5 SFT 설정 값 (W02 · W04 덱)",
+   "kind": "orig",
+   "layer": "evidence",
+   "sources": [
+    {
+     "label": "Llama 2 §3.1 (p.9)",
+     "url": "https://arxiv.org/pdf/2307.09288v2#page=9"
+    },
+    {
+     "label": "Qwen2.5 §4.1 (p.6)",
+     "url": "https://arxiv.org/pdf/2412.15115v2#page=6"
+    }
+   ]
+  },
+  {
+   "id": "base-method",
+   "statement": "Base 평가는 perplexity · generation · BPB 세 방식",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §4.4.1 (p.24)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=24"
+    }
+   ]
+  },
+  {
+   "id": "base-bpb",
+   "statement": "Pile-test는 tokenizer가 달라도 공정 비교하려고 BPB 사용",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §4.4.1 (p.24)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=24"
+    }
+   ]
+  },
+  {
+   "id": "base-same",
+   "statement": "모든 base 모델을 사내 프레임워크 · 같은 설정으로 평가",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §4.4.2 (p.24)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=24"
+    }
+   ]
+  },
+  {
+   "id": "t3-best",
+   "statement": "V3-Base가 31개 중 22개에서 최고(0.3 이내 동급 포함)",
+   "kind": "calc",
+   "layer": "evidence",
+   "value": 22,
+   "inputs": [
+    "t3"
+   ]
+  },
+  {
+   "id": "t3",
+   "statement": "Table 3 값",
+   "kind": "table",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 3 (p.25)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=25"
+    }
+   ]
+  },
+  {
+   "id": "t3-claim",
+   "statement": "저자: V2 · Qwen2.5는 전반적으로 앞서고 LLaMA-3.1 405B는 대부분 앞선다",
+   "kind": "verdict",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §4.4.2 (p.25)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=25"
+    }
+   ],
+   "inputs": [
+    "t3"
+   ]
+  },
+  {
+   "id": "t3-vs-v2",
+   "statement": "V2-Base가 5개(WinoGrande · RACE-M/H · CMRC · CCPM)에서 V3보다 높다",
+   "kind": "calc",
+   "layer": "evidence",
+   "value": 5,
+   "inputs": [
+    "t3"
+   ]
+  },
+  {
+   "id": "t3-vs-qwen",
+   "statement": "Qwen2.5 대비 31개 중 28개 앞섬, CMMLU · RACE-Middle 뒤짐, CLUEWSC 동급",
+   "kind": "calc",
+   "layer": "evidence",
+   "value": 28,
+   "inputs": [
+    "t3"
+   ]
+  },
+  {
+   "id": "t3-vs-llama",
+   "statement": "LLaMA-3.1 대비 Code · Math · Multilingual 10개 모두 앞섬, English 7승 4동급 4패",
+   "kind": "calc",
+   "layer": "evidence",
+   "value": 10,
+   "inputs": [
+    "t3"
+   ]
+  },
+  {
+   "id": "chat-bench",
+   "statement": "chat 평가에 IFEval · FRAMES · LongBench v2 · GPQA · SimpleQA · C-SimpleQA · SWE-Bench Verified · Aider · LiveCodeBench · Codeforces · CNMO · AIME 추가",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.1 (p.30)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=30"
+    }
+   ]
+  },
+  {
+   "id": "chat-base",
+   "statement": "비교 대상 6개, 폐쇄 모델은 API로 평가",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.1 (p.30)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=30"
+    }
+   ]
+  },
+  {
+   "id": "chat-cfg",
+   "statement": "세부 설정: simple-evals · Zero-Eval · agentless · diff · temp 0.7×16회 · greedy · 8192 tokens",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.1 (p.31)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
+    }
+   ]
+  },
+  {
+   "id": "chat-nd",
+   "statement": "설정마다 고른 이유는 미기술",
+   "kind": "nd",
+   "layer": "evidence",
+   "inputs": [
+    "chat-cfg"
+   ]
+  },
+  {
+   "id": "t6",
+   "statement": "Table 6 값",
+   "kind": "table",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 6 (p.31)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
+    }
+   ]
+  },
+  {
+   "id": "t6-claim",
+   "statement": "저자: 오픈모델 최고, GPT-4o · Claude-3.5-Sonnet과 경쟁",
+   "kind": "verdict",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.2 (p.31)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
+    }
+   ],
+   "inputs": [
+    "t6"
+   ]
+  },
+  {
+   "id": "t6-open",
+   "statement": "오픈모델(V2 · V2.5 · Qwen2.5 · LLaMA-3.1) 대비 22개 중 20개 최고",
+   "kind": "calc",
+   "layer": "evidence",
+   "value": 20,
+   "inputs": [
+    "t6"
+   ]
+  },
+  {
+   "id": "t6-closed",
+   "statement": "Claude 대비 16개, GPT-4o 대비 20개 앞섬",
+   "kind": "calc",
+   "layer": "evidence",
+   "value": 16,
+   "inputs": [
+    "t6"
+   ]
+  },
+  {
+   "id": "t6-en",
+   "statement": "English: MMLU-Pro · GPQA는 Claude 다음, DROP · LongBench v2 1위, FRAMES는 GPT-4o 다음",
+   "kind": "verdict",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.2 (p.32)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
+    }
+   ],
+   "inputs": [
+    "t6"
+   ]
+  },
+  {
+   "id": "t6-sqa",
+   "statement": "저자: SimpleQA 열세는 중국어 지식에 토큰을 더 배정했기 때문, C-SimpleQA는 최고",
+   "kind": "hyp",
+   "layer": "evidence",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.2 (p.32)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
+    }
+   ]
+  },
+  {
+   "id": "t6-code",
+   "statement": "저자: 알고리즘 코딩 1위(distillation 덕), 엔지니어링은 Claude 다음",
+   "kind": "verdict",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.2 (p.32)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
+    }
+   ],
+   "inputs": [
+    "t6"
+   ]
+  },
+  {
+   "id": "t6-math",
+   "statement": "저자: AIME · MATH-500 · CNMO에서 2위 Qwen2.5보다 약 10% 높다 (실제 +15.9 · +10.2 · +27.3)",
+   "kind": "verdict",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.2 (p.32)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
+    }
+   ],
+   "inputs": [
+    "t6"
+   ]
+  },
+  {
+   "id": "t6-zh",
+   "statement": "저자: C-SimpleQA에서 Qwen2.5보다 +16.4, C-Eval · CLUEWSC는 비슷",
+   "kind": "verdict",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.2 (p.32)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
+    }
+   ],
+   "inputs": [
+    "t6"
+   ]
+  },
+  {
+   "id": "t7",
+   "statement": "Table 7 값",
+   "kind": "table",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 7 (p.33)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=33"
+    }
+   ]
+  },
+  {
+   "id": "t7-claim",
+   "statement": "저자: Arena-Hard 85% 넘은 첫 오픈모델, AlpacaEval은 V2.5보다 약 20% 높다",
+   "kind": "verdict",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.3 (p.33)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=33"
+    }
+   ],
+   "inputs": [
+    "t7"
+   ]
+  },
+  {
+   "id": "t7-x",
+   "statement": "본문 'over 86%' 대 Table 7 85.5 불일치",
+   "kind": "verdict",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.3 (p.33)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=33"
+    }
+   ],
+   "inputs": [
+    "t7"
+   ]
+  },
+  {
+   "id": "t7-judge",
+   "statement": "judge GPT-4-Turbo-1106, pairwise, Arena-Hard 기준 모델 GPT-4-0314",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.3 (p.33)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=33"
+    }
+   ]
+  }
+ ]
+}
