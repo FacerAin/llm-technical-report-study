@@ -7,7 +7,10 @@
 비용부터 보면, H800을 시간당 2달러로 쳐도 전체 학습이 약 558만 달러입니다. 이 중 후학습은 5K GPU hours로 전체의 0.2%도 안 됩니다. 사전학습이 비용 대부분이고, 이 숫자엔 선행 연구·ablation 비용은 빠져 있습니다.
 
 ## @sft-data
-제 파트는 아니지만 흐름상 SFT 데이터가 어떻게 만들어졌는지 한 장 짚습니다. Reasoning 데이터는 도메인별 expert 모델을 SFT+RL로 만들고, 그 모델로 생성한 데이터를 rejection sampling으로 추립니다. R1 데이터를 그대로 쓰면 정확하지만 overthinking과 장황함이 있어서, 이 과정으로 정확도는 가져오고 장황함은 버립니다. Non-reasoning 데이터는 V2.5가 생성하고 사람이 검수합니다.
+제 파트는 아니지만 흐름상 SFT 데이터를 두 장 짚겠습니다. 전체 1.5M instances이고 도메인마다 만드는 방법이 다릅니다. 그중 reasoning, 즉 수학과 코드 경쟁 문제, 논리 퍼즐 데이터는 내부 R1 모델로 생성합니다. 문제는 R1이 만든 데이터가 정확도는 강한데 overthinking, 형식 불량, 과도한 길이라는 문제가 있다는 겁니다. 반대로 일반 형식의 reasoning 데이터는 명료하고 간결한데 정확도가 R1만 못합니다. 그래서 저자의 목표는 이 둘을 balance하는 것, R1의 정확도는 가져오고 장황함은 버리는 것입니다.
+
+## @sft-pipeline
+그 방법이 이 네 단계입니다. 먼저 code, mathematics, general reasoning 각 도메인마다 SFT와 RL을 조합한 파이프라인으로 expert 모델을 따로 학습합니다. 이 expert 모델이 최종 모델용 데이터 생성기 역할을 합니다. 둘째로, 학습할 때 문제 하나마다 SFT 샘플을 두 종류 만듭니다. 하나는 문제와 원래 응답을 묶은 것, 다른 하나는 system prompt와 문제, 그리고 R1의 응답을 묶은 것입니다. 이 system prompt는 모델이 reflection과 verification을 하도록 유도하게 설계했습니다. 셋째, RL 단계에서 high-temperature sampling으로 두 패턴이 섞인 응답을 생성하게 하고, 수백 step이 지나면 system prompt가 없어도 R1 패턴을 쓰게 됩니다. 마지막으로 RL이 끝난 expert 모델을 생성원으로 rejection sampling을 걸어 고품질 데이터만 최종 SFT 데이터로 추립니다. 이렇게 해서 정확하면서 간결한 데이터를 얻는다는 겁니다. Non-reasoning 데이터는 창작이나 롤플레이, 단순 QA인데 V2.5가 생성하고 사람이 검수하는 것으로 간단합니다.
 
 ## @sft
 SFT 설정은 한 문단입니다. 1.5M 샘플을 2 epoch 돌리고, 학습률은 cosine으로 5e-6에서 1e-6까지 내립니다. W02 Llama 2, W04 Qwen2.5와 나란히 놓으면 2 epoch에 작은 학습률이라는 틀은 같고, 데이터 규모가 가장 큽니다. 그리고 마지막 줄, 여러 샘플을 한 sequence에 packing하되 sample masking으로 서로 못 보게 한다는 문장이 오늘 질문의 출발점입니다.

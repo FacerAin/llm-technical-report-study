@@ -116,7 +116,7 @@
    "section_label": "들어가며",
    "title": "Post-training: SFT 설정 한 문단에서 출발하는 질문 하나",
    "body": "<p>제 범위는 SFT 설정과 평가입니다. 오늘은 그중 한 문장을 파고듭니다.</p>",
-   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><thead><tr><th>절</th><th>무엇</th><th>오늘 다루는 깊이</th></tr></thead><tbody><tr><td data-label=\"절\">§5.1 데이터</td><td data-label=\"무엇\">SFT 1.5M을 어떻게 만들었나</td><td data-label=\"오늘 다루는 깊이\">한 장으로 (Data 파트 범위)</td></tr><tr><td data-label=\"절\">§5.1 SFT Settings</td><td data-label=\"무엇\">epoch · lr · packing</td><td data-label=\"오늘 다루는 깊이\" class=\"em\">핵심 — 여기서 질문이 나옵니다</td></tr><tr><td data-label=\"절\">§4.4 · §5.3</td><td data-label=\"무엇\">Base · Chat 평가 (Table 3 · 6 · 7)</td><td data-label=\"오늘 다루는 깊이\">결론만</td></tr></tbody></table></div><div class=\"bx orange\" style=\"margin-top:14px\"><div class=\"t\">오늘의 질문</div><div class=\"d\">여러 샘플을 한 sequence에 묶어 학습할 때, 샘플끼리 <b>보이게 둘 것인가 막을 것인가?</b> <span class=\"ev-chip\" data-ev=\"interp\">해석</span> §4.1·§5.1을 대조하면 V3는 단계마다 다른 답을 냅니다.</div></div>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><thead><tr><th>절</th><th>무엇</th><th>오늘 다루는 깊이</th></tr></thead><tbody><tr><td data-label=\"절\">§5.1 데이터</td><td data-label=\"무엇\">SFT 1.5M을 어떻게 만들었나</td><td data-label=\"오늘 다루는 깊이\">두 장 (Data 파트 범위지만 흐름상 필요)</td></tr><tr><td data-label=\"절\">§5.1 SFT Settings</td><td data-label=\"무엇\">epoch · lr · packing</td><td data-label=\"오늘 다루는 깊이\" class=\"em\">핵심 — 여기서 질문이 나옵니다</td></tr><tr><td data-label=\"절\">§4.4 · §5.3</td><td data-label=\"무엇\">Base · Chat 평가 (Table 3 · 6 · 7)</td><td data-label=\"오늘 다루는 깊이\">결론만</td></tr></tbody></table></div><div class=\"bx orange\" style=\"margin-top:14px\"><div class=\"t\">오늘의 질문</div><div class=\"d\">여러 샘플을 한 sequence에 묶어 학습할 때, 샘플끼리 <b>보이게 둘 것인가 막을 것인가?</b> <span class=\"ev-chip\" data-ev=\"interp\">해석</span> §4.1·§5.1을 대조하면 V3는 단계마다 다른 답을 냅니다.</div></div>",
    "evidence": "<p><span class=\"ev-chip\" data-ev=\"interp\">해석</span> §4.1과 §5.1 문장을 나란히 대조하면(stage-diff) 사전학습은 막지 않고 SFT는 막습니다. 그 이유를 적지 않았고, 다른 논문들도 결론이 갈립니다. [[@rq-contrast]] · [[@rq-related]]</p>",
    "sources": [
     {
@@ -167,15 +167,43 @@
   },
   {
    "key": "sft-data",
-   "kind": "mechanism",
-   "seconds": 70,
-   "term": "SFT 데이터",
+   "kind": "intro",
+   "seconds": 50,
+   "term": "Reasoning Data",
    "section": "2",
    "section_label": "§5.1 SFT",
-   "title": "SFT 데이터 1.5M: R1의 정확도는 가져오고 장황함은 버린다",
-   "body": "<p>Data 파트 범위라 한 장만 짚습니다. 핵심은 R1을 그대로 쓰지 않았다는 점입니다.</p>",
-   "visual": "<div class=\"ba\" data-main><div class=\"ba-side ba-before\"><span class=\"ba-tag\">Reasoning (수학 · 코드 · 논리)</span><p style=\"margin:6px 0\">① 도메인별 <b>expert 모델</b>을 SFT+RL로 만든다</p><p style=\"margin:6px 0\">② 문제마다 샘플 2종: <code>&lt;problem, original response&gt;</code> · <code>&lt;system prompt, problem, R1 response&gt;</code></p><p style=\"margin:6px 0\">③ RL에서 두 패턴을 섞어 학습</p><p style=\"margin:6px 0\">④ <b>rejection sampling</b>으로 최종 SFT 데이터 선별</p></div><div class=\"ba-arrow\" aria-hidden=\"true\">+</div><div class=\"ba-side ba-after\"><span class=\"ba-tag\">Non-Reasoning (창작 · 롤플레이 · 단순 QA)</span><p style=\"margin:6px 0\">DeepSeek-V2.5가 응답 생성</p><p style=\"margin:6px 0\">사람이 정확성 검수</p></div></div><p class=\"cond\"><span class=\"ev-chip\" data-ev=\"orig\">원문</span> 저자가 든 문제: R1 데이터는 정확하지만 overthinking · 형식 불량 · 과도한 길이</p>",
-   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“while the R1-generated data demonstrates strong accuracy, it suffers from issues such as overthinking, poor formatting, and excessive length. Our objective is to balance the high accuracy of R1-generated reasoning data and the clarity and conciseness of regularly formatted reasoning data.”<cite>DeepSeek-V3 §5.1 Reasoning Data (p.28)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“For non-reasoning data, such as creative writing, role-play, and simple question answering, we utilize DeepSeek-V2.5 to generate responses and enlist human annotators to verify the accuracy and correctness of the data.”<cite>DeepSeek-V3 §5.1 Non-Reasoning Data (p.29)</cite></blockquote><p>증류 효과의 수치(Table 9: MATH-500 74.6 → 83.2, 길이 769 → 1510)는 §5.4.1, Data 파트 범위입니다.</p>",
+   "title": "Reasoning Data: R1을 그대로 쓸 수 없었던 이유",
+   "body": "<p>SFT 데이터는 1.5M instances, 도메인마다 만드는 방법이 다릅니다. Reasoning 쪽이 가장 공들인 부분입니다.</p>",
+   "visual": "<div class=\"ba\" data-main><div class=\"ba-side ba-before\"><span class=\"ba-tag\">R1이 생성한 reasoning 데이터</span><p style=\"margin:8px 0\"><b>정확도는 강하다</b> (strong accuracy)</p><p style=\"margin:8px 0\">그런데 — overthinking · poor formatting · excessive length</p></div><div class=\"ba-arrow\" aria-hidden=\"true\">vs</div><div class=\"ba-side ba-after\"><span class=\"ba-tag\">일반 형식의 reasoning 데이터</span><p style=\"margin:8px 0\">명료하고 간결하다 (clarity and conciseness)</p><p style=\"margin:8px 0\">대신 정확도는 R1만 못하다</p></div></div><div class=\"bx orange\" style=\"margin-top:14px\"><div class=\"t\">저자의 목표</div><div class=\"d\">둘을 <b>balance</b> — R1의 정확도는 가져오고 장황함은 버린다. 다음 장이 그 방법입니다.</div></div>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“We curate our instruction-tuning datasets to include 1.5M instances spanning multiple domains, with each domain employing distinct data creation methods tailored to its specific requirements.”<cite>DeepSeek-V3 §5.1 (p.28)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“For reasoning-related datasets, including those focused on mathematics, code competition problems, and logic puzzles, we generate the data by leveraging an internal DeepSeek-R1 model. Specifically, while the R1-generated data demonstrates strong accuracy, it suffers from issues such as overthinking, poor formatting, and excessive length. Our objective is to balance the high accuracy of R1-generated reasoning data and the clarity and conciseness of regularly formatted reasoning data.”<cite>DeepSeek-V3 §5.1 Reasoning Data (p.28)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"nd\">미기술</span> 1.5M의 도메인별 구성 비율, R1 데이터의 분량은 적지 않았습니다.</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.1 (p.28)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=28"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "sft-n",
+    "sft-domains",
+    "sft-reason",
+    "sft-r1-issue"
+   ],
+   "ids": "Post-training · Reasoning Data 문제의식",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "sft-pipeline",
+   "kind": "mechanism",
+   "seconds": 100,
+   "term": "Expert model 파이프라인",
+   "section": "2",
+   "section_label": "§5.1 SFT",
+   "title": "Expert model 파이프라인: 최종 SFT 데이터를 만드는 4단계",
+   "body": "<p>R1을 직접 쓰는 대신, 도메인별 <b>expert model</b>을 따로 만들어 그 모델로 데이터를 생성합니다.</p>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><thead><tr><th>단계</th><th>무엇을 하나</th><th>목적</th></tr></thead><tbody><tr><td data-label=\"단계\">① Expert model 구축</td><td data-label=\"무엇을 하나\">code · mathematics · general reasoning 각 도메인에 SFT + RL 파이프라인으로 전용 모델 학습</td><td data-label=\"목적\">최종 모델용 data generator 확보</td></tr><tr><td data-label=\"단계\">② 샘플 2종 생성</td><td data-label=\"무엇을 하나\">instance마다 <code>&lt;problem, original response&gt;</code> 와 <code>&lt;system prompt, problem, R1 response&gt;</code>. system prompt는 reflection · verification 유도</td><td data-label=\"목적\">R1 방식과 원본 방식을 모두 노출</td></tr><tr><td data-label=\"단계\">③ RL로 두 패턴 통합</td><td data-label=\"무엇을 하나\">high-temperature sampling으로 두 패턴을 섞은 응답 생성. 수백 step 후 system prompt 없이도 R1 패턴 체득</td><td data-label=\"목적\" class=\"em\">R1 패턴을 모델에 내재화</td></tr><tr><td data-label=\"단계\">④ Rejection sampling</td><td data-label=\"무엇을 하나\">RL 완료된 expert model을 생성원으로 고품질 데이터만 선별</td><td data-label=\"목적\" class=\"em\">최종 SFT 데이터 = 정확 + 간결</td></tr></tbody></table></div><p class=\"cap\">DeepSeek-V3 §5.1 Reasoning Data (p.28) · 파랑 칸 = 발표자 강조 · Non-Reasoning은 DeepSeek-V2.5가 생성 + 사람이 검수(한 줄)</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“we begin by developing an expert model tailored to a specific domain, such as code, mathematics, or general reasoning, using a combined Supervised Fine-Tuning (SFT) and Reinforcement Learning (RL) training pipeline. This expert model serves as a data generator for the final model.”<cite>DeepSeek-V3 §5.1 Reasoning Data (p.28)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“The training process involves generating two distinct types of SFT samples for each instance: the first couples the problem with its original response in the format of <problem, original response>, while the second incorporates a system prompt alongside the problem and the R1 response in the format of <system prompt, problem, R1 response>. The system prompt is meticulously designed to include instructions that guide the model toward producing responses enriched with mechanisms for reflection and verification.”<cite>DeepSeek-V3 §5.1 Reasoning Data (p.28)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“During the RL phase, the model leverages high-temperature sampling to generate responses that integrate patterns from both the R1-generated and original data, even in the absence of explicit system prompts. After hundreds of RL steps, the intermediate RL model learns to incorporate R1 patterns, thereby enhancing overall performance strategically.”<cite>DeepSeek-V3 §5.1 Reasoning Data (p.28)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“Upon completing the RL training phase, we implement rejection sampling to curate high-quality SFT data for the final model, where the expert models are used as data generation sources.”<cite>DeepSeek-V3 §5.1 Reasoning Data (p.28)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“For non-reasoning data, such as creative writing, role-play, and simple question answering, we utilize DeepSeek-V2.5 to generate responses and enlist human annotators to verify the accuracy and correctness of the data.”<cite>DeepSeek-V3 §5.1 Non-Reasoning Data (p.29)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"nd\">미기술</span> expert model의 크기 · RL step 수(\"hundreds\") · rejection sampling 기준 · system prompt 전문은 적지 않았습니다.</p><p>증류 효과의 수치(Table 9: MATH-500 74.6 → 83.2, 응답 길이 769 → 1510)는 §5.4.1, Data 파트 범위입니다.</p>",
    "sources": [
     {
      "label": "DeepSeek-V3 §5.1 (p.28)",
@@ -188,12 +216,14 @@
    ],
    "src_visible": 1,
    "claims": [
-    "sft-n",
-    "sft-reason",
-    "sft-r1-issue",
-    "sft-nonreason"
+    "sft-expert",
+    "sft-2types",
+    "sft-rl",
+    "sft-reject",
+    "sft-nonreason",
+    "sft-pipe-nd"
    ],
-   "ids": "Post-training · SFT 데이터 구성",
+   "ids": "Post-training · SFT 데이터 생성 파이프라인",
    "part": "main",
    "layout": "wide"
   },
