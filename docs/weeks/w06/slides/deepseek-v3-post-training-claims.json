@@ -76,6 +76,42 @@
    ]
   },
   {
+   "id": "sft-reason",
+   "statement": "Reasoning 데이터는 도메인별 expert 모델이 생성하고 rejection sampling으로 선별",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.1 (p.28)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=28"
+    }
+   ]
+  },
+  {
+   "id": "sft-r1-issue",
+   "statement": "저자: R1 생성 데이터는 정확하지만 overthinking · 형식 불량 · 과도한 길이 문제가 있다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.1 (p.28)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=28"
+    }
+   ]
+  },
+  {
+   "id": "sft-nonreason",
+   "statement": "Non-Reasoning 데이터는 DeepSeek-V2.5가 생성하고 사람이 검수",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.1 (p.29)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=29"
+    }
+   ]
+  },
+  {
    "id": "sft-ep",
    "statement": "SFT 2 epoch",
    "kind": "orig",
@@ -101,7 +137,7 @@
   },
   {
    "id": "sft-pack",
-   "statement": "한 sequence에 여러 샘플을 packing하고 sample masking으로 서로 보이지 않게 한다",
+   "statement": "SFT는 한 sequence에 여러 샘플을 packing하고 sample masking으로 서로 보이지 않게 한다",
    "kind": "orig",
    "layer": "main",
    "sources": [
@@ -126,6 +162,50 @@
    "kind": "illus",
    "layer": "evidence",
    "inputs": [
+    "sft-pack"
+   ]
+  },
+  {
+   "id": "pt-nomask",
+   "statement": "사전학습은 document packing을 쓰되 cross-sample attention masking은 쓰지 않는다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §4.1 (p.21)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=21"
+    }
+   ]
+  },
+  {
+   "id": "pt-ding",
+   "statement": "사전학습 packing은 Ding et al. 2024를 따른다",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §4.1 (p.21)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=21"
+    }
+   ]
+  },
+  {
+   "id": "stage-diff",
+   "statement": "같은 논문 안에서 사전학습은 막지 않고 SFT는 막는다",
+   "kind": "interp",
+   "layer": "main",
+   "inputs": [
+    "pt-nomask",
+    "sft-pack"
+   ]
+  },
+  {
+   "id": "why-nd",
+   "statement": "단계마다 다르게 한 이유는 원문에 없다",
+   "kind": "nd",
+   "layer": "main",
+   "inputs": [
+    "pt-nomask",
     "sft-pack"
    ]
   },
@@ -158,18 +238,6 @@
    ]
   },
   {
-   "id": "base-bpb",
-   "statement": "Pile-test는 tokenizer가 달라도 공정 비교하려고 BPB 사용",
-   "kind": "orig",
-   "layer": "main",
-   "sources": [
-    {
-     "label": "DeepSeek-V3 §4.4.1 (p.24)",
-     "url": "https://arxiv.org/pdf/2412.19437v2#page=24"
-    }
-   ]
-  },
-  {
    "id": "base-same",
    "statement": "모든 base 모델을 사내 프레임워크 · 같은 설정으로 평가",
    "kind": "orig",
@@ -182,16 +250,6 @@
    ]
   },
   {
-   "id": "t3-best",
-   "statement": "V3-Base가 31개 중 22개에서 최고(0.3 이내 동급 포함)",
-   "kind": "calc",
-   "layer": "evidence",
-   "value": 22,
-   "inputs": [
-    "t3"
-   ]
-  },
-  {
    "id": "t3",
    "statement": "Table 3 값",
    "kind": "table",
@@ -201,6 +259,16 @@
      "label": "DeepSeek-V3 Table 3 (p.25)",
      "url": "https://arxiv.org/pdf/2412.19437v2#page=25"
     }
+   ]
+  },
+  {
+   "id": "t3-best",
+   "statement": "V3-Base가 31개 중 22개에서 최고(0.3 이내 동급 포함)",
+   "kind": "calc",
+   "layer": "evidence",
+   "value": 22,
+   "inputs": [
+    "t3"
    ]
   },
   {
@@ -229,34 +297,14 @@
    ]
   },
   {
-   "id": "t3-vs-qwen",
-   "statement": "Qwen2.5 대비 31개 중 28개 앞섬, CMMLU · RACE-Middle 뒤짐, CLUEWSC 동급",
-   "kind": "calc",
-   "layer": "evidence",
-   "value": 28,
-   "inputs": [
-    "t3"
-   ]
-  },
-  {
-   "id": "t3-vs-llama",
-   "statement": "LLaMA-3.1 대비 Code · Math · Multilingual 10개 모두 앞섬, English 7승 4동급 4패",
-   "kind": "calc",
-   "layer": "evidence",
-   "value": 10,
-   "inputs": [
-    "t3"
-   ]
-  },
-  {
-   "id": "chat-bench",
-   "statement": "chat 평가에 IFEval · FRAMES · LongBench v2 · GPQA · SimpleQA · C-SimpleQA · SWE-Bench Verified · Aider · LiveCodeBench · Codeforces · CNMO · AIME 추가",
+   "id": "chat-cfg",
+   "statement": "Chat 평가 조건: 출력 8192 tokens 제한 · AIME/CNMO는 temp 0.7 16회 평균 · SWE는 agentless",
    "kind": "orig",
    "layer": "main",
    "sources": [
     {
-     "label": "DeepSeek-V3 §5.3.1 (p.30)",
-     "url": "https://arxiv.org/pdf/2412.19437v2#page=30"
+     "label": "DeepSeek-V3 §5.3.1 (p.31)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
     }
    ]
   },
@@ -270,27 +318,6 @@
      "label": "DeepSeek-V3 §5.3.1 (p.30)",
      "url": "https://arxiv.org/pdf/2412.19437v2#page=30"
     }
-   ]
-  },
-  {
-   "id": "chat-cfg",
-   "statement": "세부 설정: simple-evals · Zero-Eval · agentless · diff · temp 0.7×16회 · greedy · 8192 tokens",
-   "kind": "orig",
-   "layer": "main",
-   "sources": [
-    {
-     "label": "DeepSeek-V3 §5.3.1 (p.31)",
-     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
-    }
-   ]
-  },
-  {
-   "id": "chat-nd",
-   "statement": "설정마다 고른 이유는 미기술",
-   "kind": "nd",
-   "layer": "evidence",
-   "inputs": [
-    "chat-cfg"
    ]
   },
   {
@@ -341,8 +368,8 @@
    ]
   },
   {
-   "id": "t6-en",
-   "statement": "English: MMLU-Pro · GPQA는 Claude 다음, DROP · LongBench v2 1위, FRAMES는 GPT-4o 다음",
+   "id": "t6-math",
+   "statement": "저자: AIME · MATH-500 · CNMO에서 2위 Qwen2.5보다 약 10% 높다 (실제 +15.9 · +10.2 · +27.3)",
    "kind": "verdict",
    "layer": "main",
    "sources": [
@@ -365,51 +392,6 @@
      "label": "DeepSeek-V3 §5.3.2 (p.32)",
      "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
     }
-   ]
-  },
-  {
-   "id": "t6-code",
-   "statement": "저자: 알고리즘 코딩 1위(distillation 덕), 엔지니어링은 Claude 다음",
-   "kind": "verdict",
-   "layer": "main",
-   "sources": [
-    {
-     "label": "DeepSeek-V3 §5.3.2 (p.32)",
-     "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
-    }
-   ],
-   "inputs": [
-    "t6"
-   ]
-  },
-  {
-   "id": "t6-math",
-   "statement": "저자: AIME · MATH-500 · CNMO에서 2위 Qwen2.5보다 약 10% 높다 (실제 +15.9 · +10.2 · +27.3)",
-   "kind": "verdict",
-   "layer": "main",
-   "sources": [
-    {
-     "label": "DeepSeek-V3 §5.3.2 (p.32)",
-     "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
-    }
-   ],
-   "inputs": [
-    "t6"
-   ]
-  },
-  {
-   "id": "t6-zh",
-   "statement": "저자: C-SimpleQA에서 Qwen2.5보다 +16.4, C-Eval · CLUEWSC는 비슷",
-   "kind": "verdict",
-   "layer": "main",
-   "sources": [
-    {
-     "label": "DeepSeek-V3 §5.3.2 (p.32)",
-     "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
-    }
-   ],
-   "inputs": [
-    "t6"
    ]
   },
   {
@@ -464,6 +446,96 @@
      "label": "DeepSeek-V3 §5.3.3 (p.33)",
      "url": "https://arxiv.org/pdf/2412.19437v2#page=33"
     }
+   ]
+  },
+  {
+   "id": "ding-mask",
+   "statement": "Ding et al. 2024(Best-fit Packing)은 packing과 함께 cross-document attention masking도 쓴다",
+   "kind": "cite",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Ding et al. 2024 §3 (p.4–5)",
+     "url": "https://arxiv.org/pdf/2404.10830#page=4"
+    }
+   ]
+  },
+  {
+   "id": "ding-result",
+   "statement": "Ding et al.: masking만으로 perplexity 9.64→9.53, best-fit packing까지 더하면 downstream 성능도 개선, 코드 환각(undefined-name) 최대 58.3% 감소",
+   "kind": "cite",
+   "layer": "evidence",
+   "sources": [
+    {
+     "label": "Ding et al. 2024 §3 (p.4–5)",
+     "url": "https://arxiv.org/pdf/2404.10830#page=4"
+    }
+   ]
+  },
+  {
+   "id": "zhao-result",
+   "statement": "Zhao et al. 2024: IntraDoc masking이 MIXChunk 대비 perplexity · ICL · 지식 질의를 모두 개선 (예: NQ/TQA EM 2K +12.3% · 8K +37.5%), 효율 비용 약 4%",
+   "kind": "cite",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Zhao et al. 2024 §4 (p.5–7)",
+     "url": "https://arxiv.org/pdf/2402.13991#page=5"
+    }
+   ]
+  },
+  {
+   "id": "llama3-mask",
+   "statement": "Llama 3: 문서 경계 attention mask를 사전학습에 적용, 표준 사전학습에는 영향 적으나 긴 문맥 continued pretraining에서 중요",
+   "kind": "cite",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Llama 3 §3.4.1 (p.12)",
+     "url": "https://arxiv.org/pdf/2407.21783#page=12"
+    }
+   ]
+  },
+  {
+   "id": "trade-hyp",
+   "statement": "추정: SFT는 사전학습보다 데이터가 작아(1.5M vs 14.8T) masking 비용 부담이 적었을 수 있다 — 원문에 근거 없음",
+   "kind": "hyp",
+   "layer": "evidence",
+   "inputs": [
+    "sft-n",
+    "zhao-result"
+   ]
+  },
+  {
+   "id": "base-bpb",
+   "statement": "Pile-test는 tokenizer가 달라도 공정하도록 BPB(Bits-Per-Byte)로 측정",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §4.4.1 (p.24)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=24"
+    }
+   ]
+  },
+  {
+   "id": "t3-vs-qwen",
+   "statement": "Qwen2.5 72B 대비 31개 중 28개에서 V3가 높다",
+   "kind": "calc",
+   "layer": "evidence",
+   "value": 28,
+   "inputs": [
+    "t3"
+   ]
+  },
+  {
+   "id": "t3-vs-llama",
+   "statement": "LLaMA-3.1 405B 대비 31개 중 20개에서 V3가 높다",
+   "kind": "calc",
+   "layer": "evidence",
+   "value": 20,
+   "inputs": [
+    "t3"
    ]
   }
  ]
