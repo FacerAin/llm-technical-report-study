@@ -578,6 +578,39 @@
    ]
   },
   {
+   "id": "pack-bars-illus",
+   "statement": "packing 세 방식 그림은 길이 24 · 문서 5개로 줄인 설명용 재구성",
+   "kind": "illus",
+   "layer": "main",
+   "inputs": [
+    "pt-ding"
+   ]
+  },
+  {
+   "id": "ding-nopad",
+   "statement": "Ding et al.: Best-fit Packing은 concatenation 대비 시퀀스를 최대 0.01%만 더 쓴다 (2k RefinedWeb +0.0024%)",
+   "kind": "cite",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Ding et al. 2024 §3 (p.4–5)",
+     "url": "https://arxiv.org/pdf/2404.10830#page=4"
+    }
+   ]
+  },
+  {
+   "id": "ding-trunc",
+   "statement": "Ding et al.: 잘림을 줄이자 코드 환각(undefined-name)이 HumanEval 5.10%→2.41%, MBPP 9.52%→3.97%로 감소",
+   "kind": "cite",
+   "layer": "evidence",
+   "sources": [
+    {
+     "label": "Ding et al. 2024 §3 (p.4–5)",
+     "url": "https://arxiv.org/pdf/2404.10830#page=4"
+    }
+   ]
+  },
+  {
    "id": "mask-grid-illus",
    "statement": "attention mask 격자(9 토큰 · 3 샘플)는 설명용으로 줄인 재구성",
    "kind": "illus",
