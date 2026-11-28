@@ -568,6 +568,90 @@
    ]
   },
   {
+   "id": "term-same",
+   "statement": "해석: cross-contamination · cross-document attention mask · IntraDoc masking · document mask · sample masking은 같은 메커니즘의 다른 이름이며, 다른 것은 막는 단위(문서 vs 샘플)",
+   "kind": "interp",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Krell et al. 2021 §3.2 (arXiv 2107.02027)",
+     "url": "https://arxiv.org/abs/2107.02027"
+    },
+    {
+     "label": "Ding et al. 2024 §3 (p.4–5)",
+     "url": "https://arxiv.org/pdf/2404.10830#page=4"
+    },
+    {
+     "label": "Zhao et al. 2024 §4 (p.5–7)",
+     "url": "https://arxiv.org/pdf/2402.13991#page=5"
+    },
+    {
+     "label": "Llama 3 §3.4.1 (p.12)",
+     "url": "https://arxiv.org/pdf/2407.21783#page=12"
+    }
+   ]
+  },
+  {
+   "id": "krell-mask",
+   "statement": "Krell et al. 2021: block-diagonal attention mask를 쓰지 않으면 loss·정확도가 크게 나빠지고 더 학습해도 회복되지 않는다, 전체 오버헤드는 5% 미만",
+   "kind": "cite",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Krell et al. 2021 §3.2 (arXiv 2107.02027)",
+     "url": "https://arxiv.org/abs/2107.02027"
+    }
+   ]
+  },
+  {
+   "id": "krell-pos",
+   "statement": "Krell et al. 2021: mask 외에 position index를 샘플마다 리셋해야 하며, 빼면 목표 72.1% 대비 71.8%에서 정체한다",
+   "kind": "cite",
+   "layer": "evidence",
+   "sources": [
+    {
+     "label": "Krell et al. 2021 §3.2 (arXiv 2107.02027)",
+     "url": "https://arxiv.org/abs/2107.02027"
+    }
+   ]
+  },
+  {
+   "id": "iclm-opposite",
+   "statement": "Shi et al. ICLR 2024(In-Context Pretraining): 문서 간 attention을 막는 대신 관련 문서를 한 시퀀스에 모아 cross-document attention을 신호로 쓴다, attention mask는 건드리지 않는다",
+   "kind": "cite",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "Shi et al. 2024 §2 (arXiv 2310.10638)",
+     "url": "https://arxiv.org/abs/2310.10638"
+    }
+   ]
+  },
+  {
+   "id": "iclm-result",
+   "statement": "Shi et al.: ICL 평균 66.0→71.3, 독해 평균 37.6→43.2, retrieval-augmented NQ 28.5→32.2",
+   "kind": "cite",
+   "layer": "evidence",
+   "sources": [
+    {
+     "label": "Shi et al. 2024 §2 (arXiv 2310.10638)",
+     "url": "https://arxiv.org/abs/2310.10638"
+    }
+   ]
+  },
+  {
+   "id": "zhao-bm25",
+   "statement": "Zhao et al.: BM25로 관련 문서를 묶은 BM25Chunk가 2K에서 IntraDoc masking보다 ICL 평균이 높다 (70.91 vs 70.52)",
+   "kind": "cite",
+   "layer": "evidence",
+   "sources": [
+    {
+     "label": "Zhao et al. 2024 §4 (p.5–7)",
+     "url": "https://arxiv.org/pdf/2402.13991#page=5"
+    }
+   ]
+  },
+  {
    "id": "trade-hyp",
    "statement": "추정: SFT는 사전학습보다 데이터가 작아(1.5M vs 14.8T) masking 비용 부담이 적었을 수 있다 — 원문에 근거 없음",
    "kind": "hyp",

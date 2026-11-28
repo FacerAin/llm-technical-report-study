@@ -33,7 +33,20 @@ V3가 §4.1에서 document packing method라고 부른 게 여기까지입니다
 §4.1 사전학습을 보면, document packing은 쓰지만 cross-sample attention masking은 쓰지 않는다고 명시합니다. 반면 §5.1 SFT Settings는 정반대로, sample masking을 써서 샘플끼리 안 보이게 한다고 씁니다. 같은 논문, 같은 모델인데 단계마다 선택이 다릅니다. 이유는 원문에 없고, §4.1은 이 packing 방식이 Ding et al. 2024에서 왔다고만 밝힙니다.
 
 ## @rq-related
-그래서 그 Ding et al. 2024를 직접 찾아봤습니다. Best-fit Packing이라는 방법인데, 놀랍게도 packing과 함께 cross-document attention masking도 같이 씁니다. 즉 V3는 이 논문에서 영감을 받았다면서 masking 부분만 빼고 가져온 셉니다. Zhao et al. 2024도 같은 chunking에 masking만 추가했더니 perplexity, in-context learning, 지식 질의가 전부 개선됐다고 보고합니다. Llama 3도 문서 경계 attention mask를 사전학습에 썼고, 표준 사전학습엔 영향이 적지만 긴 문맥 continued pretraining에서는 중요하다고 합니다. 세 논문 모두 masking 쪽이 유리하거나 필요하다고 보는 셉니다.
+관련 논문을 찾아봤는데, 먼저 용어부터 정리하고 가겠습니다. cross-contamination 방지, cross-document attention mask, IntraDoc masking, document mask. 이름이 제각각인데 전부 같은 기법입니다. 한 시퀀스 안에서 경계를 넘는 attention을 차단한다는 것, 구현으로는 block-diagonal mask입니다. 다른 건 막는 단위뿐이에요.
+
+맨 위 Krell et al. 2021이 이 문제에 처음 이름을 붙인 논문입니다. 단위는 샘플이고, 안 막으면 loss와 정확도가 크게 나빠지는데 더 학습해도 회복이 안 된다고 보고합니다. 고치는 비용은 5% 미만입니다.
+
+두 번째가 V3가 인용한 Ding et al.입니다. 단위는 문서고, mask만으로 perplexity가 9.64에서 9.53으로 떨어집니다. Zhao et al.은 IntraDoc masking이라고 부르는데 역시 문서 단위고, perplexity와 in-context learning, 지식 질의가 다 개선됐습니다. Llama 3는 document mask라고 부르고, 표준 사전학습에서는 영향이 적지만 긴 문맥에서는 중요하다고 합니다.
+
+그리고 아래 두 줄이 DeepSeek-V3입니다. 사전학습은 Ding의 packing만 가져오고 mask는 안 썼습니다. SFT는 sample masking이라고 부르면서 샘플 단위로 막았고, 다만 효과 수치는 논문에 없습니다. 한 가지 덧붙이면, Krell et al.은 mask만으로는 부족하고 position index도 샘플마다 리셋해야 한다고 하는데, V3는 그 부분을 적지 않았습니다.
+
+## @rq-opposite
+그런데 앞 장이 전부가 아닙니다. 같은 문제를 정반대로 푸는 갈래가 있어서 짚고 넘어가겠습니다.
+
+ICLR 2024의 In-Context Pretraining인데, 문제의식은 똑같습니다. 랜덤하게 이어 붙이면 앞 문서가 다음 문서를 예측하는 데 아무 신호를 안 준다는 거죠. 그런데 처방이 반대입니다. 끊지 말고, 애초에 관련 있는 문서끼리 한 줄에 넣으라는 겁니다. attention mask는 그대로 두고 문서 순서만 바꿉니다. 검색으로 유사 문서를 찾고 TSP로 순서를 정하는 방식인데, in-context learning이 66.0에서 71.3으로, 독해가 37.6에서 43.2로 올랐습니다.
+
+그러니까 격리하는 진영과 활용하는 진영이 있는 셈인데, 두 진영이 합의하는 게 하나 있습니다. 무관한 문서를 섞어놓고 안 막는 게 제일 나쁘다는 겁니다. 그리고 V3 사전학습은 논문에 적힌 것만 보면 정확히 그 자리에 있습니다. 막지도 않고, 관련 문서로 묶지도 않았거든요. 물론 논문에 안 적은 데이터 처리가 있을 수 있어서 단정할 수는 없고, 이건 제 해석입니다.
 
 ## @mask-meaning
 그러면 같은 선택이 단계마다 어떤 의미인지 정리해보겠습니다. 출발점은 한 줄에 섞이는 대상이 다르다는 겁니다. 사전학습에서 섞이는 건 서로 다른 문서이고, SFT에서 섞이는 건 서로 다른 instruction-response 쌍입니다.
