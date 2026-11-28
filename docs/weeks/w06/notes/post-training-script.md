@@ -3,14 +3,18 @@
 ## @overview
 제 파트는 DeepSeek-V3의 Post-training입니다. SFT 설정이 핵심이고, 그 설정 한 문단에서 질문 하나가 나옵니다. 평가는 결론만 짧게 보겠습니다.
 
-## @cost
-비용부터 보면, H800을 시간당 2달러로 쳐도 전체 학습이 약 558만 달러입니다. 이 중 후학습은 5K GPU hours로 전체의 0.2%도 안 됩니다. 사전학습이 비용 대부분이고, 이 숫자엔 선행 연구·ablation 비용은 빠져 있습니다.
-
 ## @sft-data
 제 파트는 아니지만 흐름상 SFT 데이터를 두 장 짚겠습니다. 전체 1.5M instances이고 도메인마다 만드는 방법이 다릅니다. 그중 reasoning, 즉 수학과 코드 경쟁 문제, 논리 퍼즐 데이터는 내부 R1 모델로 생성합니다. 문제는 R1이 만든 데이터가 정확도는 강한데 overthinking, 형식 불량, 과도한 길이라는 문제가 있다는 겁니다. 반대로 일반 형식의 reasoning 데이터는 명료하고 간결한데 정확도가 R1만 못합니다. 그래서 저자의 목표는 이 둘을 balance하는 것, R1의 정확도는 가져오고 장황함은 버리는 것입니다.
 
 ## @sft-pipeline
 그 방법이 이 네 단계입니다. 먼저 code, mathematics, general reasoning 각 도메인마다 SFT와 RL을 조합한 파이프라인으로 expert 모델을 따로 학습합니다. 이 expert 모델이 최종 모델용 데이터 생성기 역할을 합니다. 둘째로, 학습할 때 문제 하나마다 SFT 샘플을 두 종류 만듭니다. 하나는 문제와 원래 응답을 묶은 것, 다른 하나는 system prompt와 문제, 그리고 R1의 응답을 묶은 것입니다. 이 system prompt는 모델이 reflection과 verification을 하도록 유도하게 설계했습니다. 셋째, RL 단계에서 high-temperature sampling으로 두 패턴이 섞인 응답을 생성하게 하고, 수백 step이 지나면 system prompt가 없어도 R1 패턴을 쓰게 됩니다. 마지막으로 RL이 끝난 expert 모델을 생성원으로 rejection sampling을 걸어 고품질 데이터만 최종 SFT 데이터로 추립니다. 이렇게 해서 정확하면서 간결한 데이터를 얻는다는 겁니다. Non-reasoning 데이터는 창작이나 롤플레이, 단순 QA인데 V2.5가 생성하고 사람이 검수하는 것으로 간단합니다.
+
+## @sft-nonreason
+Non-Reasoning 데이터는 앞 장과 비교하면 허무할 정도로 짧습니다. 창작, 롤플레이, 단순 QA 같은 것들인데, V2.5가 응답을 생성하고 사람이 정확성을 검수합니다. 그게 전부예요.
+
+그런데 이 차이가 오히려 핵심입니다. Reasoning은 정답이 정해져 있으니까 rejection sampling으로 자동으로 거를 수 있습니다. 반면 창작이나 롤플레이는 정답이 하나가 아니라서 자동 선별 기준을 세울 수가 없어요. 그래서 사람이 봅니다. 이건 원문에 이유가 적혀 있진 않고 제 해석입니다.
+
+참고로 제 범위는 아니지만 §5.2.1 RL 보상도 똑같은 축으로 갈립니다. 규칙으로 검증 가능하면 rule-based RM을 쓰고, 창작처럼 정답이 없으면 model-based RM이 피드백을 줍니다. 결국 "정답이 있냐 없냐"가 V3 post-training 전체를 가르는 축인 셈입니다.
 
 ## @sft
 SFT 설정은 한 문단입니다. 1.5M 샘플을 2 epoch 돌리고, 학습률은 cosine으로 5e-6에서 1e-6까지 내립니다. W02 Llama 2, W04 Qwen2.5와 나란히 놓으면 2 epoch에 작은 학습률이라는 틀은 같고, 데이터 규모가 가장 큽니다. 그리고 마지막 줄, 여러 샘플을 한 sequence에 packing하되 sample masking으로 서로 못 보게 한다는 문장이 오늘 질문의 출발점입니다.
@@ -35,7 +39,9 @@ V3가 §4.1에서 document packing method라고 부른 게 여기까지입니다
 ## @rq-related
 관련 논문을 찾아봤는데, 먼저 용어부터 정리하고 가겠습니다. cross-contamination 방지, cross-document attention mask, IntraDoc masking, document mask. 이름이 제각각인데 전부 같은 기법입니다. 한 시퀀스 안에서 경계를 넘는 attention을 차단한다는 것, 구현으로는 block-diagonal mask입니다. 다른 건 막는 단위뿐이에요.
 
-맨 위 Krell et al. 2021이 이 문제에 처음 이름을 붙인 논문입니다. 단위는 샘플이고, 안 막으면 loss와 정확도가 크게 나빠지는데 더 학습해도 회복이 안 된다고 보고합니다. 고치는 비용은 5% 미만입니다.
+여기서 중요한 게 단계 열입니다. 선행 연구 네 편은 전부 사전학습 이야기예요. SFT 단계에서 masking을 정면으로 다룬 논문은 제가 못 찾았습니다. 그러니까 V3 사전학습은 네 편과 반대로 간 거고, V3 SFT는 비교할 선행 수치가 아예 없는 셈입니다.
+
+맨 위 Krell et al. 2021이 이 문제에 처음 이름을 붙인 논문입니다. BERT 사전학습이 주 실험인데, 128이나 384 토큰짜리 짧은 시퀀스를 묶는 상황이라 오히려 요즘 SFT packing에 가깝습니다. 단위는 샘플이고, 안 막으면 loss와 정확도가 크게 나빠지는데 더 학습해도 회복이 안 된다고 보고합니다. 고치는 비용은 5% 미만입니다.
 
 두 번째가 V3가 인용한 Ding et al.입니다. 단위는 문서고, mask만으로 perplexity가 9.64에서 9.53으로 떨어집니다. Zhao et al.은 IntraDoc masking이라고 부르는데 역시 문서 단위고, perplexity와 in-context learning, 지식 질의가 다 개선됐습니다. Llama 3는 document mask라고 부르고, 표준 사전학습에서는 영향이 적지만 긴 문맥에서는 중요하다고 합니다.
 
@@ -57,14 +63,32 @@ ICLR 2024의 In-Context Pretraining인데, 문제의식은 똑같습니다. 랜�
 
 그래서 V3의 선택을 보면, 사전학습은 막지 않았습니다. 14.8T 토큰에 4% 비용을 쓰지 않기로 한 걸로 추정하는데 원문 근거는 없습니다. SFT는 막았고, 원문 표현 그대로 isolated and mutually invisible입니다. 이게 맞는 선택이었는지는 ablation이 없어서 V3 논문만으로는 알 수 없고, 열린 질문으로 남겨둡니다.
 
+## @eval-map
+이제 평가인데, 숫자를 쭉 읽기 전에 지도부터 보겠습니다. 평가는 세 번 나옵니다.
+
+§4.4는 사전학습만 끝난 Base 모델을 봅니다. V2-Base, Qwen2.5 72B, LLaMA-3.1 405B와 비교하고, English 15개 Code 5개 Math 4개 Chinese 6개 Multilingual 1개 해서 31개 벤치마크입니다. 결과는 Table 3이고요.
+
+§5.3.2는 후학습까지 끝난 Chat 모델입니다. 오픈 4개에 Claude 3.5와 GPT-4o를 더해서 비교하고, 22개 벤치마크, Table 6입니다.
+
+§5.3.3은 열린 대화 품질을 LLM이 채점하는 건데, Arena-Hard와 AlpacaEval 두 개, Table 7입니다.
+
+측정 방식도 세 가지입니다. 객관식은 보기마다 확률을 비교하는 perplexity 방식, 풀이형은 생성해서 채점, Pile-test는 BPB를 씁니다. 모델마다 tokenizer가 달라서 토큰 단위 perplexity는 공정하지 않기 때문이라고 원문이 이유를 적었습니다.
+
 ## @eval-base
-이제 평가입니다. Base 모델 평가는 간단히, V3-Base가 31개 벤치마크 중 22개에서 최고입니다. 저자는 V2와 Qwen2.5는 전반적으로, LLaMA 405B는 대부분 앞선다고 쓰는데, 표를 세어보면 대체로 맞지만 V2-Base가 5개에서는 오히려 더 높습니다. Code와 Math 9개는 전부 1위이고 차이도 가장 큽니다.
+Base 평가 원본 표입니다. 화면에 띄운 건 Code, Math, Chinese, Multilingual 행이에요. 보시면 Code와 Math 9개가 전부 1위이고, 특히 MATH는 61.6으로 LLaMA-3.1 405B의 49.0보다 12.6점 높습니다. V3-Base의 활성 파라미터가 37B니까 LLaMA의 11분의 1인데도요.
+
+전체로 보면 31개 중 22개에서 최고입니다. 저자는 V2와 Qwen2.5는 전반적으로, LLaMA 405B는 대부분 앞선다고 쓰는데, 대체로 맞지만 V2-Base가 WinoGrande나 RACE 같은 5개에서는 오히려 더 높습니다. English 행 원본은 근거 패널에 넣어뒀습니다.
 
 ## @eval-chat
-Chat 평가는 벤치마크를 더 붙여서 오픈모델과 Claude, GPT-4o까지 7개를 비교합니다. 오픈모델 중에서는 22개 중 20개가 최고이고, GPT-4o와 비교해도 20개에서 앞섭니다. 수학은 2위와 10에서 27점까지 차이가 나는 압도적인 영역입니다. 약점은 SimpleQA 같은 영어 사실 지식, 그리고 실제 저장소를 고치는 SWE-Bench와 Aider-Edit인데, 여기는 Claude와 GPT-4o 다음입니다.
+Chat 평가입니다. 화면은 Math와 Chinese 행인데, 수학이 가장 압도적인 영역이라 이걸 띄웠습니다. 저자는 2위 Qwen2.5보다 약 10% 높다고 썼는데, 실제로 세어보면 AIME는 15.9점, MATH-500은 10.2점, CNMO는 27.3점 차이입니다. 저자 표현이 오히려 보수적이에요.
+
+전체 22개로 보면 오픈모델 중 20개가 최고이고 GPT-4o와 비교해도 20개에서 앞섭니다. 약점은 SimpleQA 같은 영어 사실 지식, 그리고 실제 저장소를 고치는 SWE-Bench와 Aider-Edit인데 여기는 Claude 다음입니다. English와 Code 행 원본은 근거 패널에 있습니다.
 
 ## @eval-open
 마지막으로 LLM이 채점하는 열린 대화 평가입니다. Arena-Hard 85.5로 85% 넘은 첫 오픈모델이고, 본문은 86% 이상이라고 적었는데 표는 85.5라 살짝 다릅니다. AlpacaEval은 70.0으로 2위 Claude보다 18점 높습니다.
+
+## @cost
+비용부터 보면, H800을 시간당 2달러로 쳐도 전체 학습이 약 558만 달러입니다. 이 중 후학습은 5K GPU hours로 전체의 0.2%도 안 됩니다. 사전학습이 비용 대부분이고, 이 숫자엔 선행 연구·ablation 비용은 빠져 있습니다.
 
 ## @summary
 정리하면 세 가지입니다. SFT는 2 epoch짜리 단순한 설정이고 후학습 비용은 전체의 0.2%가 안 됩니다. 그런데 packing과 masking은 단계마다 다르게 선택했고, 다른 논문들은 대체로 masking 쪽이 유리하다고 봅니다. 그러면서도 Base와 Chat 모두 오픈모델 중 최고를 찍었습니다.

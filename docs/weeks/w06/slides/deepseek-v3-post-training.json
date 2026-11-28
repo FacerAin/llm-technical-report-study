@@ -109,7 +109,12 @@
   "ICLM",
   "BM25",
   "BM25Chunk",
-  "PPL"
+  "PPL",
+  "RM",
+  "GRPO",
+  "BERT",
+  "MLM",
+  "NSP"
  ],
  "claims_file": "deepseek-v3-post-training-claims.json",
  "slides": [
@@ -136,38 +141,6 @@
     "stage-diff"
    ],
    "ids": "Post-training 범위",
-   "part": "main",
-   "layout": "wide"
-  },
-  {
-   "key": "cost",
-   "kind": "result",
-   "seconds": 45,
-   "term": "Table 1",
-   "section": "1",
-   "section_label": "들어가며",
-   "title": "Table 1: 후학습은 5K GPU hours, 전체의 약 0.18%",
-   "body": "<p>H800 대여료를 GPU·시간당 $2로 가정한 공식 학습 비용입니다.</p>",
-   "visual": "<figure class=\"crop\" data-main style=\"margin:0\"><img src=\"figures/v3-table1.png\" alt=\"DeepSeek-V3 Table 1: 학습 단계별 H800 GPU hours와 USD\" data-glyph-px=\"23\"><figcaption>Table 1 (p.5) · 전체</figcaption></figure><div class=\"verdict\"><span class=\"vd-claim\">저자: “only $5.576M” · 선행 연구 · ablation 비용 제외</span><span class=\"vd-res vd-ok\">표: Post-Training 5K / Total 2788K = 약 0.18%</span></div>",
-   "evidence": "<figure class=\"crop\"><img src=\"figures/v3-table1.png\" alt=\"DeepSeek-V3 Table 1\" data-glyph-px=\"23\" data-display-width=\"720\"><figcaption>원문 · DeepSeek-V3 Table 1 (p.5) · 전체 / 발표자 표시 없음</figcaption></figure><blockquote class=\"ev-quote\" lang=\"en\">“Combined with 119K GPU hours for the context length extension and 5K GPU hours for post-training, DeepSeek-V3 costs only 2.788M GPU hours for its full training. … Note that the aforementioned costs include only the official training of DeepSeek-V3, excluding the costs associated with prior research and ablation experiments on architectures, algorithms, or data.”<cite>DeepSeek-V3 §1 (p.5)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> 5K ÷ 2788K = 0.00179 → 약 0.18%</p>",
-   "sources": [
-    {
-     "label": "DeepSeek-V3 Table 1 (p.5)",
-     "url": "https://arxiv.org/pdf/2412.19437v2#page=5"
-    },
-    {
-     "label": "DeepSeek-V3 §1 (p.5)",
-     "url": "https://arxiv.org/pdf/2412.19437v2#page=5"
-    }
-   ],
-   "src_visible": 1,
-   "claims": [
-    "cost-post",
-    "cost-total",
-    "cost-share",
-    "cost-excl"
-   ],
-   "ids": "Post-training · 후학습 비용(Table 1)",
    "part": "main",
    "layout": "wide"
   },
@@ -230,6 +203,38 @@
     "sft-pipe-nd"
    ],
    "ids": "Post-training · SFT 데이터 생성 파이프라인",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
+   "key": "sft-nonreason",
+   "kind": "mechanism",
+   "seconds": 60,
+   "term": "Non-Reasoning Data",
+   "section": "2",
+   "section_label": "§5.1 SFT",
+   "title": "Non-Reasoning Data: 정답이 없으면 사람이 본다",
+   "body": "<p>앞 장의 4단계와 비교하면 허무할 만큼 짧습니다. 그 차이가 오히려 핵심입니다.</p>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><thead><tr><th></th><th>Reasoning</th><th>Non-Reasoning</th></tr></thead><tbody><tr><td data-label=\"\">대상</td><td data-label=\"Reasoning\">수학 · 코드 경쟁 문제 · 논리 퍼즐</td><td data-label=\"Non-Reasoning\">creative writing · role-play · simple QA</td></tr><tr><td data-label=\"\">생성</td><td data-label=\"Reasoning\">도메인별 expert model (SFT+RL)</td><td data-label=\"Non-Reasoning\">DeepSeek-V2.5</td></tr><tr><td data-label=\"\">선별 · 검증</td><td data-label=\"Reasoning\">rejection sampling (자동)</td><td data-label=\"Non-Reasoning\" class=\"em\">사람이 정확성 검수</td></tr><tr><td data-label=\"\">왜 다른가</td><td data-label=\"Reasoning\">정답이 정해져 있어 자동으로 거를 수 있다</td><td data-label=\"Non-Reasoning\" class=\"em\">정답이 하나가 아니라 자동 기준을 세울 수 없다</td></tr></tbody></table></div><div class=\"verdict\"><span class=\"vd-claim\">§5.2.1에서도 같은 축으로 갈린다 (범위 밖, 참고)</span><span class=\"vd-res vd-ok\">규칙으로 검증 가능 → rule-based RM · 정답 없음(창작 등) → model-based RM이 피드백</span></div><p class=\"cap\"><span class=\"ev-chip\" data-ev=\"interp\">해석</span> \"왜 다른가\" 행은 발표자 해석 · 파랑 칸 = 자동화할 수 없는 쪽</p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“For non-reasoning data, such as creative writing, role-play, and simple question answering, we utilize DeepSeek-V2.5 to generate responses and enlist human annotators to verify the accuracy and correctness of the data.”<cite>DeepSeek-V3 §5.1 Non-Reasoning Data (p.29)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"interp\">해석</span> 원문은 \"왜 사람이 보는지\" 이유를 적지 않았습니다. reasoning 쪽이 rejection sampling으로 거를 수 있는 것과 대비해 발표자가 정리한 것입니다.</p><blockquote class=\"ev-quote\" lang=\"en\">“For questions that can be validated using specific rules, we adopt a rule-based reward system … for questions without a definitive ground-truth, such as those involving creative writing, the reward model is tasked with providing feedback”<cite>DeepSeek-V3 §5.2.1 (p.29)</cite></blockquote><p>§5.2 RL은 제 범위가 아니지만, \"정답이 있냐 없냐\"가 SFT 데이터 구성과 RL 보상을 모두 가르는 축이라 한 줄 붙였습니다.</p><p><span class=\"ev-chip\" data-ev=\"nd\">미기술</span> Non-Reasoning 데이터의 양, 검수자 수, 검수 기준은 적지 않았습니다.</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.1 (p.29)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=29"
+    },
+    {
+     "label": "DeepSeek-V3 §5.2.1 (p.29)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=29"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "nonreason-scope",
+    "sft-nonreason",
+    "nonreason-why",
+    "rm-split"
+   ],
+   "ids": "Post-training · Non-Reasoning 데이터",
    "part": "main",
    "layout": "wide"
   },
@@ -375,13 +380,13 @@
    "key": "rq-related",
    "kind": "result",
    "seconds": 110,
-   "term": "Attention masking 용어",
+   "term": "Attention masking",
    "section": "3",
    "section_label": "Packing과 Attention",
-   "title": "Attention masking 용어: 이름은 다섯, 메커니즘은 하나",
-   "body": "<p>부르는 말만 다를 뿐 모두 <b>경계를 넘는 attention을 차단</b>하는 같은 기법입니다. 다른 건 단위뿐입니다.</p>",
-   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><thead><tr><th>논문</th><th>부르는 이름</th><th>단위</th><th>결과 · 비고</th></tr></thead><tbody><tr><td data-label=\"논문\">Krell et al. 2021</td><td data-label=\"부르는 이름\">cross-contamination 방지</td><td data-label=\"단위\">샘플</td><td data-label=\"결과 · 비고\">안 막으면 정확도 회복 불가 · 비용 5% 미만</td></tr><tr><td data-label=\"논문\">Ding et al. 2024 (V3 인용)</td><td data-label=\"부르는 이름\">cross-document attention mask</td><td data-label=\"단위\">문서</td><td data-label=\"결과 · 비고\">mask만으로 PPL 9.64→9.53</td></tr><tr><td data-label=\"논문\">Zhao et al. 2024</td><td data-label=\"부르는 이름\">IntraDoc masking</td><td data-label=\"단위\">문서</td><td data-label=\"결과 · 비고\">PPL · ICL · 지식 모두 개선 · 비용 약 4%</td></tr><tr><td data-label=\"논문\">Llama 3 2024</td><td data-label=\"부르는 이름\">document mask</td><td data-label=\"단위\">문서</td><td data-label=\"결과 · 비고\">표준 사전학습엔 영향 적음 · 긴 문맥엔 중요</td></tr><tr><td data-label=\"논문\" class=\"em\">V3 §4.1 사전학습</td><td data-label=\"부르는 이름\" class=\"em\">쓰지 않음</td><td data-label=\"단위\" class=\"em\">—</td><td data-label=\"결과 · 비고\" class=\"em\">packing만 가져오고 mask는 제외</td></tr><tr><td data-label=\"논문\" class=\"em\">V3 §5.1 SFT</td><td data-label=\"부르는 이름\" class=\"em\">sample masking</td><td data-label=\"단위\" class=\"em\">샘플</td><td data-label=\"결과 · 비고\" class=\"em\">효과 수치는 논문에 없음</td></tr></tbody></table></div><p class=\"cap\"><span class=\"ev-chip\" data-ev=\"cite\">인용 원전</span> 다섯 논문 모두 원문 확인 · <span class=\"ev-chip\" data-ev=\"interp\">해석</span> \"같은 메커니즘\"이라는 정리는 발표자 판단 · 파랑 칸 = DeepSeek-V3</p>",
-   "evidence": "<p><span class=\"ev-chip\" data-ev=\"interp\">해석</span> 네 논문의 표현이 서로 다르지만 같은 것을 가리킨다고 본 것은 발표자 판단입니다. 근거는 아래 원문들입니다.</p><blockquote class=\"ev-quote\" lang=\"en\">“tokens from different sequences within a pack should not be able to attend to each other”<cite>Krell et al. 2021 §3.2.2</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“Best-fit Packing … masks attention across documents, so that Best-fit Packing is equivalent to treating each document as a standalone training sample”<cite>Ding et al. 2024 Appendix C.1</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“the probability of each token belonging to document is only conditioned on the preceding tokens within that document”<cite>Zhao et al. 2024 §2 (IntraDoc 정의)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“We use an attention mask that prevents self-attention between different documents within the same sequence. … we find it to be important in continued pre-training on very long sequences.”<cite>Llama 3 §3.2 (p.6)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“we adopt a sample masking strategy to ensure that these examples remain isolated and mutually invisible”<cite>DeepSeek-V3 §5.1 SFT Settings (p.29)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"nd\">미기술</span> Krell et al.은 mask 외에 <b>position index를 샘플마다 리셋</b>하고 loss도 샘플별로 분리해야 한다고 합니다(리셋을 빼면 목표 72.1% 대비 71.8%에서 정체). V3는 masking만 적고 position 처리는 언급하지 않았습니다.</p><p>네 논문은 구조 · 데이터 · 규모가 모두 달라 V3에 그대로 옮겨 적용된다고 볼 수는 없습니다.</p>",
+   "title": "Attention masking: 이름은 다섯, 메커니즘은 하나 — 선행 연구는 모두 사전학습",
+   "body": "<p>부르는 말만 다를 뿐 모두 <b>경계를 넘는 attention을 차단</b>하는 같은 기법입니다. 다른 건 단위와 단계뿐입니다.</p>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><thead><tr><th>논문</th><th>부르는 이름</th><th>단계</th><th>단위</th><th>결과 · 비고</th></tr></thead><tbody><tr><td data-label=\"논문\">Krell et al. 2021</td><td data-label=\"부르는 이름\">cross-contamination 방지</td><td data-label=\"단계\">사전학습</td><td data-label=\"단위\">샘플</td><td data-label=\"결과 · 비고\">회복 불가 · 비용 &lt;5%</td></tr><tr><td data-label=\"논문\">Ding et al. 2024 (V3 인용)</td><td data-label=\"부르는 이름\">cross-document attention mask</td><td data-label=\"단계\">사전학습</td><td data-label=\"단위\">문서</td><td data-label=\"결과 · 비고\">PPL 9.64→9.53</td></tr><tr><td data-label=\"논문\">Zhao et al. 2024</td><td data-label=\"부르는 이름\">IntraDoc masking</td><td data-label=\"단계\">사전학습</td><td data-label=\"단위\">문서</td><td data-label=\"결과 · 비고\">PPL · ICL 개선 · 비용 약 4%</td></tr><tr><td data-label=\"논문\">Llama 3 2024</td><td data-label=\"부르는 이름\">document mask</td><td data-label=\"단계\">사전학습</td><td data-label=\"단위\">문서</td><td data-label=\"결과 · 비고\">긴 문맥에서 중요</td></tr><tr><td data-label=\"논문\" class=\"em\">V3 §4.1</td><td data-label=\"부르는 이름\" class=\"em\">쓰지 않음</td><td data-label=\"단계\" class=\"em\">사전학습</td><td data-label=\"단위\" class=\"em\">—</td><td data-label=\"결과 · 비고\" class=\"em\">packing만, mask 제외</td></tr><tr><td data-label=\"논문\" class=\"em\">V3 §5.1</td><td data-label=\"부르는 이름\" class=\"em\">sample masking</td><td data-label=\"단계\" class=\"em\">SFT</td><td data-label=\"단위\" class=\"em\">샘플</td><td data-label=\"결과 · 비고\" class=\"em\">효과 수치 없음</td></tr></tbody></table></div><p class=\"cap\"><span class=\"ev-chip\" data-ev=\"cite\">인용 원전</span><span class=\"ev-chip\" data-ev=\"interp\">해석</span> 선행 네 편은 모두 사전학습 — V3 사전학습은 그 반대로 갔고, V3 SFT는 비교할 선행 수치가 없습니다 · 파랑 칸 = DeepSeek-V3</p>",
+   "evidence": "<p><span class=\"ev-chip\" data-ev=\"interp\">해석</span> 네 논문의 표현이 서로 다르지만 같은 것을 가리킨다고 본 것은 발표자 판단입니다. 근거는 아래 원문들입니다.</p><blockquote class=\"ev-quote\" lang=\"en\">“tokens from different sequences within a pack should not be able to attend to each other”<cite>Krell et al. 2021 §3.2.2</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“Best-fit Packing … masks attention across documents, so that Best-fit Packing is equivalent to treating each document as a standalone training sample”<cite>Ding et al. 2024 Appendix C.1</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“the probability of each token belonging to document is only conditioned on the preceding tokens within that document”<cite>Zhao et al. 2024 §2 (IntraDoc 정의)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“We use an attention mask that prevents self-attention between different documents within the same sequence. … we find it to be important in continued pre-training on very long sequences.”<cite>Llama 3 §3.2 (p.6)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“we adopt a sample masking strategy to ensure that these examples remain isolated and mutually invisible”<cite>DeepSeek-V3 §5.1 SFT Settings (p.29)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"nd\">미기술</span> Krell et al.은 mask 외에 <b>position index를 샘플마다 리셋</b>하고 loss도 샘플별로 분리해야 한다고 합니다(리셋을 빼면 목표 72.1% 대비 71.8%에서 정체). V3는 masking만 적고 position 처리는 언급하지 않았습니다.</p><p><span class=\"ev-chip\" data-ev=\"interp\">해석</span> 단계 확인 — Krell et al.은 BERT 사전학습(phase 2)이 주 실험이고 \"NSP와 downstream fine-tuning에도 같은 방식이 적용된다\"고만 언급합니다. Ding et al.은 13B·7B 사전학습(RefinedWeb 500B · The Stack 300B 토큰), Zhao et al.도 사전학습(SlimPajama 150B 토큰, 1.3B), Llama 3의 mask는 §3.2 사전학습 설정이고 §4 post-training에는 packed example 간 attention masking 언급이 없습니다. 즉 네 편 모두 사전학습이며, SFT 단계 masking의 효과를 측정한 선행 연구는 제가 찾지 못했습니다.</p><p>다만 Krell et al.의 BERT 사전학습은 128 · 384 토큰짜리 짧은 시퀀스를 묶는 상황이라, 긴 문서를 묶는 현대 사전학습보다 오히려 SFT packing에 가깝습니다.</p><p>네 논문은 구조 · 데이터 · 규모가 모두 달라 V3에 그대로 옮겨 적용된다고 볼 수는 없습니다.</p>",
    "sources": [
     {
      "label": "Krell et al. 2021 §3.2 (arXiv 2107.02027)",
@@ -497,16 +502,62 @@
    "layout": "wide"
   },
   {
+   "key": "eval-map",
+   "kind": "intro",
+   "seconds": 60,
+   "term": "평가 구성",
+   "section": "4",
+   "section_label": "평가",
+   "title": "평가 구성: 세 표가 각각 무엇을 보는가",
+   "body": "<p>숫자를 보기 전에 지도부터 봅니다. 평가는 세 번, 보는 대상과 영역이 다릅니다.</p>",
+   "visual": "<div class=\"table-wrap\" data-main><table class=\"tbl\"><thead><tr><th></th><th>무엇을 평가</th><th>비교 대상</th><th>도메인별 벤치마크</th><th>원문</th></tr></thead><tbody><tr><td data-label=\"\">§4.4 Base</td><td data-label=\"무엇을 평가\">사전학습만 끝난 모델</td><td data-label=\"비교 대상\">V2-Base · Qwen2.5 72B · LLaMA-3.1 405B</td><td data-label=\"도메인별 벤치마크\">English 15 · Code 5 · Math 4 · Chinese 6 · Multilingual 1 = <b>31</b></td><td data-label=\"원문\" class=\"em\">Table 3</td></tr><tr><td data-label=\"\">§5.3.2 Chat</td><td data-label=\"무엇을 평가\">후학습까지 끝난 모델</td><td data-label=\"비교 대상\">오픈 4개 + Claude-3.5 · GPT-4o</td><td data-label=\"도메인별 벤치마크\">English 9 · Code 7 · Math 3 · Chinese 3 = <b>22</b></td><td data-label=\"원문\" class=\"em\">Table 6</td></tr><tr><td data-label=\"\">§5.3.3 Open-ended</td><td data-label=\"무엇을 평가\">열린 대화 품질 (LLM judge)</td><td data-label=\"비교 대상\">오픈 4개 + Claude-3.5 · GPT-4o</td><td data-label=\"도메인별 벤치마크\">Arena-Hard · AlpacaEval 2.0 = <b>2</b></td><td data-label=\"원문\" class=\"em\">Table 7</td></tr></tbody></table></div><div class=\"bx gray\" style=\"margin-top:12px\"><div class=\"t\">측정 방식 (§4.4.1)</div><div class=\"d\">객관식은 <b>perplexity</b>(보기별 확률 비교) · 풀이형은 <b>generation</b>(생성 후 채점) · Pile-test는 <b>BPB</b>(tokenizer가 달라도 공정하게)</div></div><p class=\"cap\"><span class=\"ev-chip\" data-ev=\"calc\">계산</span> 발표자가 센 개수 <span class=\"subst\">Table 3: 15 + 5 + 4 + 6 + 1 = 31 (Pile-test 제외) · Table 6: 9 + 7 + 3 + 3 = 22</span></p>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“we adopt perplexity-based evaluation for datasets including HellaSwag, PIQA, WinoGrande, RACE-Middle, RACE-High, MMLU … and adopt generation-based evaluation for TriviaQA, NaturalQuestions, DROP, MATH, GSM8K … In addition, we perform language-modeling-based evaluation for Pile-test and use Bits-Per-Byte (BPB) as the metric to guarantee fair comparison among models using different tokenizers.”<cite>DeepSeek-V3 §4.4.1 (p.24)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“We evaluate all these models with our internal evaluation framework, and ensure that they share the same evaluation setting.”<cite>DeepSeek-V3 §4.4.2 (p.24)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> Table 3은 Pile-test(BPB)를 빼고 31개, Table 6은 22개, Table 7은 2개입니다.</p><p>Chat 평가 조건: 출력 최대 8192 tokens · AIME · CNMO는 temperature 0.7로 16회 평균 · MATH-500은 greedy · SWE-Bench는 agentless (§5.3.1 p.31).</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §4.4.1 (p.24)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=24"
+    },
+    {
+     "label": "DeepSeek-V3 §5.3.1 (p.30)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=30"
+    },
+    {
+     "label": "DeepSeek-V3 Table 3 (p.25)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=25"
+    },
+    {
+     "label": "DeepSeek-V3 Table 6 (p.31)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=31"
+    },
+    {
+     "label": "DeepSeek-V3 Table 7 (p.33)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=33"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "evalmap-counts",
+    "base-method",
+    "base-bpb",
+    "base-same",
+    "chat-base",
+    "chat-cfg"
+   ],
+   "ids": "Post-training · 평가 구성 지도",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
    "key": "eval-base",
    "kind": "result",
    "seconds": 75,
    "term": "Table 3",
    "section": "4",
-   "section_label": "§4.4 Base 평가",
+   "section_label": "평가",
    "title": "Table 3: Base 평가, V3-Base가 31개 중 22개에서 최고",
-   "body": "<p>객관식은 perplexity, 풀이형은 generation, Pile-test는 BPB로 네 base 모델을 같은 설정에서 평가합니다.</p>",
-   "visual": "<div class=\"claim-table\" data-main><div class=\"table-wrap\"><table class=\"tbl\"><thead><tr><th>영역 (개수)</th><th>vs V2-Base</th><th>vs Qwen2.5 72B</th><th>vs LLaMA-3.1 405B</th></tr></thead><tbody><tr><td data-label=\"영역 (개수)\">English (15)</td><td data-label=\"vs V2-Base\">12</td><td data-label=\"vs Qwen2.5 72B\">14</td><td data-label=\"vs LLaMA-3.1 405B\">7 (동급 4)</td></tr><tr><td data-label=\"영역 (개수)\">Code (5)</td><td data-label=\"vs V2-Base\">5</td><td data-label=\"vs Qwen2.5 72B\">5</td><td data-label=\"vs LLaMA-3.1 405B\" class=\"em\">5</td></tr><tr><td data-label=\"영역 (개수)\">Math (4)</td><td data-label=\"vs V2-Base\">4</td><td data-label=\"vs Qwen2.5 72B\">4</td><td data-label=\"vs LLaMA-3.1 405B\" class=\"em\">4</td></tr><tr><td data-label=\"영역 (개수)\">Chinese (6)</td><td data-label=\"vs V2-Base\">4</td><td data-label=\"vs Qwen2.5 72B\">4 (동급 1)</td><td data-label=\"vs LLaMA-3.1 405B\">3 (동급 2)</td></tr><tr><td data-label=\"영역 (개수)\">Multilingual (1)</td><td data-label=\"vs V2-Base\">1</td><td data-label=\"vs Qwen2.5 72B\">1</td><td data-label=\"vs LLaMA-3.1 405B\" class=\"em\">1</td></tr></tbody></table></div><p class=\"claim-legend\"><span>칸 = V3가 앞선 개수 · 0.3 이내는 동급</span></p><div class=\"verdict\"><span class=\"vd-claim\">저자: V2 · Qwen2.5는 전반적으로, LLaMA-3.1 405B는 대부분 앞선다</span><span class=\"vd-res vd-part\">표: V2-Base도 5개(WinoGrande · RACE-M/H · CMRC · CCPM)에서 더 높음</span></div></div><p class=\"cap\">DeepSeek-V3 Table 3 (p.25) 값으로 발표자 계산 · 활성 파라미터 37B (LLaMA 405B의 1/11)</p>",
-   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“Overall, DeepSeek-V3-Base comprehensively outperforms DeepSeek-V2-Base and Qwen2.5 72B Base, and surpasses LLaMA-3.1 405B Base in the majority of benchmarks, essentially becoming the strongest open-source model.”<cite>DeepSeek-V3 §4.4.2 (p.25)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> Qwen2.5 대비 28/31 · LLaMA 대비 20/31 앞섬. Code · Math 9개는 모두 1위이고 차이가 가장 큽니다(예 MATH 61.6 vs LLaMA 49.0).</p>",
+   "body": "<p>Code · Math · Chinese 행입니다. English 행은 근거 패널에 있습니다.</p>",
+   "visual": "<figure class=\"crop\" data-main style=\"margin:0;max-width:700px\"><img src=\"figures/v3-table3-code-math-zh.png\" alt=\"DeepSeek-V3 Table 3의 Code · Math · Chinese · Multilingual 행\" data-glyph-px=\"19\"><figcaption>Table 3 (p.25) · Code · Math · Chinese · Multilingual 행 · 굵게 = 원문 행 최고 · Code · Math 9개 전승, MATH 61.6 vs LLaMA 405B 49.0 (활성 37B = 1/11) · 전체 31개 중 22개 최고, 단 V2-Base가 5개에서 더 높음</figcaption></figure>",
+   "evidence": "<blockquote class=\"ev-quote\" lang=\"en\">“Overall, DeepSeek-V3-Base comprehensively outperforms DeepSeek-V2-Base and Qwen2.5 72B Base, and surpasses LLaMA-3.1 405B Base in the majority of benchmarks, essentially becoming the strongest open-source model.”<cite>DeepSeek-V3 §4.4.2 (p.25)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> 영역별로 V3가 앞선 개수 — English 15개 중 vs V2 12 · vs Qwen 14 · vs LLaMA 7(동급 4) / Code 5 · Math 4 · Multilingual 1은 모두 전승 / Chinese 6개 중 4. 합계 Qwen2.5 대비 28/31, LLaMA 대비 20/31.</p><figure class=\"crop\"><img src=\"figures/v3-table3-english.png\" alt=\"DeepSeek-V3 Table 3 English 행\" data-glyph-px=\"19\" data-display-width=\"720\"><figcaption>원문 · DeepSeek-V3 Table 3 (p.25) · English 행 / 화면에는 Code · Math 행만 띄웠습니다</figcaption></figure>",
    "sources": [
     {
      "label": "DeepSeek-V3 Table 3 (p.25)",
@@ -538,12 +589,12 @@
    "kind": "result",
    "seconds": 85,
    "term": "Table 6",
-   "section": "5",
-   "section_label": "§5.3 Chat 평가",
+   "section": "4",
+   "section_label": "평가",
    "title": "Table 6: Chat 평가, 오픈모델 중 최고",
    "body": "<p>지시 따르기 · 긴 문맥 · 실전 코딩 · 경시 수학을 더해 7개 모델을 비교합니다. 출력은 모두 8K 토큰, 경시 수학은 16회 평균입니다.</p>",
-   "visual": "<div class=\"claim-table\" data-main><div class=\"table-wrap\"><table class=\"tbl\"><thead><tr><th>영역 (개수)</th><th>오픈 4개 중 1위</th><th>vs Claude-3.5</th><th>vs GPT-4o</th></tr></thead><tbody><tr><td data-label=\"영역 (개수)\">English (9)</td><td data-label=\"오픈 4개 중 1위\">8</td><td data-label=\"vs Claude-3.5\">5</td><td data-label=\"vs GPT-4o\">7</td></tr><tr><td data-label=\"영역 (개수)\">Code (7)</td><td data-label=\"오픈 4개 중 1위\">7</td><td data-label=\"vs Claude-3.5\">5</td><td data-label=\"vs GPT-4o\">7</td></tr><tr><td data-label=\"영역 (개수)\">Math (3)</td><td data-label=\"오픈 4개 중 1위\" class=\"em\">3</td><td data-label=\"vs Claude-3.5\" class=\"em\">3</td><td data-label=\"vs GPT-4o\" class=\"em\">3</td></tr><tr><td data-label=\"영역 (개수)\">Chinese (3)</td><td data-label=\"오픈 4개 중 1위\">2</td><td data-label=\"vs Claude-3.5\">3</td><td data-label=\"vs GPT-4o\">3</td></tr></tbody></table></div><p class=\"claim-legend\"><span>칸 = V3가 앞선 개수</span></p><div class=\"verdict\"><span class=\"vd-claim\">저자: best-performing open-source · frontier 폐쇄 모델과도 경쟁</span><span class=\"vd-res vd-ok\">표: 오픈 4개 대비 20/22 최고 · GPT-4o 대비 20개 앞섬 · 수학 2위와 10–27점 차</span></div></div><p class=\"cap\">DeepSeek-V3 Table 6 (p.31) · 약점: SimpleQA(영어 사실 지식) · SWE-Bench · Aider-Edit은 Claude · GPT-4o 다음</p>",
-   "evidence": "<p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> 오픈 4개 중 최고 20/22, Claude 대비 앞섬 16개, GPT-4o 대비 앞섬 20개는 Table 6 값으로 발표자가 직접 센 것입니다(t6-open · t6-closed).</p><blockquote class=\"ev-quote\" lang=\"en\">“Table 6 presents the evaluation results, showcasing that DeepSeek-V3 stands as the best-performing open-source model. Additionally, it is competitive against frontier closed-source models like GPT-4o and Claude-3.5-Sonnet.”<cite>DeepSeek-V3 §5.3.2 (p.31)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“DeepSeek-V3 falls behind GPT-4o and Claude-Sonnet [on SimpleQA], primarily due to its design focus and resource allocation. DeepSeek-V3 assigns more training tokens to learn Chinese knowledge.”<cite>DeepSeek-V3 §5.3.2 (p.32)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"hyp\">저자 가설</span> 토큰 배정이 원인이라는 설명은 실험으로 보이지 않았습니다.</p>",
+   "visual": "<figure class=\"crop\" data-main style=\"margin:0;max-width:1000px\"><img src=\"figures/v3-table6-math-zh.png\" alt=\"DeepSeek-V3 Table 6의 Math · Chinese 행\" data-glyph-px=\"19\"><figcaption>Table 6 (p.31) · Math · Chinese 행 · 굵게 = 원문 행 최고</figcaption></figure><div class=\"verdict\"><span class=\"vd-claim\">저자: 2위 Qwen2.5보다 “approximately 10%” 높다</span><span class=\"vd-res vd-part\">실제 차이는 AIME +15.9 · MATH-500 +10.2 · CNMO +27.3</span></div><div class=\"verdict\"><span class=\"vd-claim\">전체 22개: 오픈 4개 대비 20개 최고 · GPT-4o 대비 20개 앞섬</span><span class=\"vd-res vd-ok\">약점은 SimpleQA(영어 사실 지식) · SWE-Bench · Aider-Edit — Claude · GPT-4o 다음</span></div>",
+   "evidence": "<p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> 오픈 4개 중 최고 20/22, Claude 대비 앞섬 16개, GPT-4o 대비 앞섬 20개는 Table 6 값으로 발표자가 직접 센 것입니다(t6-open · t6-closed).</p><blockquote class=\"ev-quote\" lang=\"en\">“Table 6 presents the evaluation results, showcasing that DeepSeek-V3 stands as the best-performing open-source model. Additionally, it is competitive against frontier closed-source models like GPT-4o and Claude-3.5-Sonnet.”<cite>DeepSeek-V3 §5.3.2 (p.31)</cite></blockquote><blockquote class=\"ev-quote\" lang=\"en\">“DeepSeek-V3 falls behind GPT-4o and Claude-Sonnet [on SimpleQA], primarily due to its design focus and resource allocation. DeepSeek-V3 assigns more training tokens to learn Chinese knowledge.”<cite>DeepSeek-V3 §5.3.2 (p.32)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"hyp\">저자 가설</span> 토큰 배정이 원인이라는 설명은 실험으로 보이지 않았습니다.</p><figure class=\"crop\"><img src=\"figures/v3-table6-english.png\" alt=\"DeepSeek-V3 Table 6 English 행\" data-glyph-px=\"19\" data-display-width=\"720\"><figcaption>원문 · DeepSeek-V3 Table 6 (p.31) · English 행</figcaption></figure><figure class=\"crop\"><img src=\"figures/v3-table6-code.png\" alt=\"DeepSeek-V3 Table 6 Code 행\" data-glyph-px=\"19\" data-display-width=\"720\"><figcaption>원문 · DeepSeek-V3 Table 6 (p.31) · Code 행 · 알고리즘은 1위, SWE · Aider-Edit은 Claude 다음</figcaption></figure>",
    "sources": [
     {
      "label": "DeepSeek-V3 §5.3.1 (p.30)",
@@ -578,8 +629,8 @@
    "kind": "result",
    "seconds": 65,
    "term": "Table 7",
-   "section": "6",
-   "section_label": "§5.3.3 Open-Ended",
+   "section": "4",
+   "section_label": "평가",
    "title": "Table 7: Open-ended 평가, Arena-Hard 85.5로 첫 오픈 85% 돌파",
    "body": "<p>GPT-4-Turbo-1106이 심사하는 LLM judge 평가입니다.</p>",
    "visual": "<figure class=\"crop\" data-main style=\"margin:0;max-width:900px\"><img src=\"figures/v3-table7.png\" alt=\"DeepSeek-V3 Table 7: Arena-Hard와 AlpacaEval 2.0\" data-glyph-px=\"23\"><figcaption>Table 7 (p.33) · AlpacaEval = length-controlled win rate</figcaption></figure><div class=\"verdict\"><span class=\"vd-claim\">저자: Arena-Hard 승률 “over 86%”, 85% 넘은 첫 오픈모델</span><span class=\"vd-res vd-no\">표: 85.5 · 본문 수치와 표가 다름</span></div>",
@@ -606,11 +657,43 @@
    "layout": "wide"
   },
   {
+   "key": "cost",
+   "kind": "result",
+   "seconds": 45,
+   "term": "Table 1",
+   "section": "5",
+   "section_label": "정리",
+   "title": "Table 1: 이 모든 게 후학습 5K GPU hours, 전체의 약 0.18%",
+   "body": "<p>H800 대여료를 GPU·시간당 $2로 가정한 공식 학습 비용입니다.</p>",
+   "visual": "<figure class=\"crop\" data-main style=\"margin:0\"><img src=\"figures/v3-table1.png\" alt=\"DeepSeek-V3 Table 1: 학습 단계별 H800 GPU hours와 USD\" data-glyph-px=\"23\"><figcaption>Table 1 (p.5) · 전체</figcaption></figure><div class=\"verdict\"><span class=\"vd-claim\">저자: “only $5.576M” · 선행 연구 · ablation 비용 제외</span><span class=\"vd-res vd-ok\">표: Post-Training 5K / Total 2788K = 약 0.18%</span></div>",
+   "evidence": "<figure class=\"crop\"><img src=\"figures/v3-table1.png\" alt=\"DeepSeek-V3 Table 1\" data-glyph-px=\"23\" data-display-width=\"720\"><figcaption>원문 · DeepSeek-V3 Table 1 (p.5) · 전체 / 발표자 표시 없음</figcaption></figure><blockquote class=\"ev-quote\" lang=\"en\">“Combined with 119K GPU hours for the context length extension and 5K GPU hours for post-training, DeepSeek-V3 costs only 2.788M GPU hours for its full training. … Note that the aforementioned costs include only the official training of DeepSeek-V3, excluding the costs associated with prior research and ablation experiments on architectures, algorithms, or data.”<cite>DeepSeek-V3 §1 (p.5)</cite></blockquote><p><span class=\"ev-chip\" data-ev=\"calc\">계산</span> 5K ÷ 2788K = 0.00179 → 약 0.18%</p>",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 Table 1 (p.5)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=5"
+    },
+    {
+     "label": "DeepSeek-V3 §1 (p.5)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=5"
+    }
+   ],
+   "src_visible": 1,
+   "claims": [
+    "cost-post",
+    "cost-total",
+    "cost-share",
+    "cost-excl"
+   ],
+   "ids": "Post-training · 후학습 비용(Table 1)",
+   "part": "main",
+   "layout": "wide"
+  },
+  {
    "key": "summary",
    "kind": "summary",
    "seconds": 45,
    "term": "정리",
-   "section": "7",
+   "section": "5",
    "section_label": "정리",
    "title": "정리: 단순한 SFT로 오픈모델 1위, 그런데 masking은 단계마다 다르게",
    "body": "<p>오늘 내용을 세 줄로 줄이면 이렇습니다.</p>",

@@ -345,7 +345,7 @@
   {
    "id": "t3-claim",
    "statement": "저자: V2 · Qwen2.5는 전반적으로 앞서고 LLaMA-3.1 405B는 대부분 앞선다",
-   "kind": "verdict",
+   "kind": "orig",
    "layer": "main",
    "sources": [
     {
@@ -726,6 +726,51 @@
      "label": "Llama 3 §4.1.3 (p.16)",
      "url": "https://arxiv.org/pdf/2407.21783#page=16"
     }
+   ]
+  },
+  {
+   "id": "nonreason-scope",
+   "statement": "Non-Reasoning 데이터는 creative writing · role-play · simple question answering",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.1 (p.29)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=29"
+    }
+   ]
+  },
+  {
+   "id": "nonreason-why",
+   "statement": "해석: 정답이 하나로 정해지지 않아 rejection sampling 같은 자동 선별 기준을 세울 수 없고, 그래서 사람이 검수한다",
+   "kind": "interp",
+   "layer": "main",
+   "inputs": [
+    "sft-nonreason",
+    "sft-reject"
+   ]
+  },
+  {
+   "id": "rm-split",
+   "statement": "참고(§5.2.1, 범위 밖): RL 보상도 같은 축으로 갈린다 — 규칙으로 검증 가능하면 rule-based RM, 정답이 없으면 model-based RM이 피드백",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.2.1 (p.29)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=29"
+    }
+   ]
+  },
+  {
+   "id": "evalmap-counts",
+   "statement": "Table 3 = 31개(English 15 · Code 5 · Math 4 · Chinese 6 · Multilingual 1), Table 6 = 22개(English 9 · Code 7 · Math 3 · Chinese 3), Table 7 = 2개",
+   "kind": "calc",
+   "layer": "main",
+   "inputs": [
+    "t3",
+    "t6",
+    "t7"
    ]
   },
   {
