@@ -454,6 +454,36 @@
    ]
   },
   {
+   "id": "t6-long",
+   "statement": "저자: DROP 91.6으로 1위 · LongBench v2 1위 · FRAMES는 GPT-4o 다음",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.2 (p.32)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
+    }
+   ],
+   "inputs": [
+    "t6"
+   ]
+  },
+  {
+   "id": "t6-zh",
+   "statement": "저자: C-SimpleQA에서 Qwen2.5 72B를 16.4점 앞섬 (Qwen은 18T 토큰, V3는 14.8T)",
+   "kind": "orig",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "DeepSeek-V3 §5.3.2 (p.32)",
+     "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
+    }
+   ],
+   "inputs": [
+    "t6"
+   ]
+  },
+  {
    "id": "t6-sqa",
    "statement": "저자: SimpleQA 열세는 중국어 지식에 토큰을 더 배정했기 때문, C-SimpleQA는 최고",
    "kind": "hyp",
@@ -463,6 +493,64 @@
      "label": "DeepSeek-V3 §5.3.2 (p.32)",
      "url": "https://arxiv.org/pdf/2412.19437v2#page=32"
     }
+   ]
+  },
+  {
+   "id": "ah-method",
+   "statement": "Arena-Hard v0.1: Chatbot Arena 실사용 질의 20만 개를 클러스터링해 고른 500개 프롬프트, 기준 GPT-4-0314, 심사 GPT-4-Turbo(1106), 위치를 바꿔 500x2=1000회 쌍 비교 후 Bradley-Terry로 승률 산출",
+   "kind": "cite",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "LMSYS Arena-Hard 블로그 (2024-04-19)",
+     "url": "https://lmsys.org/blog/2024-04-19-arena-hard/"
+    }
+   ]
+  },
+  {
+   "id": "ah-sep",
+   "statement": "Arena-Hard v0.1: Chatbot Arena 순위와 Spearman 94.1%, separability 87.4%, agreement 89.1%",
+   "kind": "cite",
+   "layer": "evidence",
+   "sources": [
+    {
+     "label": "LMSYS Arena-Hard 블로그 (2024-04-19)",
+     "url": "https://lmsys.org/blog/2024-04-19-arena-hard/"
+    }
+   ]
+  },
+  {
+   "id": "ae-method",
+   "statement": "AlpacaEval 2.0: 805개 지시문, 기준 GPT-4-Turbo, 심사 GPT-4-Turbo(logprob 가중), 길이 보정 승률(LC)이 기본값",
+   "kind": "cite",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "AlpacaEval 레포 README (tatsu-lab/alpaca_eval)",
+     "url": "https://github.com/tatsu-lab/alpaca_eval"
+    }
+   ]
+  },
+  {
+   "id": "ae-lc",
+   "statement": "AlpacaEval 2.0: LC 도입으로 Chatbot Arena 상관이 0.93에서 0.98로 올라가고 길이로 점수를 올리는 여지가 크게 줄었다",
+   "kind": "cite",
+   "layer": "main",
+   "sources": [
+    {
+     "label": "AlpacaEval 레포 README (tatsu-lab/alpaca_eval)",
+     "url": "https://github.com/tatsu-lab/alpaca_eval"
+    }
+   ]
+  },
+  {
+   "id": "judge-illus",
+   "statement": "심사 흐름 그림은 두 벤치마크의 공통 절차를 발표자가 재구성한 설명용 도식",
+   "kind": "illus",
+   "layer": "main",
+   "inputs": [
+    "ah-method",
+    "ae-method"
    ]
   },
   {
